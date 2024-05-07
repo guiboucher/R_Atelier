@@ -3,7 +3,7 @@ Title: Atelier R
 Version: 0.0.0.9000
 Authors@R: 
     person("Guillaume", "Boucher", , "guiboucher8@gmail.com", role = c("aut", "cre"))
-Description: Atelier R axé sur les performances R et ce qu'il faut savoir sans le domaine de la recherche.
+Description: Atelier R axé sur les performances et ce qu'il faut savoir sans le domaine de la recherche.
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
