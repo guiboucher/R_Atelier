@@ -38,33 +38,193 @@ class: center, middle, inverse, title-slide
 ### Guillaume Boucher
 ]
 .date[
-### 2024-05-18 (updated: 2024-05-18)
+### 2024-05-18 (updated: 2024-05-26)
 ]
 
 ---
 
-class: center, middle, inverse
+
+---
+class: center, middle
 
 # Fichier RPROJ (.Rproj)
 
 ---
 
-Ordinateur personnel à la maison :
+### Ordinateurs nécessaires au projet
+Adapter le _répertoire de travail_ à chaque fois qu'on change d'ordinateur :
+
+- Ordinateur personnel à la maison :
 
 ```r
 setwd("C:/Users/GuiBoucher/Desktop/NouveauProjet")
 ```
-Ordinateur travail :
+- Ordinateur travail :
 
 ```r
-setwd("C:/Users/bogu1234/GRP/B/7/P/Tout/8_Outils/Librairies R/NouveauProjet")
+setwd("K:/Users/bogu1234/GRP/8_Outils/Lib R/NouveauProjet")
 ```
-Portable personnel :
+- Portable personnel :
 
+```r
+setwd("C:/Users/PortableGUBOU276/Desktop/NouveauProjet")
+```
+- Machine virtuelle travail :
+
+```r
+setwd("J:/ABC/Z/4/Z/VPDA/HJ/Projets/Indi/Doc/NouveauProjet")
+```
+
+---
+
+### Créer un projet
+
+.pull-left[
+  ![](images/Fichier-NewProject.png)
+]
+.pull-right[
+  ![](images/Fichier-NewProject-Dossier.png)
+]
+
+.pull-left[
+  ![](images/Fichier-NewProject-Dossier-LogoFiles.png)
+]
+.pull-right[
+  Un symbole apparaîtra dans la section _Files_ de RStudio.
+
+  Le _répertoire de travail_ est automatiquement celui du dossier où se trouve le _.Rproj_.  
+  Tout ce qui est nécessaire au projet doit se retrouver dans ce dossier.  
+  Plus besoin d'adapter le début d'un script avec un `setwd()`.
+]
+
+---
+
+### Utilité du _.Rproj_
+
+Sans _.Rproj_
+
+```r
+# Option 1
+setwd("C:/Users/GuiBoucher/Desktop/NouveauProjet")
+readRDS("data/Analyse1.rds")
+
+# Option 2
+readRDS("C:/Users/GuBou/Desktop/NouveauProjet/data/Analyse1.rds")
+```
+
+Avec _.Rproj_
+
+```r
+readRDS("data/Analyse1.rds")  # Peu importe l'ordinateur
+```
+
+---
+
+### Utilité du _.Rproj_
+
+Imaginez un projet où
+
+- 12 personnes créent du code R pour un même projet
+- 20 ordinateurs sont utilisés au total
+- Utilisation d'un gestionnaire de version comme Github
+
+Est-ce qu'on met en commentaire vingt lignes de codes `setwd(...)` au début de chaque script?  
+L'utilisation du _.Rproj_ permet la gestion du _répertoire de travail_ sans se soucier de l'ordinateur qu'on utilise.
+
+---
+class: center, middle
+
+# Trois règles de base en R
+
+---
+
+## #1 : Ne jamais grossir un vecteur
+
+--
+
+Vous a-t-on déjà dit que les boucles en R ne sont pas rapides? Qu'il est préférable d'utiliser un `lapply` ou un `sapply`?
+
+--
+
+
+```r
+fct_sapply &lt;- function(n) sapply(1:n, function(x) 2*x+7)
+
+fct_loop &lt;- function(n) {
+  vec &lt;- c()
+  for (i in 1:n) {
+    vec &lt;- c(vec, 2*i+7)
+  }
+  vec
+}
+
+library(microbenchmark)
+n &lt;- 1e3
+microbenchmark(fct_sapply(n), fct_loop(n))
+```
+
+```
+## Unit: microseconds
+##           expr    min      lq     mean  median      uq     max neval
+##  fct_sapply(n)  532.9  552.25  610.946  565.05  599.00  3071.9   100
+##    fct_loop(n) 1313.4 1699.20 2443.257 1787.50 1997.65 15110.1   100
+```
+
+---
+
+## #1 : Ne jamais grossir un vecteur
+
+Problème :
+
+```r
+fct_loop &lt;- function(n) {
+  vec &lt;- c() # Créer un vecteur : 1 étape
+  for (i in 1:n) {
+    vec &lt;- c(  # (1) Recréer vecteur
+      vec,     # (2) Placer les anciennes valeurs dans le nouveau vecteur
+      2*i+7    # (3) Placer la nouvelle valeur
+    )  # -&gt; 3 étapes x n = 3n étapes
+  }
+  vec
+}
+```
+Total de `3n+1` étapes
+
+Solution :
+
+```r
+fct_loop2 &lt;- function(n) {
+  vec &lt;- vector("integer", n)  # 1 étape
+  for (i in 1:n) {
+    vec[i] &lt;- 2*i+7  # (1) Placer la nouvelle valeur dans 'vec'
+  }  # -&gt; 1 étape x n = n étapes
+}
+```
+
+---
+
+## #1 : Ne jamais grossir un vecteur
+
+
+```r
+n &lt;- 1000
+microbenchmark(
+  loop1 = fct_loop(n),
+  loop2 = fct_loop2(n)
+)
+```
+
+```
+## Unit: microseconds
+##   expr    min     lq     mean median      uq    max neval
+##  loop1 1056.3 1352.5 1913.378 1578.9 1761.10 8125.3   100
+##  loop2   44.4   44.9  143.789   45.9   47.45 5362.7   100
+```
 
 
 ---
 
+---
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
 
 
@@ -364,8 +524,8 @@ library(leaflet)
 leaflet() %&gt;% addTiles() %&gt;% setView(-93.65, 42.0285, zoom = 17)
 ```
 
-<div class="leaflet html-widget html-fill-item" id="htmlwidget-67ed3cab5c4ae3dfc030" style="width:100%;height:432px;"></div>
-<script type="application/json" data-for="htmlwidget-67ed3cab5c4ae3dfc030">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]}],"setView":[[42.0285,-93.65000000000001],17,[]]},"evals":[],"jsHooks":[]}</script>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-b787c4c02d0d8beead21" style="width:100%;height:432px;"></div>
+<script type="application/json" data-for="htmlwidget-b787c4c02d0d8beead21">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]}],"setView":[[42.0285,-93.65000000000001],17,[]]},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -377,8 +537,8 @@ DT::datatable(
 )
 ```
 
-<div class="datatables html-widget html-fill-item" id="htmlwidget-1691e10abfe8186e06cf" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-1691e10abfe8186e06cf">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Sepal.Length","targets":1},{"name":"Sepal.Width","targets":2},{"name":"Petal.Length","targets":3},{"name":"Petal.Width","targets":4},{"name":"Species","targets":5}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-04f95d6e049cba70e417" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-04f95d6e049cba70e417">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Sepal.Length","targets":1},{"name":"Sepal.Width","targets":2},{"name":"Petal.Length","targets":3},{"name":"Petal.Width","targets":4},{"name":"Species","targets":5}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 

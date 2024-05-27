@@ -12,32 +12,171 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-class: center, middle, inverse
+```{r libs_fcts, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+```
+---
+class: center, middle
 
 # Fichier RPROJ (.Rproj)
 
 ---
 
-Ordinateur personnel à la maison :
-```{r, eval=FALSE}
+### Ordinateurs nécessaires au projet
+Adapter le _répertoire de travail_ à chaque fois qu'on change d'ordinateur :
+
+- Ordinateur personnel à la maison :
+```{r repo1, eval=FALSE}
 setwd("C:/Users/GuiBoucher/Desktop/NouveauProjet")
 ```
-Ordinateur travail :
-```{r, eval=FALSE}
-setwd("K:/Users/bogu1234/GRP/8_Outils/Librairies R/NouveauProjet")
+- Ordinateur travail :
+```{r repo2, eval=FALSE}
+setwd("K:/Users/bogu1234/GRP/8_Outils/Lib R/NouveauProjet")
 ```
-Portable personnel :
-```{r, eval=FALSE}
-setwd("C:/Users/GuiGui Portable/Desktop/NouveauProjet")
+- Portable personnel :
+```{r repo3, eval=FALSE}
+setwd("C:/Users/PortableGUBOU276/Desktop/NouveauProjet")
 ```
-Machine virtuelle travail :
-```{r}
+- Machine virtuelle travail :
+```{r repo4, eval=FALSE}
 setwd("J:/ABC/Z/4/Z/VPDA/HJ/Projets/Indi/Doc/NouveauProjet")
+```
+
+---
+
+### Créer un projet
+
+.pull-left[
+  ![](images/Fichier-NewProject.png)
+]
+.pull-right[
+  ![](images/Fichier-NewProject-Dossier.png)
+]
+
+.pull-left[
+  ![](images/Fichier-NewProject-Dossier-LogoFiles.png)
+]
+.pull-right[
+  Un symbole apparaîtra dans la section _Files_ de RStudio.
+
+  Le _répertoire de travail_ est automatiquement celui du dossier où se trouve le _.Rproj_.  
+  Tout ce qui est nécessaire au projet doit se retrouver dans ce dossier.  
+  Plus besoin d'adapter le début d'un script avec un `setwd()`.
+]
+
+---
+
+### Utilité du _.Rproj_
+
+Sans _.Rproj_
+```{r option1, eval=FALSE}
+# Option 1
+setwd("C:/Users/GuiBoucher/Desktop/NouveauProjet")
+readRDS("data/Analyse1.rds")
+
+# Option 2
+readRDS("C:/Users/GuBou/Desktop/NouveauProjet/data/Analyse1.rds")
+```
+
+Avec _.Rproj_
+```{r option2, eval=FALSE}
+readRDS("data/Analyse1.rds")  # Peu importe l'ordinateur
+```
+
+---
+
+### Utilité du _.Rproj_
+
+Imaginez un projet où
+
+- 12 personnes créent du code R pour un même projet
+- 20 ordinateurs sont utilisés au total
+- Utilisation d'un gestionnaire de version comme Github
+
+Est-ce qu'on met en commentaire vingt lignes de codes `setwd(...)` au début de chaque script?  
+L'utilisation du _.Rproj_ permet la gestion du _répertoire de travail_ sans se soucier de l'ordinateur qu'on utilise.
+
+---
+class: center, middle
+
+# Trois règles de base en R
+
+---
+
+## #1 : Ne jamais grossir un vecteur
+
+--
+
+Vous a-t-on déjà dit que les boucles en R ne sont pas rapides? Qu'il est préférable d'utiliser un `lapply` ou un `sapply`?
+
+--
+
+```{r , message=FALSE, warning=FALSE}
+fct_sapply <- function(n) sapply(1:n, function(x) 2*x+7)
+
+fct_loop <- function(n) {
+  vec <- c()
+  for (i in 1:n) {
+    vec <- c(vec, 2*i+7)
+  }
+  vec
+}
+
+library(microbenchmark)
+n <- 1e3
+microbenchmark(fct_sapply(n), fct_loop(n))
+```
+
+---
+
+## #1 : Ne jamais grossir un vecteur
+
+Problème :
+```{r}
+fct_loop <- function(n) {
+  vec <- c() # Créer un vecteur : 1 étape
+  for (i in 1:n) {
+    vec <- c(  # (1) Recréer vecteur
+      vec,  # (2) Placer les anciennes valeurs dans vecteur
+      2*i+7  # (3) Placer la nouvelle valeur
+    )  # -> 3 étapes x n = 3n étapes
+  }
+  vec
+}
+```
+Total de `3n+1` étapes
+
+---
+
+## #1 : Ne jamais grossir un vecteur
+
+Solution :
+```{r}
+fct_loop2 <- function(n) {
+  vec <- vector("integer", n)  # 1 étape
+  for (i in 1:n) {
+    vec[i] <- 2*i+7  # (1) Placer la nouvelle valeur dans 'vec'
+  }  # -> 1 étape x n = n étapes
+}
+```
+Total de 
+
+---
+
+## #1 : Ne jamais grossir un vecteur
+
+```{r}
+n <- 1000
+microbenchmark(
+  loop1 = fct_loop(n),
+  loop2 = fct_loop2(n)
+)
 ```
 
 
 ---
 
+---
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
 
 ```{r setup, include=FALSE}
