@@ -93,7 +93,7 @@ Imaginez un projet où
 - 20 ordinateurs sont utilisés au total
 - Utilisation d'un gestionnaire de version comme Github
 
-Est-ce qu'on met en commentaire vingt lignes de codes `setwd(...)` au début de chaque script?  
+Est-ce qu'on met en commentaire vingt lignes de codes `setwd(...)` au début de chaque script? NON!  
 L'utilisation du _.Rproj_ permet la gestion du _répertoire de travail_ sans se soucier de l'ordinateur qu'on utilise.
 
 ---
@@ -107,11 +107,11 @@ class: center, middle
 
 --
 
-Vous a-t-on déjà dit que les boucles en R ne sont pas rapides? Qu'il est préférable d'utiliser un `lapply` ou un `sapply`?
+Vous a-t-on déjà dit que les boucles en R ne sont pas rapides? Qu'il est préférable d'utiliser un `lapply`, `sapply`, `vapply`, etc?
 
 --
 
-```{r , message=FALSE, warning=FALSE}
+```{r benchmark1, message=FALSE, warning=FALSE}
 fct_sapply <- function(n) sapply(1:n, function(x) 2*x+7)
 
 fct_loop <- function(n) {
@@ -123,8 +123,11 @@ fct_loop <- function(n) {
 }
 
 library(microbenchmark)
-n <- 1e3
-microbenchmark(fct_sapply(n), fct_loop(n))
+n <- 1e4
+microbenchmark(
+  apply = fct_sapply(n), loop = fct_loop(n),
+  times = 100
+)
 ```
 
 ---
@@ -132,44 +135,45 @@ microbenchmark(fct_sapply(n), fct_loop(n))
 ## #1 : Ne jamais grossir un vecteur
 
 Problème :
-```{r}
+```{r problem1}
 fct_loop <- function(n) {
-  vec <- c() # Créer un vecteur : 1 étape
+  vec <- c()  # (1) Créer vecteur
   for (i in 1:n) {
-    vec <- c(  # (1) Recréer vecteur
-      vec,  # (2) Placer les anciennes valeurs dans vecteur
-      2*i+7  # (3) Placer la nouvelle valeur
-    )  # -> 3 étapes x n = 3n étapes
+    vec <- c(  # (2) Recréer vecteur
+      vec, 2*i+7  # (3) Calcul 
+    )
   }
-  vec
+  return(vec)
 }
 ```
-Total de `3n+1` étapes
 
 ---
 
 ## #1 : Ne jamais grossir un vecteur
 
 Solution :
-```{r}
+```{r solution1}
 fct_loop2 <- function(n) {
-  vec <- vector("integer", n)  # 1 étape
+  vec <- vector("integer", n)  # (1) Créer vecteur
   for (i in 1:n) {
-    vec[i] <- 2*i+7  # (1) Placer la nouvelle valeur dans 'vec'
-  }  # -> 1 étape x n = n étapes
+    vec[i] <- 2*i+7  # (2) Calcul
+  }
+  return(vec)
 }
 ```
-Total de 
+On évite ici l'étape de recréer le vecteur `vec` qui est une étape très *gourmande*.
 
 ---
 
 ## #1 : Ne jamais grossir un vecteur
 
-```{r}
-n <- 1000
+```{r benchmark2}
+n <- 1e4
 microbenchmark(
-  loop1 = fct_loop(n),
-  loop2 = fct_loop2(n)
+  solution = fct_loop2(n),
+  apply = fct_sapply(n),
+  problem = fct_loop(n),
+  times = 100
 )
 ```
 
