@@ -292,8 +292,38 @@ Liste des opérateurs de comparaison :
 
 ---
 
+class: center, middle
 
+# Les *data frames*
 
+---
+
+## Qu'est-ce qu'un *data frame* ?
+
+Un *data frame* est tout simplement un tableau comme on peut en avoir avec Excel.  
+Chaque colonne est une variable d'un même type (numérique, caractère, logique...) et chaque ligne est une observation.
+
+```{r}
+head(mtcars)
+```
+
+Les fonctions `head()` et `tail()` permettent de voir les premières ou les dernières observations d'un ensemble de données.
+
+---
+
+## Structure des données
+La fonction `str()` indique la structure des données.
+```{r}
+str(mtcars)
+```
+Indique que nous avons un `data.frame` de 32 observations et 11 colonnes, toutes les variables sont de type numériques (`num`) et aperçu des premières observations de chaque variable.
+
+---
+class: center, middle
+
+# Les matrices
+
+---
 
 
 
