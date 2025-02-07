@@ -12,12 +12,68 @@ output:
       countIncrementalSlides: false
     yolo: false
 ---
+class: center, middle
+
+<!-- CODE POUR TOUTES LES DIAPOS
+<style type="text/css">
+.remark-slide-content {
+  font-size: 15px;
+}
+</style>
+-->
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = "#>")
 ```
-class: center, middle
+```{css, echo=FALSE}
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+```
 
 # Les bases
+
 ---
 
 ## Arithmétique (1)
@@ -310,13 +366,134 @@ head(mtcars)
 Les fonctions `head()` et `tail()` permettent de voir les premières ou les dernières observations d'un ensemble de données.
 
 ---
+class: code90, textfont18
 
 ## Structure des données
-La fonction `str()` indique la structure des données.
+La fonction `str()` est semblable à la fonction `class()`, mais affiche plus d'informations.
 ```{r}
+class(mtcars)
 str(mtcars)
 ```
-Indique que nous avons un `data.frame` de 32 observations et 11 colonnes, toutes les variables sont de type numériques (`num`) et aperçu des premières observations de chaque variable.
+`mtcars` est un `data.frame` de 32 observations et 11 colonnes, toutes les variables sont de type numériques (`num`) et les dix premières observations de chaque colonne sont affichées.
+
+---
+
+## Créer un data.frame (1)
+
+La fonction `data.frame()` permet de créer un `data.frame`. Chaque colonne est un vecteur et tous les vecteurs doivent contenir le même nombre de valeurs.
+```{r}
+personne <- c("Jean Airoldi", "Ricardo", "George Lucas",
+              "FredK Le Roi", "Dre Samson")
+main <- c("droitier", "gaucher", "ambidextre", "gaucher",
+          "droitier")
+gentillesse_sur_10 <- c(9, 2, 0, 10, 20)
+id <- 1:5
+on_laime <- c(FALSE, TRUE, FALSE, TRUE, TRUE)
+```
+
+---
+class: code85
+
+## Créer un data.frame (2)
+
+Chaque vecteur doivent contenir le même nombre de valeurs.  
+Les colonnes sont dans le même ordre que les vecteurs inscrits dans la fonction `data.frame()`.
+```{r}
+mon_data <- data.frame(id, personne, main, gentillesse_sur_10, on_laime)
+mon_data
+str(mon_data)
+```
+
+---
+
+## Sélection des éléments d'un *data.frame* (1)
+
+Comme pour les vecteurs, on sélectionne les éléments d'un tableau avec les crochets `[]`. À l'aide d'une virgule, on peut décider entre les lignes et les colonnes à afficher :
+- `mon_data[1, 2]` sélectionne la première ligne et la deuxième colonne
+- `mon_data[1:3, 2:4]` sélectionne les trois premières lignes et les colonnes 2, 3 et 4.
+
+---
+
+## Sélection des éléments d'un *data.frame* (2)
+
+```{r}
+mon_data
+mon_data[1, 2]
+mon_data[1:3, 2:4]
+```
+
+---
+
+## Sélection des éléments d'un *data.frame* (3)
+
+On peut utiliser le nom des colonnes au lieu les nombres
+
+```{r}
+mon_data
+mon_data[2, "gentillesse_sur_10"]
+mon_data[c(1, 4, 5), c("personne", "main")]
+```
+
+---
+class: code85
+
+## Sélection d'une colonne uniquement
+
+Indiquer uniquement la ou les colonnes après la virgule retournera toutes les lignes.  
+En plus des crochets, l'utilisation du symbole `$` est aussi possible.
+```{r}
+mon_data[, 2]
+mon_data[, "personne"]
+mon_data$personne
+```
+ 
+---
+class: code75
+
+## Sélection d'observation selon condition (1)
+
+À l'aide d'un vecteur contenant des `TRUE` ou des `FALSE`, on peut sélectionner les données des gens qu'on aime.
+```{r}
+mon_data[, c("personne", "on_laime")]
+mon_data$on_laime
+mon_data[c(FALSE, TRUE, FALSE, TRUE, TRUE),]  # la virgule est importante
+```
+
+---
+
+## Sélection d'observation selon condition (2)
+
+Même chose que précédemment, mais en utilisant le vecteur `on_laime`
+```{r}
+on_laime <- mon_data$on_laime
+mon_data[on_laime,]  # avec vecteur créé
+mon_data[mon_data$on_laime,]  # avec colonne du data
+```
+
+---
+
+## Sélection d'observation selon condition (3)
+
+Cherchons les gens qui ont une gentillesse sur 10 d'au moins 5.
+```{r}
+mon_data$gentillesse_sur_10 > 5
+mon_data[mon_data$gentillesse_sur_10 > 5,]
+gentil5 <- mon_data$gentillesse_sur_10 > 5
+mon_data[gentil5,]
+```
+
+---
+class: code75
+
+## Trier son *data frame*
+
+La fonction `order()` indique le rang, la position de la donnée. On peut ensuite l'utiliser pour afficher les lignes dans l'ordre voulu.
+```{r}
+mon_data
+tri_gentil <- order(mon_data$gentillesse_sur_10)
+tri_gentil
+mon_data[tri_gentil,]
+```
 
 ---
 class: center, middle
@@ -324,6 +501,71 @@ class: center, middle
 # Les matrices
 
 ---
+
+## Qu'est-ce qu'une matrice
+Une matrice est semblable à un `data.frame`, mais toutes les colonnes sont du même type (numérique, caractère ou logique).  
+Une matrice est construite à partir de la fonction `matrix()`.
+```{r}
+matrix(1:9, nrow = 3, byrow = TRUE)
+matrix(101:110, ncol = 5, byrow = FALSE)
+```
+
+---
+
+## Nommer une matrice (ou un *data frame*)
+
+Les fonctions `rownames()` et `colnames()` permettent de nommer les lignes et les colonnes d'une matrice ou d'un tableau.
+```{r}
+ma_matrice <- matrix(1:9, nrow = 3, byrow = TRUE)
+colnames(ma_matrice) <- c(LETTERS[1:3])
+rownames(ma_matrice) <- c(letters[24:26])
+ma_matrice
+```
+
+---
+
+## Calcul sur une matrice
+
+Les fonctions `rowSums` et `colSums` permettent de calculer la somme d'une ligne et d'une colonne.
+
+```{r}
+ma_matrice
+rowSums(ma_matrice)
+colSums(ma_matrice)
+```
+
+---
+
+## Ajouter une ligne (ou colonne)
+
+La fonction `rbind()` permet d'ajouter des lignes et `cbind()` des colonnes.
+
+```{r}
+ma_matrice
+rowSums(ma_matrice)
+rbind(ma_matrice, rowSums(ma_matrice))
+```
+
+---
+
+## Opérations sur une matrice (1)
+```{r}
+ma_matrice
+mean(ma_matrice[1,])  # de la première ligne
+mean(ma_matrice[, 1])  # de la première colonne
+mean(ma_matrice)  # de toute la matrice
+```
+
+---
+
+## Opération sur une matrice (2)
+```{r}
+ma_matrice
+ma_matrice * 3
+ma_matrice[, 1] * 3
+```
+
+
 
 
 

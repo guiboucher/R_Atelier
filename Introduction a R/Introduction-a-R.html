@@ -3,7 +3,7 @@
   <head>
     <title>Introduction à R</title>
     <meta charset="utf-8" />
-    <meta name="date" content="2025-01-27" />
+    <meta name="date" content="2025-02-05" />
     <script src="libs/header-attrs-2.29/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### INESSS, BDCA
 ]
 .date[
-### 2025-01-27
+### 2025-02-05
 ]
 
 ---
@@ -167,12 +167,14 @@ numeric &lt;- 4.5
 - Logique ou booléen : `TRUE` ou `FALSE` (`logical`/`logi`)
 
 ``` r
-logique &lt;- TRUE
+logique1 &lt;- TRUE
+logique2 &lt;- FALSE
 ```
 - Texte : `Chaîne de caractères` (`character`/`chr`)
 
 ``` r
-character &lt;- "Chaine de caractères"
+character1 &lt;- "Chaine de caractères"
+character2 &lt;- 'Chaine de caractères'
 ```
 
 ---
@@ -191,11 +193,11 @@ class(5)
 ```
 
 ``` r
-class(5)
+class(5L)
 ```
 
 ```
-#&gt; [1] "numeric"
+#&gt; [1] "integer"
 ```
 
 ``` r
@@ -205,6 +207,431 @@ class(1:5)
 ```
 #&gt; [1] "integer"
 ```
+
+---
+class: center, middle
+
+# Les vecteurs
+
+---
+
+## Créer un vecteur
+On crée un vecteur avec la fonction `c()`.
+
+
+``` r
+numeric_vec &lt;- c(1, 10, 49)
+character_vec &lt;- c("a", "b", "c")
+boolean_vec &lt;- c(TRUE, FALSE, T, F)
+```
+
+---
+
+## Mise en situation
+
+Après une semaine à Las Vegas, on décide de prendre en note nos gains et nos pertes :
+
+``` r
+# Poker
+poker &lt;- c(140, -50, 20, -120, 240)
+
+# Roulette
+roulette &lt;- c(-24, 50, 100, -350, 10)
+```
+
+---
+
+## Nommer un vecteur (1)
+
+Nous pouvons donner un nom aux éléments d'un vecteur avec la fonction `names()`.
+
+``` r
+# Poker - Gains/Pertes
+poker &lt;- c(140, -50, 20, -120, 240)
+
+# Roulette - Gains/Pertes
+roulette &lt;- c(-24, 50, 100, -350, 10)
+
+# Poker - Jour de la semaine
+names(poker) &lt;-
+  c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
+
+# Roulette - Jour de la semaine
+names(roulette) &lt;- c(
+  "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"
+)
+
+print(poker)
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+---
+
+## Nommer un vecteur (2)
+
+Si une information est utilisé plus d'une fois, il est utile de créer une nouvelle variable.
+
+``` r
+# Poker - Gains/Pertes
+poker &lt;- c(140, -50, 20, -120, 240)
+
+# Roulette - Gains/Pertes
+roulette &lt;- c(-24, 50, 100, -350, 10)
+
+# Jour de la semaine
+jours &lt;- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
+
+# Attribuer le jour de la semaine
+names(poker) &lt;- jours
+names(roulette) &lt;- jours
+
+print(poker)
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+---
+
+## Calculs sur un vecteur (1)
+
+Pour chaque jour, calculons les gains et les pertes du poker et de la roulette.
+
+
+``` r
+poker
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+``` r
+roulette
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      -24       50      100     -350       10
+```
+
+``` r
+total_jour &lt;- poker + roulette
+total_jour
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      116        0      120     -470      250
+```
+
+---
+
+## Calculs sur un vecteur (2)
+
+Calculons les totaux de la semaine
+
+
+``` r
+total_poker &lt;- sum(poker)
+total_poker
+```
+
+```
+#&gt; [1] 230
+```
+
+``` r
+total_roulette &lt;- sum(roulette)
+total_roulette
+```
+
+```
+#&gt; [1] -214
+```
+
+``` r
+total_semaine &lt;- sum(total_jour)
+total_semaine
+```
+
+```
+#&gt; [1] 16
+```
+
+---
+
+## Comparer les gains
+
+Vérifions si nos gains sont meilleurs au poker qu'à la roulette
+
+
+``` r
+total_poker
+```
+
+```
+#&gt; [1] 230
+```
+
+``` r
+total_roulette
+```
+
+```
+#&gt; [1] -214
+```
+
+``` r
+total_poker &gt; total_roulette
+```
+
+```
+#&gt; [1] TRUE
+```
+
+---
+
+## Sélection dans un vecteur (1)
+
+Pour sélectionner une valeur dans un vecteur, nous utilisons les crochets `[]`.
+
+
+``` r
+poker
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+``` r
+# Gains du mercredi
+poker[3]
+```
+
+```
+#&gt; Mercredi 
+#&gt;       20
+```
+
+``` r
+poker[[3]]
+```
+
+```
+#&gt; [1] 20
+```
+
+---
+
+## Sélection dans un vecteur (2)
+
+Il est possible de sélectionner plusieurs valeurs à l'aide d'un vecteur. Si nous voulons analyser les gains du lundi et du vendredi, nous pourrions utiliser le vecteur `c(1, 5)` à l'intérieur des crochets : `poker[c(1, 5)]`.  
+Analysons les gains du mardi au jeudi :
+
+``` r
+poker[c(2, 3, 4)]
+```
+
+```
+#&gt;    Mardi Mercredi    Jeudi 
+#&gt;      -50       20     -120
+```
+
+``` r
+poker[c(2:4)]
+```
+
+```
+#&gt;    Mardi Mercredi    Jeudi 
+#&gt;      -50       20     -120
+```
+
+``` r
+poker[2:4]
+```
+
+```
+#&gt;    Mardi Mercredi    Jeudi 
+#&gt;      -50       20     -120
+```
+
+---
+
+## Sélection dans un vecteur (3)
+
+Une autre manière de sélectionner des valeurs est d'utiliser les noms lorsqu'il y en a.
+
+``` r
+poker
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+``` r
+poker[c("Mardi", "Jeudi")]
+```
+
+```
+#&gt; Mardi Jeudi 
+#&gt;   -50  -120
+```
+
+``` r
+poker["Mercredi"]
+```
+
+```
+#&gt; Mercredi 
+#&gt;       20
+```
+
+---
+
+## Sélection par comparaison (1)
+
+Il est aussi possible de sélectionner des valeurs par comparaison.
+
+
+``` r
+# Jours où les gains sont positifs
+poker &gt; 0
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;     TRUE    FALSE     TRUE    FALSE     TRUE
+```
+
+``` r
+poker[poker &gt; 0]
+```
+
+```
+#&gt;    Lundi Mercredi Vendredi 
+#&gt;      140       20      240
+```
+
+``` r
+selection &lt;- poker &gt; 0
+poker[selection]
+```
+
+```
+#&gt;    Lundi Mercredi Vendredi 
+#&gt;      140       20      240
+```
+
+---
+
+## Sélection par comparaison (2)
+
+Liste des opérateurs de comparaison :
+
+- `&lt;` : plus petit
+- `&gt;` : plus grand
+- `&lt;=` : plus petit ou égal
+- `&gt;=` : plus grand ou égal
+- `==` : égal
+- `!=` : pas égal, différent
+
+---
+
+class: center, middle
+
+# Les *data frames*
+
+---
+
+## Qu'est-ce qu'un *data frame* ?
+
+Un *data frame* est tout simplement un tableau comme on peut en avoir avec Excel.  
+Chaque colonne est une variable d'un même type (numérique, caractère, logique...) et chaque ligne est une observation.
+
+
+``` r
+head(mtcars)
+```
+
+```
+#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#&gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+#&gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+#&gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+#&gt; Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+Les fonctions `head()` et `tail()` permettent de voir les premières ou les dernières observations d'un ensemble de données.
+
+---
+
+## Structure des données
+La fonction `str()` indique la structure des données.
+
+``` r
+str(mtcars)
+```
+
+```
+#&gt; 'data.frame':	32 obs. of  11 variables:
+#&gt;  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+#&gt;  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
+#&gt;  $ disp: num  160 160 108 258 360 ...
+#&gt;  $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+#&gt;  $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+#&gt;  $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+#&gt;  $ qsec: num  16.5 17 18.6 19.4 17 ...
+#&gt;  $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
+#&gt;  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+#&gt;  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+#&gt;  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...
+```
+Indique que nous avons un `data.frame` de 32 observations et 11 colonnes, toutes les variables sont de type numériques (`num`) et aperçu des premières observations de chaque variable.
+
+---
+class: center, middle
+
+# Les matrices
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
