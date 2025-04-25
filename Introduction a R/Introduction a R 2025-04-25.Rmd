@@ -1,0 +1,732 @@
+---
+title: "Introduction à R"
+subtitle: "*The R Base Package*"
+# author: "Prénom Nom"
+institute: "INESSS, BDCA"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    yolo: false
+---
+class: center, middle
+
+<!-- CODE POUR TOUTES LES DIAPOS
+<style type="text/css">
+.remark-slide-content {
+  font-size: 15px;
+}
+</style>
+-->
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "#>")
+```
+```{css, echo=FALSE}
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+```
+
+# Les bases
+
+---
+
+## Arithmétique (1)
+
+```{r arithmetique_1de2}
+# Addition
+5 + 5
+
+# Soustraction
+5 - 5
+
+# Multiplication
+3 * 5
+
+# Division
+(5 + 5) / 2
+```
+
+---
+
+## Arithmétique (2)
+
+```{r arithmetique_2de2}
+# Exposant
+2^5
+
+# Modulo
+28 %% 6
+```
+
+Prendre note que le caractère `#` met la ligne de code en commentaire et n'est pas évalué par R.
+
+---
+
+## Affectation de variables (1)
+Une variable permet de stocker une valeur ou un objet. On peut ensuite l'utiliser ultérieurement pour accéder facilement à cette valeur.
+```{r affect_var}
+# Assigner la valeur 42 à x
+x <- 42
+
+# Afficher/Imprimer la valeur de la variable x
+x
+print(x)
+```
+
+---
+
+## Affectation de variables (2)
+Nous pouvons appliquer des opérations arithmétiques entre des variables numériques.
+```{r}
+x <- 5
+y <- 25
+x + y
+x - y
+y / x
+```
+
+---
+
+## Type de données de base (1)
+
+- Nombres entiers : `4` (`integer`/`int`)
+```{r type_entier}
+integer <- 4
+```
+- Numérique : `4.5` (`numeric`/`num`)
+```{r type_numeric}
+numeric <- 4.5
+```
+- Logique ou booléen : `TRUE` ou `FALSE` (`logical`/`logi`)
+```{r type_logic}
+logique1 <- TRUE
+logique2 <- FALSE
+```
+- Texte : `Chaîne de caractères` (`character`/`chr`)
+```{r type_chr}
+character1 <- "Chaine de caractères"
+character2 <- 'Chaine de caractères'
+```
+
+---
+
+## Type de données de base (2)
+
+R peut décider que c'est numérique même si on veut des nombres entiers.  
+Ajouter `L` après un nombre force la classe d'un nombre à entier au lieu de numérique.
+```{r}
+class(5)
+class(5L)
+class(1:5)
+```
+
+---
+class: center, middle
+
+# Vecteurs
+
+---
+
+## Créer un vecteur
+On crée un vecteur avec la fonction `c()`.
+
+```{r}
+numeric_vec <- c(1, 10, 49)
+character_vec <- c("a", "b", "c")
+boolean_vec <- c(TRUE, FALSE, T, F)
+```
+
+---
+
+## Mise en situation
+
+Médicament ajouté ou déduit de l'inventaire à la fin de la journée du lundi au vendredi :
+```{r}
+# Advil
+advil <- c(140, -50, 20, -120, 240)
+
+# Tylenol
+tylenol <- c(-24, 50, 100, -350, 10)
+```
+
+---
+
+## Nommer un vecteur (1)
+
+Nous pouvons donner un nom aux éléments d'un vecteur avec la fonction `names()`.
+```{r}
+advil <- c(140, -50, 20, -120, 240)
+advil
+tylenol <- c(-24, 50, 100, -350, 10)
+names(advil) <- c(
+  "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"
+)
+names(tylenol) <-
+  c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
+print(advil)
+```
+
+---
+
+## Nommer un vecteur (2)
+
+Si une information est utilisé plus d'une fois, il est utile de créer une nouvelle variable.
+```{r}
+advil <- c(140, -50, 20, -120, 240)
+tylenol <- c(-24, 50, 100, -350, 10)
+
+# Jour de la semaine
+jours <- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
+
+# Attribuer le jour de la semaine
+names(advil) <- jours
+names(tylenol) <- jours
+
+print(advil)
+```
+
+---
+
+## Calculs sur un vecteur (1)
+
+Pour chaque jour, calculons le nombre de médicaments qui ont été ajouté ou déduit de l'inventaire.
+```{r}
+advil
+tylenol
+inventaire_jour <- advil + tylenol
+inventaire_jour
+```
+
+---
+
+## Calculs sur un vecteur (2)
+
+Les opérations de plusieurs vecteurs se font à partir de la position des valeurs, pas des noms.
+```{r}
+advil
+tylenol2 <- tylenol[c(3,2,5,1,4)]  # modifier l'ordre des jours
+tylenol2
+inventaire_jour2 <- advil + tylenol2
+inventaire_jour2
+```
+Les Advil du lundi sont additionné aux Tylenol du mercredi, ce qui n'a pas de sens.
+
+---
+
+## Calculs sur un vecteur (3)
+
+Calculons l'inventaire de la semaine
+
+```{r}
+total_advil <- sum(advil)
+total_advil
+total_tylenol <- sum(tylenol)
+total_tylenol
+total_semaine <- sum(inventaire_jour)
+total_semaine
+```
+
+---
+
+## Comparer les inventaires
+
+Vérifions si les inventaires sont plus élevés en Advil qu'en Tylenol.
+
+```{r}
+total_advil
+total_tylenol
+total_advil > total_tylenol
+```
+
+---
+class: code80, textfont15
+
+## Sélection dans un vecteur (1)
+
+Pour sélectionner une valeur dans un vecteur, nous utilisons les crochets `[]`.
+
+```{r}
+advil
+
+# Inventaire du mercredi
+advil[3]
+advil[[3]]
+```
+Utiliser les doubles crochets focalise sur la valeur perdant ainsi l'information du nom (si présent)
+```{r}
+vecteur_sans_nom <- c(5, 4, 7)
+vecteur_sans_nom[2]
+vecteur_sans_nom[[2]]
+```
+Aucune différence entre crochets simples ou doubles
+
+---
+
+## Sélection dans un vecteur (2)
+
+Il est possible de sélectionner plusieurs valeurs à l'aide d'un vecteur. Si nous voulons analyser les inventaires du lundi et du vendredi, nous pourrions utiliser le vecteur `c(1, 5)` à l'intérieur des crochets : `advil[c(1, 5)]`.  
+Analysons les inventaires du mardi au jeudi :
+```{r}
+advil[c(2, 3, 4)]
+advil[2:4]
+```
+
+---
+
+## Sélection dans un vecteur (3)
+
+Une autre manière de sélectionner des valeurs est d'utiliser les noms lorsqu'il y en a.
+```{r}
+advil
+advil[c("Mardi", "Jeudi")]
+advil["Mercredi"]
+```
+
+---
+class: code85, textfont17
+
+## Sélection par comparaison (1)
+
+Il est aussi possible de sélectionner des valeurs par comparaison.
+```{r}
+# Jour(s)s où l'inventaire Advil est positif
+advil > 0
+advil[advil > 0]  # insérer la condition dans les crochets
+
+selection <- advil > 0  # enregistrer la condition sous une variable
+advil[selection]  # utiliser la variable dans les crochets
+
+# Jour(s)s où l'inventaire total est de zéro
+advil[inventaire_jour == 0]
+```
+
+---
+
+## Sélection par comparaison (2)
+
+Liste des opérateurs de comparaison :
+
+- `<` : plus petit
+- `>` : plus grand
+- `<=` : plus petit ou égal
+- `>=` : plus grand ou égal
+- `==` : égal\*
+- `!=` : pas égal, différent
+
+\* important de mettre deux `==`, sinon assignation d'une variable comme `<-`
+
+---
+
+class: center, middle
+
+# Les *data frames*
+
+---
+
+## Qu'est-ce qu'un *data frame* ?
+
+Un *data frame* est un tableau comme on peut en avoir avec Excel.  
+Chaque colonne est une variable d'un même type (numérique, caractère, logique...) et chaque ligne est une observation.
+
+```{r}
+head(mtcars)
+```
+
+Les fonctions `head()` et `tail()` permettent de voir les premières ou les dernières observations d'un ensemble de données.
+
+---
+class: code80, textfont18
+
+## Structure des données
+La fonction `str()` est semblable à la fonction `class()`, mais affiche plus d'informations.
+```{r}
+class(mtcars)
+str(mtcars)
+```
+Il est préférable d'utiliser `str()` pour une première exploration que de visualiser tout le tableau avec `View()`.  
+`mtcars` est un `data.frame` de 32 observations et 11 colonnes, toutes les variables sont de type numériques (`num`) et les dix premières observations de chaque colonne sont affichées.
+
+---
+
+## Créer un data.frame (1)
+
+La fonction `data.frame()` permet de créer un `data.frame`. Chaque colonne est un vecteur et tous les vecteurs doivent contenir le même nombre de valeurs.
+```{r}
+personne <- c("Jean Airoldi", "Ricardo", "George Lucas",
+              "FredK Le Roi", "Dre Samson")
+main <- c("droitier", NA, "ambidextre",
+          "gaucher", "droitier")
+gentillesse_sur_10 <- c(9, 2, 0,
+                        10, 20)
+id <- 1:5
+on_laime <- c(FALSE, TRUE, FALSE,
+              TRUE, TRUE)
+```
+
+`NA` est pour *Not Available / Missing Values*. Pas besoin de préciser si `NA` est dans un vecteur numérique, logique ou caractère.
+
+---
+class: code85
+
+## Créer un data.frame (2)
+
+Chaque vecteur doivent contenir le même nombre de valeurs.  
+Les colonnes sont dans le même ordre que les vecteurs inscrits dans la fonction `data.frame()`.
+```{r}
+mon_data <- data.frame(id, personne, main, gentillesse_sur_10, on_laime)
+mon_data
+str(mon_data)
+```
+
+---
+
+## Sélection des éléments d'un *data.frame* (1)
+
+Comme pour les vecteurs, on sélectionne les éléments d'un tableau avec les crochets `[]`. À l'aide d'une virgule, on peut décider entre les lignes et les colonnes à afficher :
+- `mon_data[1:2, ]` : Les deux premières lignes, toutes les colonnes.
+- `mon_data[1, 2]` : **Valeur** de la cellule de la première ligne et la deuxième colonne.
+- `mon_data[1:3, c(2:4, 6)]` : Les trois premières lignes et les colonnes 2, 3, 4 et 6.
+
+---
+
+## Sélection des éléments d'un *data.frame* (2)
+
+```{r}
+mon_data
+mon_data[1, 2]
+mon_data[1:3, 2:4]
+```
+
+---
+
+## Sélection des éléments d'un *data.frame* (3)
+
+On peut utiliser le nom des colonnes au lieu les nombres
+
+```{r}
+mon_data
+mon_data[2, "gentillesse_sur_10"]
+mon_data[c(1, 4, 5), c("personne", "main")]
+```
+
+---
+class: code75
+
+## Sélection d'une colonne uniquement
+
+Indiquer uniquement la ou les colonnes après la virgule retournera toutes les lignes.  
+En plus des crochets, l'utilisation du symbole `$` est aussi possible.
+```{r}
+mon_data[, 2]
+mon_data[, "personne"]
+mon_data$personne
+```
+ 
+---
+class: code75
+
+## Sélection d'observation selon condition (1)
+
+À l'aide d'un vecteur contenant des `TRUE` ou des `FALSE`, on peut sélectionner les données des gens qu'on aime.
+```{r}
+mon_data[, c("personne", "on_laime")]
+mon_data$on_laime  # la colonne 'on_laime' sous la forme d'un vecteur
+# Utiliser le vecteur mon_data$on_laime pour sélectionner les valeurs TRUE
+# uniquement. Les FALSE sont exclus.
+mon_data[mon_data$on_laime, ]  
+```
+
+---
+
+## Sélection d'observation selon condition (2)
+
+Même chose que précédemment, mais en utilisant la variable `on_laime`
+```{r}
+mon_data[mon_data$on_laime, ]  # avec colonne du data
+variable_on_laime <- mon_data$on_laime
+mon_data[variable_on_laime, ]  # avec la variable
+```
+
+---
+
+## Sélection d'observation selon condition (3)
+
+Cherchons les gens qui ont une gentillesse d'au moins 5 sur 10.
+```{r}
+# En utilisant la colonne du data
+mon_data$gentillesse_sur_10 > 5
+mon_data[mon_data$gentillesse_sur_10 > 5, ]
+# En utilisant une variable
+gentil5 <- mon_data$gentillesse_sur_10 > 5
+mon_data[gentil5, ]
+```
+
+---
+class: code80, textfont17
+
+## Trier son *data frame*
+
+La fonction `order()` indique le rang, la position de la donnée. On peut ensuite l'utiliser pour afficher les lignes dans l'ordre voulu.
+```{r}
+mon_data
+tri_gentil <- order(mon_data$gentillesse_sur_10)
+tri_gentil
+mon_data[tri_gentil,]
+```
+
+---
+class: middle, center
+
+# Facteurs
+
+---
+
+## Qu'est-ce qu'un facteur? (1)
+
+Le terme facteur est un type de données pour stocker des variables catégoriques et être en mesure de les trier. Elles sont aussi plus efficace au niveau de la mémoire.
+```{r}
+sex <- c("Femme", "Homme", "Homme", "Femme", "Femme")
+factor_sex <- factor(sex)
+factor_sex
+```
+S'ils ne sont pas défini, les *Levels* sont en ordre alphabétique.
+
+---
+class: code75, textfont17
+
+## Qu'est-ce qu'un facteur (2)
+
+Comment trier une variable catégorique :
+
+```{r}
+temperature <- c("Élevée", "Faible", "Élevée", "Faible", "Moyenne")
+factor_temperature <- factor(
+  temperature,  # vecteur à utiliser
+  order = TRUE,  # si l'ordre a un concept de 'plus petit/grand que'
+  levels = c("Faible", "Moyenne", "Élevée")  # ordre souhaité
+)
+factor_temperature
+```
+Très utile avec les légendes de graphiques.
+
+```{r}
+mois_annee <- c("Déc", "Avr", "Jan", "Mar")
+factor_mois_annee <- factor(
+  mois_annee,
+  order = FALSE,  # les mois ont un ordre, mais ne sont pas plus petit/grand qu'un autre
+  levels = c(
+    "Jan", "Fév", "Mar", "Avr", "Mai", "Jun", 
+    "Jul", "Aou", "Sep", "Oct", "Nov", "Déc"
+  )
+)
+sort(factor_mois_annee)
+```
+
+---
+class: middle, center
+
+# Liste
+
+---
+
+## Qu'est-ce qu'une liste?
+Une liste dans R permet de réunir une variété d'objets sous une même variable. Peut contenir des matrices, des vecteurs, des *data.frame* et même d'autres listes.
+
+```{r, eval=FALSE}
+MaListe = list(element1, element2, ...)
+```
+
+
+---
+class: code80
+
+## Comment créer une liste (1)
+
+```{r}
+vecteur <- 1:10
+list1 <- list(x = "a", y = "b", z = "c")
+datafr <- mtcars[1:3, 1:3]
+ma_liste <- list(vecteur, list1, datafr)
+ma_liste
+```
+
+---
+class: code80
+
+## Comment créer une liste (2)
+Nommer directement les éléments d'une liste
+```{r}
+ma_liste <- list(vec = vecteur, lis = list1, df = datafr)
+ma_liste
+```
+
+---
+class: code80
+
+## Comment créer une liste (3)
+Nommer les éléments d'une liste après l'avoir créée
+```{r}
+names(ma_liste) <- c("MonVecteur", "MaListe", "MonDf")
+ma_liste
+```
+
+---
+class: code75, textfont18
+
+
+## Sélectionner les éléments d'une liste (1)
+Semblable à la sélection d'un vecteur ou d'un *data frame* avec une particularité au niveau des crochets `[]`
+```{r}
+ma_liste[1]
+str(ma_liste[1])
+ma_liste[[1]]
+str(ma_liste[[1]])
+ma_liste$MonVecteur
+```
+
+---
+class: code80, textfont17
+
+## Sélectionner les éléments d'une liste (2)
+Il est possible qu'une liste contienne plusieurs éléments et les concepts de sélection sont les mêmes.
+```{r}
+list_plusieurs_niveaux = list(
+  niv1_1 = "Niveau 1",
+  niv1_2 = list(
+    niv2_1 = "Niveau 2",
+    niv2_2 = list(
+      niv3_1 = "Niveau 3",
+      niv3_2 = list(niv4_1 = "Niveau 4 - Élément 1",
+                    niv4_2 = "Niveau 4 - Élément 2")
+    )
+  )
+)
+list_plusieurs_niveaux$niv1_2$niv2_2
+list_plusieurs_niveaux$niv1_2$niv2_2$niv3_2$niv4_2
+```
+
+---
+class: center, middle
+
+## BRAVO!
+Vous êtes maintenant de jeunes padawans Rinessiens
+
+
+
+<!-- --- -->
+<!-- class: center, middle -->
+
+<!-- # Matrices -->
+
+<!-- --- -->
+
+<!-- ## Qu'est-ce qu'une matrice -->
+<!-- Une matrice est semblable à un `data.frame`, mais toutes les colonnes sont du même type (numérique, caractère ou logique).   -->
+<!-- Une matrice est construite à partir de la fonction `matrix()`. -->
+<!-- ```{r} -->
+<!-- matrix(1:9, nrow = 3, byrow = TRUE) -->
+<!-- matrix(101:110, ncol = 5, byrow = FALSE) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ## Nommer une matrice (ou un *data frame*) -->
+
+<!-- Les fonctions `rownames()` et `colnames()` permettent de nommer les lignes et les colonnes d'une matrice ou d'un tableau. -->
+<!-- ```{r} -->
+<!-- ma_matrice <- matrix(1:9, nrow = 3, byrow = TRUE) -->
+<!-- colnames(ma_matrice) <- c(LETTERS[1:3]) -->
+<!-- rownames(ma_matrice) <- c(letters[24:26]) -->
+<!-- ma_matrice -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ## Calcul sur une matrice -->
+
+<!-- Les fonctions `rowSums` et `colSums` permettent de calculer la somme d'une ligne et d'une colonne. -->
+
+<!-- ```{r} -->
+<!-- ma_matrice -->
+<!-- rowSums(ma_matrice) -->
+<!-- colSums(ma_matrice) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ## Ajouter une ligne (ou colonne) -->
+
+<!-- La fonction `rbind()` permet d'ajouter des lignes et `cbind()` des colonnes. -->
+
+<!-- ```{r} -->
+<!-- ma_matrice -->
+<!-- rowSums(ma_matrice) -->
+<!-- rbind(ma_matrice, rowSums(ma_matrice)) -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ## Opérations sur une matrice (1) -->
+<!-- ```{r} -->
+<!-- ma_matrice -->
+<!-- mean(ma_matrice[1,])  # de la première ligne -->
+<!-- mean(ma_matrice[, 1])  # de la première colonne -->
+<!-- mean(ma_matrice)  # de toute la matrice -->
+<!-- ``` -->
+
+<!-- --- -->
+
+<!-- ## Opération sur une matrice (2) -->
+<!-- ```{r} -->
+<!-- ma_matrice -->
+<!-- ma_matrice * 3 -->
+<!-- ma_matrice[, 1] * 3 -->
+<!-- ``` -->
+

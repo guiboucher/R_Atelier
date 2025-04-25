@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction à R</title>
+    <meta charset="utf-8" />
+    <meta name="date" content="2025-04-25" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introduction à R
+]
+.subtitle[
+## <em>The R Base Package</em>
+]
+.institute[
+### INESSS, BDCA
+]
+.date[
+### 2025-04-25
+]
+
+---
+
+class: center, middle
+
+&lt;!-- CODE POUR TOUTES LES DIAPOS
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+  font-size: 15px;
+}
+&lt;/style&gt;
+--&gt;
+
+&lt;style type="text/css"&gt;
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+&lt;/style&gt;
+
+# Les bases
+
+---
+
+## Arithmétique (1)
+
+
+``` r
+# Addition
+5 + 5
+```
+
+```
+#&gt; [1] 10
+```
+
+``` r
+# Soustraction
+5 - 5
+```
+
+```
+#&gt; [1] 0
+```
+
+``` r
+# Multiplication
+3 * 5
+```
+
+```
+#&gt; [1] 15
+```
+
+``` r
+# Division
+(5 + 5) / 2
+```
+
+```
+#&gt; [1] 5
+```
+
+---
+
+## Arithmétique (2)
+
+
+``` r
+# Exposant
+2^5
+```
+
+```
+#&gt; [1] 32
+```
+
+``` r
+# Modulo
+28 %% 6
+```
+
+```
+#&gt; [1] 4
+```
+
+Prendre note que le caractère `#` met la ligne de code en commentaire et n'est pas évalué par R.
+
+---
+
+## Affectation de variables (1)
+Une variable permet de stocker une valeur ou un objet. On peut ensuite l'utiliser ultérieurement pour accéder facilement à cette valeur.
+
+``` r
+# Assigner la valeur 42 à x
+x &lt;- 42
+
+# Afficher/Imprimer la valeur de la variable x
+x
+```
+
+```
+#&gt; [1] 42
+```
+
+``` r
+print(x)
+```
+
+```
+#&gt; [1] 42
+```
+
+---
+
+## Affectation de variables (2)
+Nous pouvons appliquer des opérations arithmétiques entre des variables numériques.
+
+``` r
+x &lt;- 5
+y &lt;- 25
+x + y
+```
+
+```
+#&gt; [1] 30
+```
+
+``` r
+x - y
+```
+
+```
+#&gt; [1] -20
+```
+
+``` r
+y / x
+```
+
+```
+#&gt; [1] 5
+```
+
+---
+
+## Type de données de base (1)
+
+- Nombres entiers : `4` (`integer`/`int`)
+
+``` r
+integer &lt;- 4
+```
+- Numérique : `4.5` (`numeric`/`num`)
+
+``` r
+numeric &lt;- 4.5
+```
+- Logique ou booléen : `TRUE` ou `FALSE` (`logical`/`logi`)
+
+``` r
+logique1 &lt;- TRUE
+logique2 &lt;- FALSE
+```
+- Texte : `Chaîne de caractères` (`character`/`chr`)
+
+``` r
+character1 &lt;- "Chaine de caractères"
+character2 &lt;- 'Chaine de caractères'
+```
+
+---
+
+## Type de données de base (2)
+
+R peut décider que c'est numérique même si on veut des nombres entiers.  
+Ajouter `L` après un nombre force la classe d'un nombre à entier au lieu de numérique.
+
+``` r
+class(5)
+```
+
+```
+#&gt; [1] "numeric"
+```
+
+``` r
+class(5L)
+```
+
+```
+#&gt; [1] "integer"
+```
+
+``` r
+class(1:5)
+```
+
+```
+#&gt; [1] "integer"
+```
+
+---
+class: center, middle
+
+# Vecteurs
+
+---
+
+## Créer un vecteur
+On crée un vecteur avec la fonction `c()`.
+
+
+``` r
+numeric_vec &lt;- c(1, 10, 49)
+character_vec &lt;- c("a", "b", "c")
+boolean_vec &lt;- c(TRUE, FALSE, T, F)
+```
+
+---
+
+## Mise en situation
+
+Médicament ajouté ou déduit de l'inventaire à la fin de la journée du lundi au vendredi :
+
+``` r
+# Advil
+advil &lt;- c(140, -50, 20, -120, 240)
+
+# Tylenol
+tylenol &lt;- c(-24, 50, 100, -350, 10)
+```
+
+---
+
+## Nommer un vecteur (1)
+
+Nous pouvons donner un nom aux éléments d'un vecteur avec la fonction `names()`.
+
+``` r
+advil &lt;- c(140, -50, 20, -120, 240)
+advil
+```
+
+```
+#&gt; [1]  140  -50   20 -120  240
+```
+
+``` r
+tylenol &lt;- c(-24, 50, 100, -350, 10)
+names(advil) &lt;- c(
+  "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"
+)
+names(tylenol) &lt;-
+  c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
+print(advil)
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+---
+
+## Nommer un vecteur (2)
+
+Si une information est utilisé plus d'une fois, il est utile de créer une nouvelle variable.
+
+``` r
+advil &lt;- c(140, -50, 20, -120, 240)
+tylenol &lt;- c(-24, 50, 100, -350, 10)
+
+# Jour de la semaine
+jours &lt;- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")
+
+# Attribuer le jour de la semaine
+names(advil) &lt;- jours
+names(tylenol) &lt;- jours
+
+print(advil)
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+---
+
+## Calculs sur un vecteur (1)
+
+Pour chaque jour, calculons le nombre de médicaments qui ont été ajouté ou déduit de l'inventaire.
+
+``` r
+advil
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+``` r
+tylenol
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      -24       50      100     -350       10
+```
+
+``` r
+inventaire_jour &lt;- advil + tylenol
+inventaire_jour
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      116        0      120     -470      250
+```
+
+---
+
+## Calculs sur un vecteur (2)
+
+Les opérations de plusieurs vecteurs se font à partir de la position des valeurs, pas des noms.
+
+``` r
+advil
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+``` r
+tylenol2 &lt;- tylenol[c(3,2,5,1,4)]  # modifier l'ordre des jours
+tylenol2
+```
+
+```
+#&gt; Mercredi    Mardi Vendredi    Lundi    Jeudi 
+#&gt;      100       50       10      -24     -350
+```
+
+``` r
+inventaire_jour2 &lt;- advil + tylenol2
+inventaire_jour2
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      240        0       30     -144     -110
+```
+Les Advil du lundi sont additionné aux Tylenol du mercredi, ce qui n'a pas de sens.
+
+---
+
+## Calculs sur un vecteur (3)
+
+Calculons l'inventaire de la semaine
+
+
+``` r
+total_advil &lt;- sum(advil)
+total_advil
+```
+
+```
+#&gt; [1] 230
+```
+
+``` r
+total_tylenol &lt;- sum(tylenol)
+total_tylenol
+```
+
+```
+#&gt; [1] -214
+```
+
+``` r
+total_semaine &lt;- sum(inventaire_jour)
+total_semaine
+```
+
+```
+#&gt; [1] 16
+```
+
+---
+
+## Comparer les inventaires
+
+Vérifions si les inventaires sont plus élevés en Advil qu'en Tylenol.
+
+
+``` r
+total_advil
+```
+
+```
+#&gt; [1] 230
+```
+
+``` r
+total_tylenol
+```
+
+```
+#&gt; [1] -214
+```
+
+``` r
+total_advil &gt; total_tylenol
+```
+
+```
+#&gt; [1] TRUE
+```
+
+---
+class: code80, textfont15
+
+## Sélection dans un vecteur (1)
+
+Pour sélectionner une valeur dans un vecteur, nous utilisons les crochets `[]`.
+
+
+``` r
+advil
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+``` r
+# Inventaire du mercredi
+advil[3]
+```
+
+```
+#&gt; Mercredi 
+#&gt;       20
+```
+
+``` r
+advil[[3]]
+```
+
+```
+#&gt; [1] 20
+```
+Utiliser les doubles crochets focalise sur la valeur perdant ainsi l'information du nom (si présent)
+
+``` r
+vecteur_sans_nom &lt;- c(5, 4, 7)
+vecteur_sans_nom[2]
+```
+
+```
+#&gt; [1] 4
+```
+
+``` r
+vecteur_sans_nom[[2]]
+```
+
+```
+#&gt; [1] 4
+```
+Aucune différence entre crochets simples ou doubles
+
+---
+
+## Sélection dans un vecteur (2)
+
+Il est possible de sélectionner plusieurs valeurs à l'aide d'un vecteur. Si nous voulons analyser les inventaires du lundi et du vendredi, nous pourrions utiliser le vecteur `c(1, 5)` à l'intérieur des crochets : `advil[c(1, 5)]`.  
+Analysons les inventaires du mardi au jeudi :
+
+``` r
+advil[c(2, 3, 4)]
+```
+
+```
+#&gt;    Mardi Mercredi    Jeudi 
+#&gt;      -50       20     -120
+```
+
+``` r
+advil[2:4]
+```
+
+```
+#&gt;    Mardi Mercredi    Jeudi 
+#&gt;      -50       20     -120
+```
+
+---
+
+## Sélection dans un vecteur (3)
+
+Une autre manière de sélectionner des valeurs est d'utiliser les noms lorsqu'il y en a.
+
+``` r
+advil
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;      140      -50       20     -120      240
+```
+
+``` r
+advil[c("Mardi", "Jeudi")]
+```
+
+```
+#&gt; Mardi Jeudi 
+#&gt;   -50  -120
+```
+
+``` r
+advil["Mercredi"]
+```
+
+```
+#&gt; Mercredi 
+#&gt;       20
+```
+
+---
+class: code85, textfont17
+
+## Sélection par comparaison (1)
+
+Il est aussi possible de sélectionner des valeurs par comparaison.
+
+``` r
+# Jour(s)s où l'inventaire Advil est positif
+advil &gt; 0
+```
+
+```
+#&gt;    Lundi    Mardi Mercredi    Jeudi Vendredi 
+#&gt;     TRUE    FALSE     TRUE    FALSE     TRUE
+```
+
+``` r
+advil[advil &gt; 0]  # insérer la condition dans les crochets
+```
+
+```
+#&gt;    Lundi Mercredi Vendredi 
+#&gt;      140       20      240
+```
+
+``` r
+selection &lt;- advil &gt; 0  # enregistrer la condition sous une variable
+advil[selection]  # utiliser la variable dans les crochets
+```
+
+```
+#&gt;    Lundi Mercredi Vendredi 
+#&gt;      140       20      240
+```
+
+``` r
+# Jour(s)s où l'inventaire total est de zéro
+advil[inventaire_jour == 0]
+```
+
+```
+#&gt; Mardi 
+#&gt;   -50
+```
+
+---
+
+## Sélection par comparaison (2)
+
+Liste des opérateurs de comparaison :
+
+- `&lt;` : plus petit
+- `&gt;` : plus grand
+- `&lt;=` : plus petit ou égal
+- `&gt;=` : plus grand ou égal
+- `==` : égal\*
+- `!=` : pas égal, différent
+
+\* important de mettre deux `==`, sinon assignation d'une variable comme `&lt;-`
+
+---
+
+class: center, middle
+
+# Les *data frames*
+
+---
+
+## Qu'est-ce qu'un *data frame* ?
+
+Un *data frame* est un tableau comme on peut en avoir avec Excel.  
+Chaque colonne est une variable d'un même type (numérique, caractère, logique...) et chaque ligne est une observation.
+
+
+``` r
+head(mtcars)
+```
+
+```
+#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#&gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+#&gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+#&gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+#&gt; Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+```
+
+Les fonctions `head()` et `tail()` permettent de voir les premières ou les dernières observations d'un ensemble de données.
+
+---
+class: code80, textfont18
+
+## Structure des données
+La fonction `str()` est semblable à la fonction `class()`, mais affiche plus d'informations.
+
+``` r
+class(mtcars)
+```
+
+```
+#&gt; [1] "data.frame"
+```
+
+``` r
+str(mtcars)
+```
+
+```
+#&gt; 'data.frame':	32 obs. of  11 variables:
+#&gt;  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+#&gt;  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
+#&gt;  $ disp: num  160 160 108 258 360 ...
+#&gt;  $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+#&gt;  $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+#&gt;  $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+#&gt;  $ qsec: num  16.5 17 18.6 19.4 17 ...
+#&gt;  $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
+#&gt;  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+#&gt;  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+#&gt;  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...
+```
+Il est préférable d'utiliser `str()` pour une première exploration que de visualiser tout le tableau avec `View()`.  
+`mtcars` est un `data.frame` de 32 observations et 11 colonnes, toutes les variables sont de type numériques (`num`) et les dix premières observations de chaque colonne sont affichées.
+
+---
+
+## Créer un data.frame (1)
+
+La fonction `data.frame()` permet de créer un `data.frame`. Chaque colonne est un vecteur et tous les vecteurs doivent contenir le même nombre de valeurs.
+
+``` r
+personne &lt;- c("Jean Airoldi", "Ricardo", "George Lucas",
+              "FredK Le Roi", "Dre Samson")
+main &lt;- c("droitier", NA, "ambidextre",
+          "gaucher", "droitier")
+gentillesse_sur_10 &lt;- c(9, 2, 0,
+                        10, 20)
+id &lt;- 1:5
+on_laime &lt;- c(FALSE, TRUE, FALSE,
+              TRUE, TRUE)
+```
+
+`NA` est pour *Not Available / Missing Values*. Pas besoin de préciser si `NA` est dans un vecteur numérique, logique ou caractère.
+
+---
+class: code85
+
+## Créer un data.frame (2)
+
+Chaque vecteur doivent contenir le même nombre de valeurs.  
+Les colonnes sont dans le même ordre que les vecteurs inscrits dans la fonction `data.frame()`.
+
+``` r
+mon_data &lt;- data.frame(id, personne, main, gentillesse_sur_10, on_laime)
+mon_data
+```
+
+```
+#&gt;   id     personne       main gentillesse_sur_10 on_laime
+#&gt; 1  1 Jean Airoldi   droitier                  9    FALSE
+#&gt; 2  2      Ricardo       &lt;NA&gt;                  2     TRUE
+#&gt; 3  3 George Lucas ambidextre                  0    FALSE
+#&gt; 4  4 FredK Le Roi    gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson   droitier                 20     TRUE
+```
+
+``` r
+str(mon_data)
+```
+
+```
+#&gt; 'data.frame':	5 obs. of  5 variables:
+#&gt;  $ id                : int  1 2 3 4 5
+#&gt;  $ personne          : chr  "Jean Airoldi" "Ricardo" "George Lucas" "FredK Le Roi" ...
+#&gt;  $ main              : chr  "droitier" NA "ambidextre" "gaucher" ...
+#&gt;  $ gentillesse_sur_10: num  9 2 0 10 20
+#&gt;  $ on_laime          : logi  FALSE TRUE FALSE TRUE TRUE
+```
+
+---
+
+## Sélection des éléments d'un *data.frame* (1)
+
+Comme pour les vecteurs, on sélectionne les éléments d'un tableau avec les crochets `[]`. À l'aide d'une virgule, on peut décider entre les lignes et les colonnes à afficher :
+- `mon_data[1:2, ]` : Les deux premières lignes, toutes les colonnes.
+- `mon_data[1, 2]` : **Valeur** de la cellule de la première ligne et la deuxième colonne.
+- `mon_data[1:3, c(2:4, 6)]` : Les trois premières lignes et les colonnes 2, 3, 4 et 6.
+
+---
+
+## Sélection des éléments d'un *data.frame* (2)
+
+
+``` r
+mon_data
+```
+
+```
+#&gt;   id     personne       main gentillesse_sur_10 on_laime
+#&gt; 1  1 Jean Airoldi   droitier                  9    FALSE
+#&gt; 2  2      Ricardo       &lt;NA&gt;                  2     TRUE
+#&gt; 3  3 George Lucas ambidextre                  0    FALSE
+#&gt; 4  4 FredK Le Roi    gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson   droitier                 20     TRUE
+```
+
+``` r
+mon_data[1, 2]
+```
+
+```
+#&gt; [1] "Jean Airoldi"
+```
+
+``` r
+mon_data[1:3, 2:4]
+```
+
+```
+#&gt;       personne       main gentillesse_sur_10
+#&gt; 1 Jean Airoldi   droitier                  9
+#&gt; 2      Ricardo       &lt;NA&gt;                  2
+#&gt; 3 George Lucas ambidextre                  0
+```
+
+---
+
+## Sélection des éléments d'un *data.frame* (3)
+
+On peut utiliser le nom des colonnes au lieu les nombres
+
+
+``` r
+mon_data
+```
+
+```
+#&gt;   id     personne       main gentillesse_sur_10 on_laime
+#&gt; 1  1 Jean Airoldi   droitier                  9    FALSE
+#&gt; 2  2      Ricardo       &lt;NA&gt;                  2     TRUE
+#&gt; 3  3 George Lucas ambidextre                  0    FALSE
+#&gt; 4  4 FredK Le Roi    gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson   droitier                 20     TRUE
+```
+
+``` r
+mon_data[2, "gentillesse_sur_10"]
+```
+
+```
+#&gt; [1] 2
+```
+
+``` r
+mon_data[c(1, 4, 5), c("personne", "main")]
+```
+
+```
+#&gt;       personne     main
+#&gt; 1 Jean Airoldi droitier
+#&gt; 4 FredK Le Roi  gaucher
+#&gt; 5   Dre Samson droitier
+```
+
+---
+class: code75
+
+## Sélection d'une colonne uniquement
+
+Indiquer uniquement la ou les colonnes après la virgule retournera toutes les lignes.  
+En plus des crochets, l'utilisation du symbole `$` est aussi possible.
+
+``` r
+mon_data[, 2]
+```
+
+```
+#&gt; [1] "Jean Airoldi" "Ricardo"      "George Lucas" "FredK Le Roi" "Dre Samson"
+```
+
+``` r
+mon_data[, "personne"]
+```
+
+```
+#&gt; [1] "Jean Airoldi" "Ricardo"      "George Lucas" "FredK Le Roi" "Dre Samson"
+```
+
+``` r
+mon_data$personne
+```
+
+```
+#&gt; [1] "Jean Airoldi" "Ricardo"      "George Lucas" "FredK Le Roi" "Dre Samson"
+```
+ 
+---
+class: code75
+
+## Sélection d'observation selon condition (1)
+
+À l'aide d'un vecteur contenant des `TRUE` ou des `FALSE`, on peut sélectionner les données des gens qu'on aime.
+
+``` r
+mon_data[, c("personne", "on_laime")]
+```
+
+```
+#&gt;       personne on_laime
+#&gt; 1 Jean Airoldi    FALSE
+#&gt; 2      Ricardo     TRUE
+#&gt; 3 George Lucas    FALSE
+#&gt; 4 FredK Le Roi     TRUE
+#&gt; 5   Dre Samson     TRUE
+```
+
+``` r
+mon_data$on_laime  # la colonne 'on_laime' sous la forme d'un vecteur
+```
+
+```
+#&gt; [1] FALSE  TRUE FALSE  TRUE  TRUE
+```
+
+``` r
+# Utiliser le vecteur mon_data$on_laime pour sélectionner les valeurs TRUE
+# uniquement. Les FALSE sont exclus.
+mon_data[mon_data$on_laime, ]  
+```
+
+```
+#&gt;   id     personne     main gentillesse_sur_10 on_laime
+#&gt; 2  2      Ricardo     &lt;NA&gt;                  2     TRUE
+#&gt; 4  4 FredK Le Roi  gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson droitier                 20     TRUE
+```
+
+---
+
+## Sélection d'observation selon condition (2)
+
+Même chose que précédemment, mais en utilisant la variable `on_laime`
+
+``` r
+mon_data[mon_data$on_laime, ]  # avec colonne du data
+```
+
+```
+#&gt;   id     personne     main gentillesse_sur_10 on_laime
+#&gt; 2  2      Ricardo     &lt;NA&gt;                  2     TRUE
+#&gt; 4  4 FredK Le Roi  gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson droitier                 20     TRUE
+```
+
+``` r
+variable_on_laime &lt;- mon_data$on_laime
+mon_data[variable_on_laime, ]  # avec la variable
+```
+
+```
+#&gt;   id     personne     main gentillesse_sur_10 on_laime
+#&gt; 2  2      Ricardo     &lt;NA&gt;                  2     TRUE
+#&gt; 4  4 FredK Le Roi  gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson droitier                 20     TRUE
+```
+
+---
+
+## Sélection d'observation selon condition (3)
+
+Cherchons les gens qui ont une gentillesse d'au moins 5 sur 10.
+
+``` r
+# En utilisant la colonne du data
+mon_data$gentillesse_sur_10 &gt; 5
+```
+
+```
+#&gt; [1]  TRUE FALSE FALSE  TRUE  TRUE
+```
+
+``` r
+mon_data[mon_data$gentillesse_sur_10 &gt; 5, ]
+```
+
+```
+#&gt;   id     personne     main gentillesse_sur_10 on_laime
+#&gt; 1  1 Jean Airoldi droitier                  9    FALSE
+#&gt; 4  4 FredK Le Roi  gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson droitier                 20     TRUE
+```
+
+``` r
+# En utilisant une variable
+gentil5 &lt;- mon_data$gentillesse_sur_10 &gt; 5
+mon_data[gentil5, ]
+```
+
+```
+#&gt;   id     personne     main gentillesse_sur_10 on_laime
+#&gt; 1  1 Jean Airoldi droitier                  9    FALSE
+#&gt; 4  4 FredK Le Roi  gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson droitier                 20     TRUE
+```
+
+---
+class: code80, textfont17
+
+## Trier son *data frame*
+
+La fonction `order()` indique le rang, la position de la donnée. On peut ensuite l'utiliser pour afficher les lignes dans l'ordre voulu.
+
+``` r
+mon_data
+```
+
+```
+#&gt;   id     personne       main gentillesse_sur_10 on_laime
+#&gt; 1  1 Jean Airoldi   droitier                  9    FALSE
+#&gt; 2  2      Ricardo       &lt;NA&gt;                  2     TRUE
+#&gt; 3  3 George Lucas ambidextre                  0    FALSE
+#&gt; 4  4 FredK Le Roi    gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson   droitier                 20     TRUE
+```
+
+``` r
+tri_gentil &lt;- order(mon_data$gentillesse_sur_10)
+tri_gentil
+```
+
+```
+#&gt; [1] 3 2 1 4 5
+```
+
+``` r
+mon_data[tri_gentil,]
+```
+
+```
+#&gt;   id     personne       main gentillesse_sur_10 on_laime
+#&gt; 3  3 George Lucas ambidextre                  0    FALSE
+#&gt; 2  2      Ricardo       &lt;NA&gt;                  2     TRUE
+#&gt; 1  1 Jean Airoldi   droitier                  9    FALSE
+#&gt; 4  4 FredK Le Roi    gaucher                 10     TRUE
+#&gt; 5  5   Dre Samson   droitier                 20     TRUE
+```
+
+---
+class: middle, center
+
+# Facteurs
+
+---
+
+## Qu'est-ce qu'un facteur? (1)
+
+Le terme facteur est un type de données pour stocker des variables catégoriques et être en mesure de les trier. Elles sont aussi plus efficace au niveau de la mémoire.
+
+``` r
+sex &lt;- c("Femme", "Homme", "Homme", "Femme", "Femme")
+factor_sex &lt;- factor(sex)
+factor_sex
+```
+
+```
+#&gt; [1] Femme Homme Homme Femme Femme
+#&gt; Levels: Femme Homme
+```
+S'ils ne sont pas défini, les *Levels* sont en ordre alphabétique.
+
+---
+class: code75, textfont17
+
+## Qu'est-ce qu'un facteur (2)
+
+Comment trier une variable catégorique :
+
+
+``` r
+temperature &lt;- c("Élevée", "Faible", "Élevée", "Faible", "Moyenne")
+factor_temperature &lt;- factor(
+  temperature,  # vecteur à utiliser
+  order = TRUE,  # si l'ordre a un concept de 'plus petit/grand que'
+  levels = c("Faible", "Moyenne", "Élevée")  # ordre souhaité
+)
+factor_temperature
+```
+
+```
+#&gt; [1] Élevée  Faible  Élevée  Faible  Moyenne
+#&gt; Levels: Faible &lt; Moyenne &lt; Élevée
+```
+Très utile avec les légendes de graphiques.
+
+
+``` r
+mois_annee &lt;- c("Déc", "Avr", "Jan", "Mar")
+factor_mois_annee &lt;- factor(
+  mois_annee,
+  order = FALSE,  # les mois ont un ordre, mais ne sont pas plus petit/grand qu'un autre
+  levels = c(
+    "Jan", "Fév", "Mar", "Avr", "Mai", "Jun", 
+    "Jul", "Aou", "Sep", "Oct", "Nov", "Déc"
+  )
+)
+sort(factor_mois_annee)
+```
+
+```
+#&gt; [1] Jan Mar Avr Déc
+#&gt; Levels: Jan Fév Mar Avr Mai Jun Jul Aou Sep Oct Nov Déc
+```
+
+---
+class: middle, center
+
+# Liste
+
+---
+
+## Qu'est-ce qu'une liste?
+Une liste dans R permet de réunir une variété d'objets sous une même variable. Peut contenir des matrices, des vecteurs, des *data.frame* et même d'autres listes.
+
+
+``` r
+MaListe = list(element1, element2, ...)
+```
+
+
+---
+class: code80
+
+## Comment créer une liste (1)
+
+
+``` r
+vecteur &lt;- 1:10
+list1 &lt;- list(x = "a", y = "b", z = "c")
+datafr &lt;- mtcars[1:3, 1:3]
+ma_liste &lt;- list(vecteur, list1, datafr)
+ma_liste
+```
+
+```
+#&gt; [[1]]
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+#&gt; 
+#&gt; [[2]]
+#&gt; [[2]]$x
+#&gt; [1] "a"
+#&gt; 
+#&gt; [[2]]$y
+#&gt; [1] "b"
+#&gt; 
+#&gt; [[2]]$z
+#&gt; [1] "c"
+#&gt; 
+#&gt; 
+#&gt; [[3]]
+#&gt;                mpg cyl disp
+#&gt; Mazda RX4     21.0   6  160
+#&gt; Mazda RX4 Wag 21.0   6  160
+#&gt; Datsun 710    22.8   4  108
+```
+
+---
+class: code80
+
+## Comment créer une liste (2)
+Nommer directement les éléments d'une liste
+
+``` r
+ma_liste &lt;- list(vec = vecteur, lis = list1, df = datafr)
+ma_liste
+```
+
+```
+#&gt; $vec
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+#&gt; 
+#&gt; $lis
+#&gt; $lis$x
+#&gt; [1] "a"
+#&gt; 
+#&gt; $lis$y
+#&gt; [1] "b"
+#&gt; 
+#&gt; $lis$z
+#&gt; [1] "c"
+#&gt; 
+#&gt; 
+#&gt; $df
+#&gt;                mpg cyl disp
+#&gt; Mazda RX4     21.0   6  160
+#&gt; Mazda RX4 Wag 21.0   6  160
+#&gt; Datsun 710    22.8   4  108
+```
+
+---
+class: code80
+
+## Comment créer une liste (3)
+Nommer les éléments d'une liste après l'avoir créée
+
+``` r
+names(ma_liste) &lt;- c("MonVecteur", "MaListe", "MonDf")
+ma_liste
+```
+
+```
+#&gt; $MonVecteur
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+#&gt; 
+#&gt; $MaListe
+#&gt; $MaListe$x
+#&gt; [1] "a"
+#&gt; 
+#&gt; $MaListe$y
+#&gt; [1] "b"
+#&gt; 
+#&gt; $MaListe$z
+#&gt; [1] "c"
+#&gt; 
+#&gt; 
+#&gt; $MonDf
+#&gt;                mpg cyl disp
+#&gt; Mazda RX4     21.0   6  160
+#&gt; Mazda RX4 Wag 21.0   6  160
+#&gt; Datsun 710    22.8   4  108
+```
+
+---
+class: code75, textfont18
+
+
+## Sélectionner les éléments d'une liste (1)
+Semblable à la sélection d'un vecteur ou d'un *data frame* avec une particularité au niveau des crochets `[]`
+
+``` r
+ma_liste[1]
+```
+
+```
+#&gt; $MonVecteur
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+``` r
+str(ma_liste[1])
+```
+
+```
+#&gt; List of 1
+#&gt;  $ MonVecteur: int [1:10] 1 2 3 4 5 6 7 8 9 10
+```
+
+``` r
+ma_liste[[1]]
+```
+
+```
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+``` r
+str(ma_liste[[1]])
+```
+
+```
+#&gt;  int [1:10] 1 2 3 4 5 6 7 8 9 10
+```
+
+``` r
+ma_liste$MonVecteur
+```
+
+```
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+---
+class: code80, textfont17
+
+## Sélectionner les éléments d'une liste (2)
+Il est possible qu'une liste contienne plusieurs éléments et les concepts de sélection sont les mêmes.
+
+``` r
+list_plusieurs_niveaux = list(
+  niv1_1 = "Niveau 1",
+  niv1_2 = list(
+    niv2_1 = "Niveau 2",
+    niv2_2 = list(
+      niv3_1 = "Niveau 3",
+      niv3_2 = list(niv4_1 = "Niveau 4 - Élément 1",
+                    niv4_2 = "Niveau 4 - Élément 2")
+    )
+  )
+)
+list_plusieurs_niveaux$niv1_2$niv2_2
+```
+
+```
+#&gt; $niv3_1
+#&gt; [1] "Niveau 3"
+#&gt; 
+#&gt; $niv3_2
+#&gt; $niv3_2$niv4_1
+#&gt; [1] "Niveau 4 - Élément 1"
+#&gt; 
+#&gt; $niv3_2$niv4_2
+#&gt; [1] "Niveau 4 - Élément 2"
+```
+
+``` r
+list_plusieurs_niveaux$niv1_2$niv2_2$niv3_2$niv4_2
+```
+
+```
+#&gt; [1] "Niveau 4 - Élément 2"
+```
+
+---
+class: center, middle
+
+## BRAVO!
+Vous êtes maintenant de jeunes padawans Rinessiens
+
+
+
+&lt;!-- --- --&gt;
+&lt;!-- class: center, middle --&gt;
+
+&lt;!-- # Matrices --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## Qu'est-ce qu'une matrice --&gt;
+&lt;!-- Une matrice est semblable à un `data.frame`, mais toutes les colonnes sont du même type (numérique, caractère ou logique).   --&gt;
+&lt;!-- Une matrice est construite à partir de la fonction `matrix()`. --&gt;
+&lt;!-- ```{r} --&gt;
+&lt;!-- matrix(1:9, nrow = 3, byrow = TRUE) --&gt;
+&lt;!-- matrix(101:110, ncol = 5, byrow = FALSE) --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## Nommer une matrice (ou un *data frame*) --&gt;
+
+&lt;!-- Les fonctions `rownames()` et `colnames()` permettent de nommer les lignes et les colonnes d'une matrice ou d'un tableau. --&gt;
+&lt;!-- ```{r} --&gt;
+&lt;!-- ma_matrice &lt;- matrix(1:9, nrow = 3, byrow = TRUE) --&gt;
+&lt;!-- colnames(ma_matrice) &lt;- c(LETTERS[1:3]) --&gt;
+&lt;!-- rownames(ma_matrice) &lt;- c(letters[24:26]) --&gt;
+&lt;!-- ma_matrice --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## Calcul sur une matrice --&gt;
+
+&lt;!-- Les fonctions `rowSums` et `colSums` permettent de calculer la somme d'une ligne et d'une colonne. --&gt;
+
+&lt;!-- ```{r} --&gt;
+&lt;!-- ma_matrice --&gt;
+&lt;!-- rowSums(ma_matrice) --&gt;
+&lt;!-- colSums(ma_matrice) --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## Ajouter une ligne (ou colonne) --&gt;
+
+&lt;!-- La fonction `rbind()` permet d'ajouter des lignes et `cbind()` des colonnes. --&gt;
+
+&lt;!-- ```{r} --&gt;
+&lt;!-- ma_matrice --&gt;
+&lt;!-- rowSums(ma_matrice) --&gt;
+&lt;!-- rbind(ma_matrice, rowSums(ma_matrice)) --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## Opérations sur une matrice (1) --&gt;
+&lt;!-- ```{r} --&gt;
+&lt;!-- ma_matrice --&gt;
+&lt;!-- mean(ma_matrice[1,])  # de la première ligne --&gt;
+&lt;!-- mean(ma_matrice[, 1])  # de la première colonne --&gt;
+&lt;!-- mean(ma_matrice)  # de toute la matrice --&gt;
+&lt;!-- ``` --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## Opération sur une matrice (2) --&gt;
+&lt;!-- ```{r} --&gt;
+&lt;!-- ma_matrice --&gt;
+&lt;!-- ma_matrice * 3 --&gt;
+&lt;!-- ma_matrice[, 1] * 3 --&gt;
+&lt;!-- ``` --&gt;
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

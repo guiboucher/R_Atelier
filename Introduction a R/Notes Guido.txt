@@ -1,0 +1,19 @@
+L77 - INCLURE UN PLAN
+# Les bases
+?Table des matières?
+
+L80 - CLARIFIER QU'ON PARLE SPÉCIFIQUEMENT DE "base R"
+# Les bases
+- Ajout du sous-titre 'The R Base Package'
+-> clarifier pendant la présentation la distinction entre une librairie de type dplyr et la librairie base?
+
+L113 - **POURQUOI DES VARIABLES ET NON DES OBJETS?**
+-> Distinction entre une variable et un objet. Je vais en glisser un mot pendant la présentation, mais c'est plus poussé comme concept informatique. Une variable est un objet, mais un objet n'est pas une variable. Le concept d'bjet est plus complexe, tout comme sa programmation (orienté objet).
+
+L241 - ** EXPLIQUER QU'UNE OPERATION SUR DEUX VECTEUR EST CALCULÉE SELON LA POSITION ET NON LE NOM**
+## Caculs sur un vecteur (1)
+-> Done + exemples
+
+L473 - *JE DOIS AVOUER ÇA ME DÉPASSE. JE NE COMPRENDS PAS CE QUE TU FAIS ICI*
+## Sélection d'observation selon condition (1)
+-> Commentaire dans le code pour précision
