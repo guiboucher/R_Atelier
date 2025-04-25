@@ -169,7 +169,7 @@ class(1:5)
 ---
 class: center, middle
 
-# Les vecteurs
+# Vecteurs
 
 ---
 
@@ -498,7 +498,7 @@ mon_data[tri_gentil,]
 ---
 class: center, middle
 
-# Les matrices
+# Matrices
 
 ---
 
@@ -565,29 +565,105 @@ ma_matrice * 3
 ma_matrice[, 1] * 3
 ```
 
+---
+class: middle, center
 
+# Facteurs
 
+---
 
+## Qu'est-ce qu'un facteur? (1)
 
+Le terme facteur est un type de données pour stocker des variables catégoriques et potentiellement les trier.
 
+```{r}
+sex <- c("Femme", "Homme", "Homme", "Femme", "Femme")
+factor_sex <- factor(sex)
+factor_sex
+```
 
+---
 
+## Qu'est-ce qu'un facteur (2)
 
+Comment trier une variables catégorique :
 
+```{r}
+temperature <- c("Élevée", "Faible", "Élevée", "Faible", "Moyenne")
+factor_temperature <- factor(
+  temperature,
+  order = TRUE,
+  levels = c("Faible", "Moyenne", "Élevée")
+)
+factor_temperature
+```
 
+Très utile avec les légendes de graphiques.
 
+---
+class: middle, center
 
+# Liste
 
+---
 
+## Qu'est-ce qu'une liste?
+Une liste dans R permet de réunir une variété d'objets sous une même variable. Peut contenir des matrices, des vecteurs, des *data.frame* et même d'autres listes.
 
+---
 
+## Comment créer une liste (1)
 
+```{r}
+vecteur <- 1:10
+matrice <- matrix(1:9, ncol = 3)
+datafr <- mtcars[1:3, 1:3]
+ma_liste <- list(vecteur, matrice, datafr)
+ma_liste
+```
 
+---
 
+## Comment créer une liste (2)
+Nommer directement les éléments d'une liste
+```{r}
+ma_liste <- list(vec = vecteur, mat = matrice, df = datafr)
+ma_liste
+```
 
+---
 
+## Comment créer une liste (3)
+Nommer les éléments d'une liste après l'avoir créée
+```{r}
+names(ma_liste) <- c("MonVecteur", "MaMatrice", "MonDf")
+ma_liste
+```
 
+---
 
+## Sélectionner les éléments d'une liste (1)
+Semblable à la sélection d'un vecteur ou d'un *data frame* avec une particularité au niveau des crochets `[]`
+```{r}
+ma_liste[1]
+ma_liste[[1]]
+ma_liste[["MonVecteur"]]
+ma_liste$MonVecteur
+```
 
+---
 
+## Sélectionner les éléments d'une liste (2)
+
+Si ce n'est pas un vecteur, l'utilisation du double crochet n'a pas d'impact
+```{r}
+ma_liste[2]
+ma_liste[[2]]
+```
+
+---
+class: center, middle
+
+## BRAVO!
+Vous êtes maintenant de jeunes padawans Rinessiens
 

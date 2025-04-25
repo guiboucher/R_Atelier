@@ -3,7 +3,7 @@
   <head>
     <title>Introduction à R</title>
     <meta charset="utf-8" />
-    <meta name="date" content="2025-02-06" />
+    <meta name="date" content="2025-02-10" />
     <script src="libs/header-attrs-2.29/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### INESSS, BDCA
 ]
 .date[
-### 2025-02-06
+### 2025-02-10
 ]
 
 ---
@@ -267,7 +267,7 @@ class(1:5)
 ---
 class: center, middle
 
-# Les vecteurs
+# Vecteurs
 
 ---
 
@@ -984,7 +984,7 @@ mon_data[tri_gentil,]
 ---
 class: center, middle
 
-# Les matrices
+# Matrices
 
 ---
 
@@ -1182,31 +1182,219 @@ ma_matrice[, 1] * 3
 #&gt;  3 12 21
 ```
 
+---
+class: middle, center
+
+# Facteurs
+
+---
+
+## Qu'est-ce qu'un facteur? (1)
+
+Le terme facteur est un type de données pour stocker des variables catégoriques et potentiellement les trier.
 
 
+``` r
+sex &lt;- c("Femme", "Homme", "Homme", "Femme", "Femme")
+factor_sex &lt;- factor(sex)
+factor_sex
+```
+
+```
+#&gt; [1] Femme Homme Homme Femme Femme
+#&gt; Levels: Femme Homme
+```
+
+---
+
+## Qu'est-ce qu'un facteur (2)
+
+Comment trier une variables catégorique :
 
 
+``` r
+temperature &lt;- c("Élevée", "Faible", "Élevée", "Faible", "Moyenne")
+factor_temperature &lt;- factor(
+  temperature,
+  order = TRUE,
+  levels = c("Faible", "Moyenne", "Élevée")
+)
+factor_temperature
+```
+
+```
+#&gt; [1] Élevée  Faible  Élevée  Faible  Moyenne
+#&gt; Levels: Faible &lt; Moyenne &lt; Élevée
+```
+
+Très utile avec les légendes de graphiques.
+
+---
+class: middle, center
+
+# Liste
+
+---
+
+## Qu'est-ce qu'une liste?
+Une liste dans R permet de réunir une variété d'objets sous une même variable. Peut contenir des matrices, des vecteurs, des *data.frame* et même d'autres listes.
+
+---
+
+## Comment créer une liste (1)
 
 
+``` r
+vecteur &lt;- 1:10
+matrice &lt;- matrix(1:9, ncol = 3)
+datafr &lt;- mtcars[1:3, 1:3]
+ma_liste &lt;- list(vecteur, matrice, datafr)
+ma_liste
+```
 
+```
+#&gt; [[1]]
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+#&gt; 
+#&gt; [[2]]
+#&gt;      [,1] [,2] [,3]
+#&gt; [1,]    1    4    7
+#&gt; [2,]    2    5    8
+#&gt; [3,]    3    6    9
+#&gt; 
+#&gt; [[3]]
+#&gt;                mpg cyl disp
+#&gt; Mazda RX4     21.0   6  160
+#&gt; Mazda RX4 Wag 21.0   6  160
+#&gt; Datsun 710    22.8   4  108
+```
 
+---
 
+## Comment créer une liste (2)
+Nommer directement les éléments d'une liste
 
+``` r
+ma_liste &lt;- list(vec = vecteur, mat = matrice, df = datafr)
+ma_liste
+```
 
+```
+#&gt; $vec
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+#&gt; 
+#&gt; $mat
+#&gt;      [,1] [,2] [,3]
+#&gt; [1,]    1    4    7
+#&gt; [2,]    2    5    8
+#&gt; [3,]    3    6    9
+#&gt; 
+#&gt; $df
+#&gt;                mpg cyl disp
+#&gt; Mazda RX4     21.0   6  160
+#&gt; Mazda RX4 Wag 21.0   6  160
+#&gt; Datsun 710    22.8   4  108
+```
 
+---
 
+## Comment créer une liste (3)
+Nommer les éléments d'une liste après l'avoir créée
 
+``` r
+names(ma_liste) &lt;- c("MonVecteur", "MaMatrice", "MonDf")
+ma_liste
+```
 
+```
+#&gt; $MonVecteur
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+#&gt; 
+#&gt; $MaMatrice
+#&gt;      [,1] [,2] [,3]
+#&gt; [1,]    1    4    7
+#&gt; [2,]    2    5    8
+#&gt; [3,]    3    6    9
+#&gt; 
+#&gt; $MonDf
+#&gt;                mpg cyl disp
+#&gt; Mazda RX4     21.0   6  160
+#&gt; Mazda RX4 Wag 21.0   6  160
+#&gt; Datsun 710    22.8   4  108
+```
 
+---
 
+## Sélectionner les éléments d'une liste (1)
+Semblable à la sélection d'un vecteur ou d'un *data frame* avec une particularité au niveau des crochets `[]`
 
+``` r
+ma_liste[1]
+```
 
+```
+#&gt; $MonVecteur
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+```
 
+``` r
+ma_liste[[1]]
+```
 
+```
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+```
 
+``` r
+ma_liste[["MonVecteur"]]
+```
 
+```
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+```
 
+``` r
+ma_liste$MonVecteur
+```
 
+```
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+---
+
+## Sélectionner les éléments d'une liste (2)
+
+Si ce n'est pas un vecteur, l'utilisation du double crochet n'a pas d'impact
+
+``` r
+ma_liste[2]
+```
+
+```
+#&gt; $MaMatrice
+#&gt;      [,1] [,2] [,3]
+#&gt; [1,]    1    4    7
+#&gt; [2,]    2    5    8
+#&gt; [3,]    3    6    9
+```
+
+``` r
+ma_liste[[2]]
+```
+
+```
+#&gt;      [,1] [,2] [,3]
+#&gt; [1,]    1    4    7
+#&gt; [2,]    2    5    8
+#&gt; [3,]    3    6    9
+```
+
+---
+class: center, middle
+
+## BRAVO!
+Vous êtes maintenant de jeunes padawans Rinessiens
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
