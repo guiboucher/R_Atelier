@@ -10,7 +10,6 @@
 # Cliquer sur Run en haut à droite du script ou CTRL+ENTER
 5 + 5
 # Une ligne de commentaire commence par le caractère carré [#]
-# 5 + 5 ne sera pas exécuté puisque la ligne de code commence par un carré
 
 ### Console - Bas gauche ####
 # On y voit le résultat de notre calcul précédent qui était 5+5
@@ -20,6 +19,9 @@
 #### Environnement ####
 # Endroit où l'on peut voir la ou les valeurs d'un objet ou d'une variable.
 x <- 5 + 5
+# 1) le code s'afficher dans la console
+# 2) x prend la valeur de 5+5=10
+tableau <- mtcars
 
 #### History ####
 # Historique du code exécuté
@@ -42,7 +44,7 @@ x <- 5 + 5
 
 #### Graphiques - Plots ####
 # Endroit où on peut visualiser les graphiques créés.
-ggplot2::qplot(mpg, wt, data = mtcars)
+plot(mtcars$mpg, mtcars$wt)
 
 #### Librairies - Packages ####
 # Liste des librairies installées.
