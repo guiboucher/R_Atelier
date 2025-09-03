@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>data.table</title>
+    <meta charset="utf-8" />
+    <meta name="date" content="2025-09-03" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# data.table
+]
+.institute[
+### INESSS
+]
+.date[
+### 2025-09-03
+]
+
+---
+
+
+&lt;style type="text/css"&gt;
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+&lt;/style&gt;
+
+# data.table
+
+``` r
+library(data.table)
+```
+
+`dt[i, j, by]`
+
+- **_dt_ :** Nom du `data.table`
+- **_i_ :** Sous-ensemble de lignes, lignes à utiliser
+- **_j_ :** Colonnes à manipuler
+- **_by_ :** Regrouper par `by`
+
+---
+class: code80
+
+## Créer un data.table
+
+
+``` r
+df1 &lt;- data.frame(a = c(1, 2, 4), b = c("a", "b", "d"), c = c(111, 222, 333))
+dt &lt;- data.table(a = c(1, 2, 4), b = c("a", "b", "d"), c = c(111, 222, 333))
+dt2 &lt;- as.data.table(df1)
+setDT(df1)  # Utile pour les grosses bases de données
+            # Efficace au niveau de la mémoire. Ne fait pas de copie.
+str(df1)
+```
+
+```
+#&gt; Classes 'data.table' and 'data.frame':	3 obs. of  3 variables:
+#&gt;  $ a: num  1 2 4
+#&gt;  $ b: chr  "a" "b" "d"
+#&gt;  $ c: num  111 222 333
+#&gt;  - attr(*, ".internal.selfref")=&lt;externalptr&gt;
+```
+
+---
+
+## Sélection de lignes avec `i`
+
+En indiquant les numéros de lignes
+
+``` r
+dt[c(2, 3)]
+```
+
+```
+#&gt;        a      b     c
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt;
+#&gt; 1:     2      b   222
+#&gt; 2:     4      d   333
+```
+
+Selon un opérateurs
+
+``` r
+dt[a &gt; 2]
+```
+
+```
+#&gt;        a      b     c
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt;
+#&gt; 1:     4      d   333
+```
+
+---
+
+## Extraire des colonnes
+
+Par numéro
+
+``` r
+dt[, c(2)]
+```
+
+```
+#&gt;         b
+#&gt;    &lt;char&gt;
+#&gt; 1:      a
+#&gt; 2:      b
+#&gt; 3:      d
+```
+
+``` r
+dt[, c(-2)]  # Un signe négatif exclu la colonne
+```
+
+```
+#&gt;        a     c
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1   111
+#&gt; 2:     2   222
+#&gt; 3:     4   333
+```
+
+---
+
+## Extraire des colonnes
+
+Par nom
+
+``` r
+dt[, .(a, c)]
+```
+
+```
+#&gt;        a     c
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1   111
+#&gt; 2:     2   222
+#&gt; 3:     4   333
+```
+
+``` r
+cols &lt;- c("a", "c")
+dt[, ..cols]
+```
+
+```
+#&gt;        a     c
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1   111
+#&gt; 2:     2   222
+#&gt; 3:     4   333
+```
+
+---
+
+## Les fonctions *set* ou le symbole *:=*
+Les fonctions avec le préfixe `set` ou les colonnes créées à partir de `:=` modifient les données sans faire de copie. En d'autres mots, pas besoin d'utiliser le `&lt;-`.
+
+---
+## Création de colonnes
+
+
+``` r
+dt
+```
+
+```
+#&gt;        a      b     c
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt;
+#&gt; 1:     1      a   111
+#&gt; 2:     2      b   222
+#&gt; 3:     4      d   333
+```
+
+``` r
+dt[, d := 1 + 2]
+```
+
+```
+#&gt;        a      b     c     d
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1      a   111     3
+#&gt; 2:     2      b   222     3
+#&gt; 3:     4      d   333     3
+```
+
+---
+
+## Création de colonnes
+Pour un sous-ensemble de lignes
+
+
+``` r
+dt[a == 1, d := 1 + 2]
+```
+
+```
+#&gt; Index: &lt;a&gt;
+#&gt;        a      b     c     d
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1      a   111     3
+#&gt; 2:     2      b   222    NA
+#&gt; 3:     4      d   333    NA
+```
+Les lignes non sélectionnées auront des `NA`
+
+---
+
+## Création de colonnes
+Pour créer plusieurs colonnes en même temps
+
+
+``` r
+dt[, `:=` (d = 2, e = 2+3)]
+```
+
+```
+#&gt; Index: &lt;a&gt;
+#&gt;        a      b     c     d     e
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1      a   111     2     5
+#&gt; 2:     2      b   222     2     5
+#&gt; 3:     4      d   333     2     5
+```
+
+---
+
+## Supprimer une colonne
+
+``` r
+dt
+```
+
+```
+#&gt; Index: &lt;a&gt;
+#&gt;        a      b     c     d     e
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1      a   111     2     5
+#&gt; 2:     2      b   222     2     5
+#&gt; 3:     4      d   333     2     5
+```
+
+``` r
+dt[, d := NULL]
+```
+
+```
+#&gt; Index: &lt;a&gt;
+#&gt;        a      b     c     e
+#&gt;    &lt;num&gt; &lt;char&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1      a   111     5
+#&gt; 2:     2      b   222     5
+#&gt; 3:     4      d   333     5
+```
+
+---
+
+## Regrouper selon `by`
+
+Calculer la colonne `j` en regroupant par la colonne `a`
+&gt; `dt[, j, by = .(a)]`
+
+Calculer la colonne `j` en regroupant par la colonne `a` et trier en ordre croissant la colonne `a`
+&gt; `dt[, j, keyby = .(a)]`
+
+---
+
+## Regrouper selon `by`
+
+
+``` r
+dt2
+```
+
+```
+#&gt;        a     b
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     4
+#&gt; 2:     1     5
+#&gt; 3:     2     6
+```
+Résumer les lignes au sein des groupes
+
+``` r
+dt2[, .(c = sum(b)), by = a]
+```
+
+```
+#&gt;        a     c
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     9
+#&gt; 2:     2     6
+```
+
+---
+
+## Regrouper selon `by`
+Créer une nouvelle colonne et calculer les lignes au sein des groupes.
+
+``` r
+dt2[, c := sum(b), by = a]
+```
+
+```
+#&gt;        a     b     c
+#&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     4     9
+#&gt; 2:     1     5     9
+#&gt; 3:     2     6     6
+```
+
+---
+
+## Regrouper selon `by`
+Extraire les premières observations d'un groupe
+
+``` r
+dt2[, .SD[1], by = a]  # .SD = Subset data
+```
+
+```
+#&gt;        a     b     c
+#&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     4     9
+#&gt; 2:     2     6     6
+```
+
+Extraire les dernières observations d'un groupe
+
+``` r
+dt2[, .SD[.N], by = a]  # .N est la dernière valeur
+```
+
+```
+#&gt;        a     b     c
+#&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     5     9
+#&gt; 2:     2     6     6
+```
+
+---
+
+## Enchainement d'opérations (*chaining*)
+
+Il est possible d'enchainer les opérations avec les *pipes* `[]`
+&gt; `dt[...][...][...]`
+
+
+``` r
+dt[, e := NULL][, d := 1+3][, e := sum(c), by = a]
+# 1) Supprimer colonne e
+# 2) Créer colonne d = 4
+# 3) Créer colonne e = somme de c groupé par colonne a
+```
+
+---
+
+## Exemple de fonctions `set`
+
+``` r
+# Trier les données par a croissant et b décroissant
+setorder(dt, a, -b)
+
+# Order des colonnes
+setcolorder(dt, c("b", "c", "a", "e", "d"))
+
+# Renommer les colonnes a et b par col1 et col2
+setnames(dt, old = c("a", "b"), new = c("col1", "col2"))  
+```
+
+
+---
+
+##  Jointure *left join*
+
+.pull-left[
+  
+  ``` r
+  dt_a
+  ```
+  
+  ```
+  #&gt;        a      b
+  #&gt;    &lt;int&gt; &lt;char&gt;
+  #&gt; 1:     1      c
+  #&gt; 2:     2      a
+  #&gt; 3:     3      b
+  ```
+]
+.pull-right[
+  
+  ``` r
+  dt_b
+  ```
+  
+  ```
+  #&gt;        x      y
+  #&gt;    &lt;int&gt; &lt;char&gt;
+  #&gt; 1:     3      b
+  #&gt; 2:     2      c
+  #&gt; 3:     1      a
+  ```
+]
+
+``` r
+dt_a[dt_b, on = .(b = y)]
+```
+
+```
+#&gt;        a      b     x
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;int&gt;
+#&gt; 1:     3      b     3
+#&gt; 2:     1      c     2
+#&gt; 3:     2      a     1
+```
+
+---
+
+##  Jointure *left join*
+
+.pull-left[
+  
+  ``` r
+  dt_a
+  ```
+  
+  ```
+  #&gt;        a      b     c
+  #&gt;    &lt;int&gt; &lt;char&gt; &lt;num&gt;
+  #&gt; 1:     1      c     7
+  #&gt; 2:     2      a     5
+  #&gt; 3:     3      b     6
+  ```
+]
+.pull-right[
+  
+  ``` r
+  dt_b
+  ```
+  
+  ```
+  #&gt;        x      y     z
+  #&gt;    &lt;int&gt; &lt;char&gt; &lt;num&gt;
+  #&gt; 1:     3      b     4
+  #&gt; 2:     2      c     5
+  #&gt; 3:     1      a     8
+  ```
+]
+
+``` r
+dt_a[dt_b, on = .(b = y, c &gt; z)]
+```
+
+```
+#&gt;        a      b     c     x
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;num&gt; &lt;int&gt;
+#&gt; 1:     3      b     4     3
+#&gt; 2:     1      c     5     2
+#&gt; 3:    NA      a     8     1
+```
+
+---
+
+## *Rolling join*
+
+Jointure qui connserve la correspondance **la plus récente** avec la table de données de gauche. «roll = -Inf» inverse le sens.
+
+.pull-left[
+  
+  ``` r
+  dt_a
+  ```
+  
+  ```
+  #&gt;        a     id       date
+  #&gt;    &lt;num&gt; &lt;char&gt;     &lt;Date&gt;
+  #&gt; 1:     1      A 2010-01-01
+  #&gt; 2:     2      A 2012-01-01
+  #&gt; 3:     3      A 2014-01-01
+  #&gt; 4:     1      B 2010-01-01
+  #&gt; 5:     2      B 2012-01-01
+  ```
+]
+.pull-right[
+  
+  ``` r
+  dt_b
+  ```
+  
+  ```
+  #&gt;        b     id       date
+  #&gt;    &lt;num&gt; &lt;char&gt;     &lt;Date&gt;
+  #&gt; 1:     1      A 2013-01-01
+  #&gt; 2:     1      B 2013-01-01
+  ```
+]
+
+``` r
+dt_a[dt_b, on = .(id = id, date = date), roll=TRUE]
+```
+
+```
+#&gt;        a     id       date     b
+#&gt;    &lt;num&gt; &lt;char&gt;     &lt;Date&gt; &lt;num&gt;
+#&gt; 1:     2      A 2013-01-01     1
+#&gt; 2:     2      B 2013-01-01     1
+```
+Dans les deux cas, les dates qui précèdent 2013-01-01 de `dt_b` sont 2012-01-01 dans `dt_a`.
+
+---
+
+## Lier - Lignes
+
+
+.pull-left[
+  
+  ``` r
+  dt_a
+  ```
+  
+  ```
+  #&gt;       id     x
+  #&gt;    &lt;num&gt; &lt;int&gt;
+  #&gt; 1:     1     1
+  #&gt; 2:     1     2
+  ```
+]
+.pull-right[
+  
+  ``` r
+  dt_b
+  ```
+  
+  ```
+  #&gt;       id     x
+  #&gt;    &lt;num&gt; &lt;num&gt;
+  #&gt; 1:     2     5
+  ```
+]
+
+``` r
+rbind(dt_a, dt_b)
+```
+
+```
+#&gt;       id     x
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     1
+#&gt; 2:     1     2
+#&gt; 3:     2     5
+```
+
+---
+
+## Lier - Colonnes
+
+
+.pull-left[
+  
+  ``` r
+  dt_a
+  ```
+  
+  ```
+  #&gt;       id     x
+  #&gt;    &lt;num&gt; &lt;int&gt;
+  #&gt; 1:     1     1
+  #&gt; 2:     1     2
+  ```
+]
+.pull-right[
+  
+  ``` r
+  dt_b
+  ```
+  
+  ```
+  #&gt;        y
+  #&gt;    &lt;int&gt;
+  #&gt; 1:     5
+  #&gt; 2:     6
+  ```
+]
+
+``` r
+cbind(dt_a, dt_b)
+```
+
+```
+#&gt;       id     x     y
+#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt;
+#&gt; 1:     1     1     5
+#&gt; 2:     1     2     6
+```
+
+---
+
+## Transformer au format large
+
+
+
+``` r
+dt
+```
+
+```
+#&gt;       id variable valeur
+#&gt;    &lt;num&gt;   &lt;char&gt;  &lt;num&gt;
+#&gt; 1:     1        A     10
+#&gt; 2:     1        B     20
+#&gt; 3:     2        A     15
+#&gt; 4:     2        B     25
+```
+
+``` r
+dcast(dt, id ~ variable, value.var = "valeur")
+```
+
+```
+#&gt; Key: &lt;id&gt;
+#&gt;       id     A     B
+#&gt;    &lt;num&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1    10    20
+#&gt; 2:     2    15    25
+```
+
+---
+
+## Transformer au format long
+
+
+
+``` r
+dt
+```
+
+```
+#&gt;       id  Var1  Var2
+#&gt;    &lt;int&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1    10   100
+#&gt; 2:     2    20   200
+#&gt; 3:     3    30   300
+```
+
+``` r
+melt(dt, id.vars = "id", measure.vars = c("Var1", "Var2"))
+```
+
+```
+#&gt;       id variable value
+#&gt;    &lt;int&gt;   &lt;fctr&gt; &lt;num&gt;
+#&gt; 1:     1     Var1    10
+#&gt; 2:     2     Var1    20
+#&gt; 3:     3     Var1    30
+#&gt; 4:     1     Var2   100
+#&gt; 5:     2     Var2   200
+#&gt; 6:     3     Var2   300
+```
+
+---
+
+## Appliquer une fonction sur plusieurs colonnes
+
+```
+#&gt;        a     b
+#&gt;    &lt;int&gt; &lt;int&gt;
+#&gt; 1:     1     4
+#&gt; 2:     2     5
+#&gt; 3:     3     6
+```
+
+``` r
+dt[, lapply(.SD, mean), .SDcols = c("a", "b")]
+```
+
+```
+#&gt;        a     b
+#&gt;    &lt;num&gt; &lt;num&gt;
+#&gt; 1:     2     5
+```
+
+``` r
+cols &lt;- c("a", "b")
+dt[, paste0(cols, "_m") := lapply(.SD, mean), .SDcols = cols]
+```
+
+```
+#&gt;        a     b   a_m   b_m
+#&gt;    &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt;
+#&gt; 1:     1     4     2     5
+#&gt; 2:     2     5     2     5
+#&gt; 3:     3     6     2     5
+```
+
+---
+
+## Séquence - Index
+
+Indiquer de 1 à N les lignes d'un même groupe
+
+
+``` r
+dt[, c := 1:.N, by = .(b)]
+```
+
+```
+#&gt;        a      b     c
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;int&gt;
+#&gt; 1:     1      A     1
+#&gt; 2:     2      A     2
+#&gt; 3:     3      B     1
+```
+
+---
+
+## Valeur précédente ou suivante
+
+
+
+``` r
+# Valeur précédente de A par B
+dt[, C := shift(A, 1), by = B]
+```
+
+```
+#&gt;        A      B     C
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;int&gt;
+#&gt; 1:     1      X    NA
+#&gt; 2:     2      X     1
+#&gt; 3:     3      X     2
+#&gt; 4:     4      Y    NA
+#&gt; 5:     5      Y     4
+```
+
+
+``` r
+# Valeur suivante de A par B
+dt[, C := shift(A, 1, type =  "lead"), by = B]
+```
+
+```
+#&gt;        A      B     C
+#&gt;    &lt;int&gt; &lt;char&gt; &lt;int&gt;
+#&gt; 1:     1      X     2
+#&gt; 2:     2      X     3
+#&gt; 3:     3      X    NA
+#&gt; 4:     4      Y     5
+#&gt; 5:     5      Y    NA
+```
+
+---
+
+## Import / Export
+
+Importer un fichier .csv
+
+``` r
+fread()
+```
+Exporter un fichier .csv
+
+``` r
+fwrite()
+```
+
+
+Bien que `fread()` et `fwrite()` soient très rapides, je conseille de rester avec `saveRDS()`/`readRDS()` et `save()`/`load()` qui prennent beaucoup moins d'espace (fichier compressé) et permette une meilleure intégrité des données. Par exemple, il pourrait arriver que les dates ne s'affichent pas correctement.
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
