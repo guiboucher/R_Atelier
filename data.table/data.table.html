@@ -89,7 +89,7 @@ library(data.table)
 ---
 class: code80
 
-## Créer un data.table
+### Créer un data.table
 
 
 ``` r
@@ -111,7 +111,7 @@ str(df1)
 
 ---
 
-## Sélection de lignes avec `i`
+### Sélection de lignes avec `i`
 
 En indiquant les numéros de lignes
 
@@ -140,7 +140,7 @@ dt[a &gt; 2]
 
 ---
 
-## Extraire des colonnes
+### Extraire des colonnes
 
 Par numéro
 
@@ -170,7 +170,7 @@ dt[, c(-2)]  # Un signe négatif exclu la colonne
 
 ---
 
-## Extraire des colonnes
+### Extraire des colonnes
 
 Par nom
 
@@ -201,11 +201,11 @@ dt[, ..cols]
 
 ---
 
-## Les fonctions *set* ou le symbole *:=*
+### Les fonctions *set* ou le symbole *:=*
 Les fonctions avec le préfixe `set` ou les colonnes créées à partir de `:=` modifient les données sans faire de copie. En d'autres mots, pas besoin d'utiliser le `&lt;-`.
 
 ---
-## Création de colonnes
+### Création de colonnes
 
 
 ``` r
@@ -234,7 +234,7 @@ dt[, d := 1 + 2]
 
 ---
 
-## Création de colonnes
+### Création de colonnes
 Pour un sous-ensemble de lignes
 
 
@@ -254,7 +254,7 @@ Les lignes non sélectionnées auront des `NA`
 
 ---
 
-## Création de colonnes
+### Création de colonnes
 Pour créer plusieurs colonnes en même temps
 
 
@@ -273,7 +273,7 @@ dt[, `:=` (d = 2, e = 2+3)]
 
 ---
 
-## Supprimer une colonne
+### Supprimer une colonne
 
 ``` r
 dt
@@ -303,7 +303,7 @@ dt[, d := NULL]
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 
 Calculer la colonne `j` en regroupant par la colonne `a`
 &gt; `dt[, j, by = .(a)]`
@@ -313,7 +313,7 @@ Calculer la colonne `j` en regroupant par la colonne `a` et trier en ordre crois
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 
 
 ``` r
@@ -342,7 +342,7 @@ dt2[, .(c = sum(b)), by = a]
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 Créer une nouvelle colonne et calculer les lignes au sein des groupes.
 
 ``` r
@@ -359,7 +359,7 @@ dt2[, c := sum(b), by = a]
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 Extraire les premières observations d'un groupe
 
 ``` r
@@ -388,7 +388,7 @@ dt2[, .SD[.N], by = a]  # .N est la dernière valeur
 
 ---
 
-## Enchainement d'opérations (*chaining*)
+### Enchainement d'opérations (*chaining*)
 
 Il est possible d'enchainer les opérations avec les *pipes* `[]`
 &gt; `dt[...][...][...]`
@@ -403,7 +403,7 @@ dt[, e := NULL][, d := 1+3][, e := sum(c), by = a]
 
 ---
 
-## Exemple de fonctions `set`
+### Exemple de fonctions `set`
 
 ``` r
 # Trier les données par a croissant et b décroissant
@@ -419,7 +419,7 @@ setnames(dt, old = c("a", "b"), new = c("col1", "col2"))
 
 ---
 
-##  Jointure *left join*
+###  Jointure *left join*
 
 .pull-left[
   
@@ -464,7 +464,7 @@ dt_a[dt_b, on = .(b = y)]
 
 ---
 
-##  Jointure *left join*
+###  Jointure *left join*
 
 .pull-left[
   
@@ -509,7 +509,7 @@ dt_a[dt_b, on = .(b = y, c &gt; z)]
 
 ---
 
-## *Rolling join*
+### *Rolling join*
 
 Jointure qui connserve la correspondance **la plus récente** avec la table de données de gauche. «roll = -Inf» inverse le sens.
 
@@ -557,7 +557,7 @@ Dans les deux cas, les dates qui précèdent 2013-01-01 de `dt_b` sont 2012-01-0
 
 ---
 
-## Lier - Lignes
+### Lier - Lignes
 
 
 .pull-left[
@@ -600,7 +600,7 @@ rbind(dt_a, dt_b)
 
 ---
 
-## Lier - Colonnes
+### Lier - Colonnes
 
 
 .pull-left[
@@ -643,7 +643,7 @@ cbind(dt_a, dt_b)
 
 ---
 
-## Transformer au format large
+### Transformer au format large
 
 
 
@@ -674,7 +674,7 @@ dcast(dt, id ~ variable, value.var = "valeur")
 
 ---
 
-## Transformer au format long
+### Transformer au format long
 
 
 
@@ -707,7 +707,7 @@ melt(dt, id.vars = "id", measure.vars = c("Var1", "Var2"))
 
 ---
 
-## Appliquer une fonction sur plusieurs colonnes
+### Appliquer une fonction sur plusieurs colonnes
 
 ```
 #&gt;        a     b
@@ -742,7 +742,7 @@ dt[, paste0(cols, "_m") := lapply(.SD, mean), .SDcols = cols]
 
 ---
 
-## Séquence - Index
+### Séquence - Index
 
 Indiquer de 1 à N les lignes d'un même groupe
 
@@ -761,7 +761,7 @@ dt[, c := 1:.N, by = .(b)]
 
 ---
 
-## Valeur précédente ou suivante
+### Valeur précédente ou suivante
 
 
 
@@ -798,7 +798,7 @@ dt[, C := shift(A, 1, type =  "lead"), by = B]
 
 ---
 
-## Import / Export
+### Import / Export
 
 Importer un fichier .csv
 
@@ -813,6 +813,431 @@ fwrite()
 
 
 Bien que `fread()` et `fwrite()` soient très rapides, je conseille de rester avec `saveRDS()`/`readRDS()` et `save()`/`load()` qui prennent beaucoup moins d'espace (fichier compressé) et permette une meilleure intégrité des données. Par exemple, il pourrait arriver que les dates ne s'affichent pas correctement.
+
+
+---
+class: code75
+
+### Symboles spéciaux
+
+
+
+.pull-left[
+  
+  ```
+  #&gt;         x     v     y     a     b
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
+  #&gt; 1:      b     1     1     1     9
+  #&gt; 2:      b     1     3     2     8
+  #&gt; 3:      b     1     6     3     7
+  #&gt; 4:      a     2     1     4     6
+  #&gt; 5:      a     2     3     5     5
+  #&gt; 6:      a     1     6     6     4
+  #&gt; 7:      c     1     1     7     3
+  #&gt; 8:      c     2     3     8     2
+  #&gt; 9:      c     2     6     9     1
+  ```
+  
+  ``` r
+  # Dernière ligne
+  dt[.N]
+  ```
+  
+  ```
+  #&gt;         x     v     y     a     b
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
+  #&gt; 1:      c     2     6     9     1
+  ```
+]
+.pull-right[
+  
+  ``` r
+  # Nombre de lignes
+  dt[, .N]
+  ```
+  
+  ```
+  #&gt; [1] 9
+  ```
+  
+  ``` r
+  # Nombre de lignes dans chaque groupe
+  dt[, .N, by=x]
+  ```
+  
+  ```
+  #&gt;         x     N
+  #&gt;    &lt;char&gt; &lt;int&gt;
+  #&gt; 1:      b     3
+  #&gt; 2:      a     3
+  #&gt; 3:      c     3
+  ```
+]
+---
+class: code75
+
+### Symboles spéciaux
+.pull-left[
+  
+  ```
+  #&gt;         x     v     y     a     b
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
+  #&gt; 1:      b     1     1     1     9
+  #&gt; 2:      b     1     3     2     8
+  #&gt; 3:      b     1     6     3     7
+  #&gt; 4:      a     2     1     4     6
+  #&gt; 5:      a     2     3     5     5
+  #&gt; 6:      a     1     6     6     4
+  #&gt; 7:      c     1     1     7     3
+  #&gt; 8:      c     2     3     8     2
+  #&gt; 9:      c     2     6     9     1
+  ```
+  
+  ``` r
+  # Sélectionne les colonnes x à y
+  dt[, .SD, .SDcols=x:y]
+  ```
+  
+  ```
+  #&gt;         x     v     y
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;num&gt;
+  #&gt; 1:      b     1     1
+  #&gt; 2:      b     1     3
+  #&gt; 3:      b     1     6
+  #&gt; 4:      a     2     1
+  #&gt; 5:      a     2     3
+  #&gt; 6:      a     1     6
+  #&gt; 7:      c     1     1
+  #&gt; 8:      c     2     3
+  #&gt; 9:      c     2     6
+  ```
+]
+.pull-right[
+  
+  ``` r
+  # Première ligne de chaque colonne
+  dt[, .SD[1]]
+  ```
+  
+  ```
+  #&gt;         x     v     y     a     b
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
+  #&gt; 1:      b     1     1     1     9
+  ```
+  
+  ``` r
+  # Première ligne de chaque colonne
+  # de chaque groupe dans 'x'
+  dt[, .SD[1], by=x]
+  ```
+  
+  ```
+  #&gt;         x     v     y     a     b
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
+  #&gt; 1:      b     1     1     1     9
+  #&gt; 2:      a     2     1     4     6
+  #&gt; 3:      c     1     1     7     3
+  ```
+]
+---
+class: code75
+
+### Symboles spéciaux
+.pull-left[
+  
+  ```
+  #&gt;         x     v     y     a     b
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
+  #&gt; 1:      b     1     1     1     9
+  #&gt; 2:      b     1     3     2     8
+  #&gt; 3:      b     1     6     3     7
+  #&gt; 4:      a     2     1     4     6
+  #&gt; 5:      a     2     3     5     5
+  #&gt; 6:      a     1     6     6     4
+  #&gt; 7:      c     1     1     7     3
+  #&gt; 8:      c     2     3     8     2
+  #&gt; 9:      c     2     6     9     1
+  ```
+  
+]
+.pull-right[
+  
+  ``` r
+  # Numéro de la première ligne par
+  # groupe de x
+  dt[, .I[1], by=x]
+  ```
+  
+  ```
+  #&gt;         x    V1
+  #&gt;    &lt;char&gt; &lt;int&gt;
+  #&gt; 1:      b     1
+  #&gt; 2:      a     4
+  #&gt; 3:      c     7
+  ```
+  
+  ``` r
+  # Numéro de la dernière ligne par
+  # groupe de x
+  dt[, .I[.N], by=x]
+  ```
+  
+  ```
+  #&gt;         x    V1
+  #&gt;    &lt;char&gt; &lt;int&gt;
+  #&gt; 1:      b     3
+  #&gt; 2:      a     6
+  #&gt; 3:      c     9
+  ```
+]
+
+---
+class: code75
+
+### Symboles spéciaux
+.pull-left[
+  
+  ```
+  #&gt;         x     y     b
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;int&gt;
+  #&gt; 1:      b     1     9
+  #&gt; 2:      b     3     8
+  #&gt; 3:      b     6     7
+  #&gt; 4:      a     1     6
+  #&gt; 5:      a     3     5
+  #&gt; 6:      a     6     4
+  #&gt; 7:      c     1     3
+  #&gt; 8:      c     3     2
+  #&gt; 9:      c     6     1
+  ```
+  
+  ``` r
+  # Itérateur de groupe
+  dt[, grp := .GRP, keyby=x]
+  ```
+  
+  ```
+  #&gt; Key: &lt;x&gt;
+  #&gt;         x     y     b   grp
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;
+  #&gt; 1:      a     1     6     1
+  #&gt; 2:      a     3     5     1
+  #&gt; 3:      a     6     4     1
+  #&gt; 4:      b     1     9     2
+  #&gt; 5:      b     3     8     2
+  #&gt; 6:      b     6     7     2
+  #&gt; 7:      c     1     3     3
+  #&gt; 8:      c     3     2     3
+  #&gt; 9:      c     6     1     3
+  ```
+]
+.pull-right[
+  
+  ``` r
+  # Itérateur de groupe avec un compteur
+  # de progrès
+  dt[
+    , grp_pct := round(.GRP/.NGRP, 2),
+    by=x
+  ]
+  ```
+  
+  ```
+  #&gt; Key: &lt;x&gt;
+  #&gt;         x     y     b   grp grp_pct
+  #&gt;    &lt;char&gt; &lt;num&gt; &lt;int&gt; &lt;int&gt;   &lt;num&gt;
+  #&gt; 1:      a     1     6     1    0.33
+  #&gt; 2:      a     3     5     1    0.33
+  #&gt; 3:      a     6     4     1    0.33
+  #&gt; 4:      b     1     9     2    0.67
+  #&gt; 5:      b     3     8     2    0.67
+  #&gt; 6:      b     6     7     2    0.67
+  #&gt; 7:      c     1     3     3    1.00
+  #&gt; 8:      c     3     2     3    1.00
+  #&gt; 9:      c     6     1     3    1.00
+  ```
+]
+
+---
+
+### Exemple avancé avec dt[, .I\[ \]\]
+
+Prescription à un patient
+
+```
+#&gt;       ID     DateRx nJours
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;
+#&gt; 1:     1 2020-01-01     30
+#&gt; 2:     1 2020-01-20      5
+#&gt; 3:     1 2020-02-01     30
+#&gt; 4:     2 2020-06-01     30
+```
+
+``` r
+dt[, DateFin := DateRx + nJours - 1]
+dt[, diff := as.integer(DateRx - shift(DateFin)), .(ID)]
+```
+
+```
+#&gt;       ID     DateRx nJours    DateFin  diff
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;     &lt;Date&gt; &lt;int&gt;
+#&gt; 1:     1 2020-01-01     30 2020-01-30    NA
+#&gt; 2:     1 2020-01-20      5 2020-01-24   -10
+#&gt; 3:     1 2020-02-01     30 2020-03-01     8
+#&gt; 4:     2 2020-06-01     30 2020-06-30    NA
+```
+
+---
+
+
+```
+#&gt;       ID     DateRx nJours    DateFin  diff
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;     &lt;Date&gt; &lt;int&gt;
+#&gt; 1:     1 2020-01-01     30 2020-01-30    NA
+#&gt; 2:     1 2020-01-20      5 2020-01-24   -10
+#&gt; 3:     1 2020-02-01     30 2020-03-01     8
+#&gt; 4:     2 2020-06-01     30 2020-06-30    NA
+```
+
+``` r
+dt[, .I[diff &lt; 1], .(ID)]
+```
+
+```
+#&gt;       ID    V1
+#&gt;    &lt;num&gt; &lt;int&gt;
+#&gt; 1:     1    NA
+#&gt; 2:     1     2
+#&gt; 3:     2    NA
+```
+
+``` r
+idx &lt;- c(
+  dt[, .I[diff &lt; 1], .(ID)]$V1-1,
+  dt[, .I[diff &lt; 1], .(ID)]$V1
+)
+idx &lt;- sort(idx[!is.na(idx)])
+idx
+```
+
+```
+#&gt; [1] 1 2
+```
+
+---
+
+
+``` r
+dt[idx, ajout := shift(nJours, -1), .(ID)]
+```
+
+```
+#&gt;       ID     DateRx nJours    DateFin  diff ajout
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;     &lt;Date&gt; &lt;int&gt; &lt;num&gt;
+#&gt; 1:     1 2020-01-01     30 2020-01-30    NA     5
+#&gt; 2:     1 2020-01-20      5 2020-01-24   -10    NA
+#&gt; 3:     1 2020-02-01     30 2020-03-01     8    NA
+#&gt; 4:     2 2020-06-01     30 2020-06-30    NA    NA
+```
+
+``` r
+dt[!is.na(ajout), nJours := nJours + ajout]
+```
+
+```
+#&gt;       ID     DateRx nJours    DateFin  diff ajout
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;     &lt;Date&gt; &lt;int&gt; &lt;num&gt;
+#&gt; 1:     1 2020-01-01     35 2020-01-30    NA     5
+#&gt; 2:     1 2020-01-20      5 2020-01-24   -10    NA
+#&gt; 3:     1 2020-02-01     30 2020-03-01     8    NA
+#&gt; 4:     2 2020-06-01     30 2020-06-30    NA    NA
+```
+
+
+---
+
+
+```
+#&gt;       ID     DateRx nJours    DateFin  diff ajout
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;     &lt;Date&gt; &lt;int&gt; &lt;num&gt;
+#&gt; 1:     1 2020-01-01     35 2020-01-30    NA     5
+#&gt; 2:     1 2020-01-20      5 2020-01-24   -10    NA
+#&gt; 3:     1 2020-02-01     30 2020-03-01     8    NA
+#&gt; 4:     2 2020-06-01     30 2020-06-30    NA    NA
+```
+
+``` r
+dt &lt;- dt[!dt[, .I[diff &lt; 1], .(ID)]$V1]
+```
+
+```
+#&gt;       ID     DateRx nJours    DateFin  diff ajout
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;     &lt;Date&gt; &lt;int&gt; &lt;num&gt;
+#&gt; 1:     1 2020-01-01     35 2020-01-30    NA     5
+#&gt; 2:     1 2020-02-01     30 2020-03-01     8    NA
+#&gt; 3:     2 2020-06-01     30 2020-06-30    NA    NA
+```
+
+---
+
+**Attention si plusieurs périodes doivent être fusionnées**
+
+
+```
+#&gt;       ID     DateRx nJours    DateFin  diff
+#&gt;    &lt;num&gt;     &lt;Date&gt;  &lt;num&gt;     &lt;Date&gt; &lt;int&gt;
+#&gt; 1:     1 2020-01-01     30 2020-01-30     0
+#&gt; 2:     1 2020-01-20      5 2020-01-24   -10
+#&gt; 3:     1 2020-01-22     30 2020-02-20    -2
+#&gt; 4:     2 2020-06-01     30 2020-06-30     0
+```
+
+On doit s'assurer de ne pas avoir trois nombres qui se suivent pour un même ID et répéter les étapes dans un `while loop`.  
+À faire en devoir! :P
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

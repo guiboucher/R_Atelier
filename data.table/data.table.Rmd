@@ -78,7 +78,7 @@ library(data.table)
 ---
 class: code80
 
-## Créer un data.table
+### Créer un data.table
 
 ```{r}
 df1 <- data.frame(a = c(1, 2, 4), b = c("a", "b", "d"), c = c(111, 222, 333))
@@ -91,7 +91,7 @@ str(df1)
 
 ---
 
-## Sélection de lignes avec `i`
+### Sélection de lignes avec `i`
 
 En indiquant les numéros de lignes
 ```{r}
@@ -105,7 +105,7 @@ dt[a > 2]
 
 ---
 
-## Extraire des colonnes
+### Extraire des colonnes
 
 Par numéro
 ```{r}
@@ -115,7 +115,7 @@ dt[, c(-2)]  # Un signe négatif exclu la colonne
 
 ---
 
-## Extraire des colonnes
+### Extraire des colonnes
 
 Par nom
 ```{r}
@@ -127,11 +127,11 @@ dt[, ..cols]
 
 ---
 
-## Les fonctions *set* ou le symbole *:=*
+### Les fonctions *set* ou le symbole *:=*
 Les fonctions avec le préfixe `set` ou les colonnes créées à partir de `:=` modifient les données sans faire de copie. En d'autres mots, pas besoin d'utiliser le `<-`.
 
 ---
-## Création de colonnes
+### Création de colonnes
 
 ```{r}
 dt
@@ -143,7 +143,7 @@ dt
 
 ---
 
-## Création de colonnes
+### Création de colonnes
 Pour un sous-ensemble de lignes
 ```{r, echo=FALSE}
 dt[, d := NULL]
@@ -158,7 +158,7 @@ Les lignes non sélectionnées auront des `NA`
 
 ---
 
-## Création de colonnes
+### Création de colonnes
 Pour créer plusieurs colonnes en même temps
 ```{r, echo=FALSE}
 dt[, d := NULL]
@@ -172,7 +172,7 @@ dt
 
 ---
 
-## Supprimer une colonne
+### Supprimer une colonne
 ```{r}
 dt
 dt[, d := NULL]
@@ -183,7 +183,7 @@ dt
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 
 Calculer la colonne `j` en regroupant par la colonne `a`
 > `dt[, j, by = .(a)]`
@@ -193,7 +193,7 @@ Calculer la colonne `j` en regroupant par la colonne `a` et trier en ordre crois
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 ```{r, echo=FALSE}
 dt2 <- data.table(a = c(1,1,2), b = c(4, 5, 6))
 ```
@@ -207,7 +207,7 @@ dt2[, .(c = sum(b)), by = a]
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 Créer une nouvelle colonne et calculer les lignes au sein des groupes.
 ```{r}
 dt2[, c := sum(b), by = a]
@@ -218,7 +218,7 @@ dt2
 
 ---
 
-## Regrouper selon `by`
+### Regrouper selon `by`
 Extraire les premières observations d'un groupe
 ```{r}
 dt2[, .SD[1], by = a]  # .SD = Subset data
@@ -231,7 +231,7 @@ dt2[, .SD[.N], by = a]  # .N est la dernière valeur
 
 ---
 
-## Enchainement d'opérations (*chaining*)
+### Enchainement d'opérations (*chaining*)
 
 Il est possible d'enchainer les opérations avec les *pipes* `[]`
 > `dt[...][...][...]`
@@ -245,7 +245,7 @@ dt[, e := NULL][, d := 1+3][, e := sum(c), by = a]
 
 ---
 
-## Exemple de fonctions `set`
+### Exemple de fonctions `set`
 ```{r}
 # Trier les données par a croissant et b décroissant
 setorder(dt, a, -b)
@@ -260,7 +260,7 @@ setnames(dt, old = c("a", "b"), new = c("col1", "col2"))
 
 ---
 
-##  Jointure *left join*
+###  Jointure *left join*
 ```{r, echo=FALSE}
 dt_a <- data.table(a = 1:3, b = c("c", "a", "b"))
 dt_b <- data.table(x = 3:1, y = c("b", "c", "a"))
@@ -281,7 +281,7 @@ dt_a[dt_b, on = .(b = y)]
 
 ---
 
-##  Jointure *left join*
+###  Jointure *left join*
 ```{r, echo=FALSE}
 dt_a <- data.table(a = 1:3, b = c("c", "a", "b"), c = c(7, 5, 6))
 dt_b <- data.table(x = 3:1, y = c("b", "c", "a"), z = c(4, 5, 8))
@@ -302,7 +302,7 @@ dt_a[dt_b, on = .(b = y, c > z)]
 
 ---
 
-## *Rolling join*
+### *Rolling join*
 
 Jointure qui connserve la correspondance **la plus récente** avec la table de données de gauche. «roll = -Inf» inverse le sens.
 ```{r, echo=FALSE}
@@ -334,7 +334,7 @@ Dans les deux cas, les dates qui précèdent 2013-01-01 de `dt_b` sont 2012-01-0
 
 ---
 
-## Lier - Lignes
+### Lier - Lignes
 
 ```{r, echo=FALSE}
 dt_a <- data.table(
@@ -362,7 +362,7 @@ rbind(dt_a, dt_b)
 
 ---
 
-## Lier - Colonnes
+### Lier - Colonnes
 
 ```{r, echo=FALSE}
 dt_a <- data.table(
@@ -389,7 +389,7 @@ cbind(dt_a, dt_b)
 
 ---
 
-## Transformer au format large
+### Transformer au format large
 
 ```{r, echo=FALSE}
 dt <- data.table(
@@ -405,7 +405,7 @@ dcast(dt, id ~ variable, value.var = "valeur")
 
 ---
 
-## Transformer au format long
+### Transformer au format long
 
 ```{r, echo=FALSE}
 dt <- data.table(
@@ -421,7 +421,7 @@ melt(dt, id.vars = "id", measure.vars = c("Var1", "Var2"))
 
 ---
 
-## Appliquer une fonction sur plusieurs colonnes
+### Appliquer une fonction sur plusieurs colonnes
 ```{r, echo=FALSE}
 dt <- data.table(a = 1:3, b = 4:6)
 dt
@@ -438,7 +438,7 @@ dt
 
 ---
 
-## Séquence - Index
+### Séquence - Index
 
 Indiquer de 1 à N les lignes d'un même groupe
 ```{r, echo=FALSE}
@@ -453,7 +453,7 @@ dt
 
 ---
 
-## Valeur précédente ou suivante
+### Valeur précédente ou suivante
 
 ```{r, echo=FALSE}
 dt <- data.table(A = 1:5, B = c("X", "X", "X", "Y", "Y"))
@@ -476,7 +476,7 @@ dt
 
 ---
 
-## Import / Export
+### Import / Export
 
 Importer un fichier .csv
 ```{r, eval=FALSE}
@@ -489,6 +489,238 @@ fwrite()
 
 
 Bien que `fread()` et `fwrite()` soient très rapides, je conseille de rester avec `saveRDS()`/`readRDS()` et `save()`/`load()` qui prennent beaucoup moins d'espace (fichier compressé) et permette une meilleure intégrité des données. Par exemple, il pourrait arriver que les dates ne s'affichent pas correctement.
+
+
+---
+class: code75
+
+### Symboles spéciaux
+
+```{r, echo=FALSE}
+dt = data.table(x=rep(c("b","a","c"),each=3), v=c(1,1,1,2,2,1,1,2,2), y=c(1,3,6), a=1:9, b=9:1)
+```
+
+.pull-left[
+  ```{r, echo=FALSE}
+  dt
+  ```
+  ```{r}
+  # Dernière ligne
+  dt[.N]
+  ```
+]
+.pull-right[
+  ```{r}
+  # Nombre de lignes
+  dt[, .N]
+  
+  # Nombre de lignes dans chaque groupe
+  dt[, .N, by=x]
+  ```
+]
+---
+class: code75
+
+### Symboles spéciaux
+.pull-left[
+  ```{r, echo=FALSE}
+  dt
+  ```
+  ```{r}
+  # Sélectionne les colonnes x à y
+  dt[, .SD, .SDcols=x:y]
+  ```
+]
+.pull-right[
+  ```{r}
+  # Première ligne de chaque colonne
+  dt[, .SD[1]]
+  # Première ligne de chaque colonne
+  # de chaque groupe dans 'x'
+  dt[, .SD[1], by=x]
+  ```
+]
+---
+class: code75
+
+### Symboles spéciaux
+.pull-left[
+  ```{r, echo=FALSE}
+  dt
+  ```
+  ```{r}
+  
+  ```
+]
+.pull-right[
+  ```{r}
+  # Numéro de la première ligne par
+  # groupe de x
+  dt[, .I[1], by=x]
+  # Numéro de la dernière ligne par
+  # groupe de x
+  dt[, .I[.N], by=x]
+  ```
+]
+
+---
+class: code75
+
+### Symboles spéciaux
+.pull-left[
+  ```{r, echo=FALSE}
+  dt[, `:=` (a = NULL, v = NULL)]
+  dt
+  ```
+  ```{r}
+  # Itérateur de groupe
+  dt[, grp := .GRP, keyby=x]
+  ```
+  ```{r, echo=FALSE}
+  print(dt)
+  ```
+]
+.pull-right[
+  ```{r}
+  # Itérateur de groupe avec un compteur
+  # de progrès
+  dt[
+    , grp_pct := round(.GRP/.NGRP, 2),
+    by=x
+  ]
+  ```
+  ```{r, echo=FALSE}
+  dt
+  ```
+]
+
+---
+
+### Exemple avancé avec dt[, .I\[ \]\]
+
+Prescription à un patient
+```{r, echo=FALSE}
+dt <- data.table(
+  ID = c(1, 1, 1, 2),
+  DateRx = as.Date(c("2020-01-01", "2020-01-20", "2020-02-01", "2020-06-01")),
+  nJours = c(30, 5, 30, 30)
+)
+dt
+```
+```{r}
+dt[, DateFin := DateRx + nJours - 1]
+dt[, diff := as.integer(DateRx - shift(DateFin)), .(ID)]
+```
+```{r, echo=FALSE}
+dt
+```
+
+---
+
+```{r, echo=FALSE}
+dt
+```
+```{r}
+dt[, .I[diff < 1], .(ID)]
+idx <- c(
+  dt[, .I[diff < 1], .(ID)]$V1-1,
+  dt[, .I[diff < 1], .(ID)]$V1
+)
+idx <- sort(idx[!is.na(idx)])
+idx
+```
+
+---
+
+```{r}
+dt[idx, ajout := shift(nJours, -1), .(ID)]
+```
+```{r, echo=FALSE}
+dt
+```
+```{r}
+dt[!is.na(ajout), nJours := nJours + ajout]
+```
+```{r, echo=FALSE}
+dt
+```
+
+
+---
+
+```{r, echo=FALSE}
+dt
+```
+```{r}
+dt <- dt[!dt[, .I[diff < 1], .(ID)]$V1]
+```
+```{r, echo=FALSE}
+dt
+```
+
+---
+
+**Attention si plusieurs périodes doivent être fusionnées**
+```{r, echo=FALSE}
+dt <- data.table(
+  ID = c(1, 1, 1, 2),
+  DateRx = as.Date(c("2020-01-01", "2020-01-20", "2020-01-22", "2020-06-01")),
+  nJours = c(30, 5, 30, 30)
+)
+dt[, DateFin := DateRx + nJours - 1]
+dt[, diff := as.integer(DateRx - shift(DateFin)), .(ID)]
+dt[is.na(diff), diff := 0L]
+```
+```{r, echo=FALSE}
+dt
+```
+
+On doit s'assurer de ne pas avoir trois nombres qui se suivent pour un même ID et répéter les étapes dans un `while loop`.  
+À faire en devoir! :P
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
