@@ -34,23 +34,27 @@ print_dt <- function(x) {
 ```
 
 
+\newpage
+
+
 # Juxtaposition
 
 ## Contexte
 Transformer plusieurs périodes qui se chevauchent dans le temps en une seule période continue.
 ```{r, echo=FALSE, results="asis"}
 dt <- data.table(
-  ID = c(rep(1, 3), rep(2, 2)),
-  DIN = c(rep(555, 3), rep(999, 2)),
-  DENOM = c(rep(159, 3), rep(357, 2)),
-  DatAdm = as.Date(c("2022-03-01","2022-03-15","2022-03-19",
-                     "2022-06-01", "2022-06-15")),
-  DatDep = as.Date(c("2022-03-25","2022-03-17","2022-03-30",
-                     "2022-06-15", "2022-06-19"))
+  ID = 1L,
+  DENOM = c(rep(159, 3), rep(159, 2), rep(456, 2)),
+  DatAdm = as_date(c("2022-03-01","2022-03-15","2022-03-19",
+                     "2022-06-01", "2022-06-15",
+                     "2022-05-10", "2022-05-21")),
+  DatDep = as_date(c("2022-03-25","2022-03-17","2022-03-30",
+                     "2022-06-15", "2022-06-19",
+                     "2022-05-15", "2022-05-25"))
 )
 ```
 
-Tableau d'analyse :
+Tableau initial :
 ```{r, echo=FALSE}
 print_dt(dt)
 ```
@@ -58,11 +62,14 @@ print_dt(dt)
 Résultat final voulu :
 ```{r, echo=FALSE}
 dt1 <- data.table(
-  ID = 1:2,
-  DIN = c(555,999),
-  DENOM = c(159, 357),
-  DatAdm = as.Date(c("2022-03-01", "2022-06-01")),
-  DatDep = as.Date(c("2022-03-30", "2022-06-19"))
+  ID = 1L,
+  DENOM = c(159, 159, rep(456, 2)),
+  DatAdm = as_date(c("2022-03-01",
+                     "2022-06-01",
+                     "2022-05-10", "2022-05-21")),
+  DatDep = as_date(c("2022-03-30",
+                     "2022-06-19",
+                     "2022-05-15", "2022-05-25"))
 )
 print_dt(dt1)
 ```
@@ -70,7 +77,16 @@ print_dt(dt1)
 
 ## Programmation
 ```{r}
-dt[, max_dep := as_date(cummax(as.integer(fcoalesce(shift(DatDep), DatDep)))), .(ID)]
+setorder(dt, ID, DENOM, DatAdm)
+dt[, max_dep := as_date(cummax(as.integer(fcoalesce(shift(DatDep), DatDep)))), .(ID, DENOM)]
+dt[, episode_id := 0L][DatAdm > max_dep + 1, episode_id := 1L]
+dt[, episode_id := cumsum(episode_id) + 1]
+dt <- dt[
+  , .(DatAdm = min(DatAdm),
+       DatDep = max(DatDep)),
+  keyby = .(ID, episode_id)
+]
+dt[, episode_id := NULL]
 ```
 
 
