@@ -1,0 +1,84 @@
+---
+title: "Calcul Age"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE, comment="#>"}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Contexte
+Trouver la manière la plus efficace de calculer l'âge
+
+# Pré-requis
+```{r, message=FALSE, warning=FALSE}
+library(lubridate)
+library(stringr)
+```
+
+# Méthodes
+
+## Diviser par 365.25
+Calculer le nombre de jours entre la date de naissance et la date où l'on veut déterminer l'âge, puis diviser par 365,25.
+```{r}
+# Calculer l'âge d'une personne pour ses 10 premières années
+date_naissance <- as_date("2001-01-01")
+age <- vector("integer", 10)
+for (i in 1:10) {  # Calculer l'âge des 10 premières années
+  date_age <- as_date(paste0(2001 + i,"-01-01"))  # Date à laquelle on veut calculer l'âge : 2022 à 2011
+  age[i] <- as.integer((date_age - date_naissance) / 365.25)  # Calcul de l'âge
+  names(age)[i] <- paste0(2001 + i,"-01-01")
+}
+print(age)
+```
+Le résultat ci-dessus devrait être un vecteur allant de 1 à 10. On remarque qu’il n’y a que deux bonnes valeurs : l’année 2005 indiquant 4 ans et l’année 2009 indiquant 8 ans.
+
+## Diviser par 10000
+Convertir une date `AAAA-MM-JJ` en un nombre entier au format `AAAAMMJJ`, puis diviser par 10000.
+```{r}
+date_naissance <- as_date("2001-01-01")
+date_age <- as_date(paste0(2002:2011, "01-01"))  # 2002-01-01 à 2011-01-01
+# Convertir en entier au format AAAAMMJJ
+date_naissance <- as.integer(str_remove_all(date_naissance, "-"))
+date_age <- as.integer(str_remove_all(date_age, "-"))
+date_age
+date_age - date_naissance
+(date_age - date_naissance) / 10000
+floor((date_age - date_naissance) / 10000)
+
+date_naissance <- as_date("2001-06-15")
+date_age <- as_date(paste0(2002:2011, "01-01"))  # 2002-01-01 à 2011-01-01
+# Convertir en entier au format AAAAMMJJ
+date_naissance <- as.integer(str_remove_all(date_naissance, "-"))
+date_age <- as.integer(str_remove_all(date_age, "-"))
+date_age - date_naissance
+(date_age - date_naissance) / 10000
+floor((date_age - date_naissance) / 10000)
+```
+En faisant une soustraction on s'assure de toujours avoir le bon âge. L'année anniversaire (`AAAA`) moins l'année de naissance donne le nombre d'années, puis si le nombre `MMJJ` de la date anniversaire est plus petit que celui de la date de naissance on soustrait 1, sinon on conserve.
+
+## Diviser par 365
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
