@@ -17,7 +17,10 @@ Trouver la manière la plus efficace de calculer l'âge
 
 # Pré-requis
 ```{r, message=FALSE, warning=FALSE}
+library(data.table)
+library(dplyr)
 library(lubridate)
+library(microbenchmark)
 library(stringr)
 ```
 
@@ -26,31 +29,30 @@ library(stringr)
 ## Diviser par 365.25
 Calculer le nombre de jours entre la date de naissance et la date où l'on veut déterminer l'âge, puis diviser par 365,25.
 ```{r}
-# Calculer l'âge d'une personne pour ses 10 premières années
 date_naissance <- as_date("2001-01-01")
 age <- vector("integer", 10)
 for (i in 1:10) {  # Calculer l'âge des 10 premières années
-  date_age <- as_date(paste0(2001 + i,"-01-01"))  # Date à laquelle on veut calculer l'âge : 2022 à 2011
+  date_age <- as_date(paste0(2001 + i,"-01-01"))  # Date pour calcul âge : 2022 à 2011
   age[i] <- as.integer((date_age - date_naissance) / 365.25)  # Calcul de l'âge
   names(age)[i] <- paste0(2001 + i,"-01-01")
 }
 print(age)
 ```
-Le résultat ci-dessus devrait être un vecteur allant de 1 à 10. On remarque qu’il n’y a que deux bonnes valeurs : l’année 2005 indiquant 4 ans et l’année 2009 indiquant 8 ans.
+Le résultat devrait être un vecteur allant de 1 à 10. On remarque qu’il n’y a que deux bonnes valeurs : l’année 2005 indiquant 4 ans et l’année 2009 indiquant 8 ans.
+
+
+## Diviser par 365
+```{r}
+date_naissance <- as_date("2000-02-29")
+date_age <- as_date(c("2001-02-28", "2001-03-01", "2004-02-28", "2004-02-29", "2004-03-01"))
+floor(as.integer(date_age - date_naissance) / 365)
+```
+On devrait avoir un vecteur de `{0, 1, 3, 4, 4}`. Diviser par 365 ne fonctionne pas.
+
 
 ## Diviser par 10000
 Convertir une date `AAAA-MM-JJ` en un nombre entier au format `AAAAMMJJ`, puis diviser par 10000.
 ```{r}
-date_naissance <- as_date("2001-01-01")
-date_age <- as_date(paste0(2002:2011, "01-01"))  # 2002-01-01 à 2011-01-01
-# Convertir en entier au format AAAAMMJJ
-date_naissance <- as.integer(str_remove_all(date_naissance, "-"))
-date_age <- as.integer(str_remove_all(date_age, "-"))
-date_age
-date_age - date_naissance
-(date_age - date_naissance) / 10000
-floor((date_age - date_naissance) / 10000)
-
 date_naissance <- as_date("2001-06-15")
 date_age <- as_date(paste0(2002:2011, "01-01"))  # 2002-01-01 à 2011-01-01
 # Convertir en entier au format AAAAMMJJ
@@ -60,9 +62,76 @@ date_age - date_naissance
 (date_age - date_naissance) / 10000
 floor((date_age - date_naissance) / 10000)
 ```
-En faisant une soustraction on s'assure de toujours avoir le bon âge. L'année anniversaire (`AAAA`) moins l'année de naissance donne le nombre d'années, puis si le nombre `MMJJ` de la date anniversaire est plus petit que celui de la date de naissance on soustrait 1, sinon on conserve.
+En faisant une soustraction on s'assure de toujours avoir le bon âge. L'année anniversaire (`AAAA`) moins l'année de naissance donne le nombre d'années, puis si le nombre `MMJJ` de la date anniversaire est plus petit que celui de la date de naissance on soustrait 1, sinon on conserve l'âge.  
+Exemple si la date de naissance est le 29 février 2000 et que l'année où l'on veut calculer l'âge est en 2025, on aurait 2025 moins 2000 qui donne 25 ans. Toutes les dates entre le 1$^{er}$ janvier et le 28 février l'âge serait de 24 (25 - 1) ans et du 1$^{er}$ mars au 31 décembre l'âge serait de 25 ans.
+```{r}
+# Vérifier les limites du calcul de l'âge à la date de fête,
+# la date précédente et la suivante
+date_naissance <- as_date("2000-02-29")
+date_age <- as_date(c("2025-01-01", "2025-02-28", "2025-03-01", "2025-12-31"))  # 2002-01-01 à 2011-01-01
+# Convertir en entier au format AAAAMMJJ
+date_naissance <- as.integer(str_remove_all(date_naissance, "-"))
+date_age <- as.integer(str_remove_all(date_age, "-"))
+date_age - date_naissance
+(date_age - date_naissance) / 10000
+floor((date_age - date_naissance) / 10000)
+```
 
-## Diviser par 365
+
+# Test de performance
+```{r}
+# Data à 1M d'observations
+set.seed(42)
+dates_naiss <- seq(as_date("1961-01-01"), as_date("1980-12-31"), by = 1)
+dates_age <- seq(as_date("2001-01-01"), as_date("2021-12-31"), by = 1)
+df <- tibble(
+  ID = 1:1e6,
+  DATE_NAISS = sample(dates_naiss, 1e6, replace = TRUE),
+  DATE_AGE = sample(dates_age, 1e6, replace = TRUE)
+)
+dt <- as.data.table(df)
+dt
+
+df_36525 <- function(df) {
+  df <- df %>% mutate(AGE = floor(as.integer(DATE_AGE - DATE_NAISS) / 365.25))
+}
+df_365 <- function(df) {
+  df <- df %>% mutate(AGE = floor(as.integer(DATE_AGE - DATE_NAISS) / 365))
+}
+df_10k <- function(df) {
+  df <- df %>%
+    mutate(
+      AGE = floor(
+        (as.integer(str_remove_all(DATE_AGE, "-")) - as.integer(str_remove_all(DATE_NAISS, "-")))
+        / 10000
+      )
+    )
+}
+dt_36525 <- function(dt) {
+  dt[, AGE := floor(as.integer(DATE_AGE - DATE_NAISS) / 365.25)]
+}
+dt_365 <- function(dt) {
+  dt[, AGE := floor(as.integer(DATE_AGE - DATE_NAISS) / 365)]
+}
+dt_10k <- function(dt) {
+  dt[, AGE := floor(
+    (as.integer(str_remove_all(DATE_AGE, "-")) - as.integer(str_remove_all(DATE_NAISS, "-")))
+    / 10000
+  )]
+}
+
+microbenchmark(
+  df_36525 = df_36525(df),
+  df_365 = df_365(df),
+  df_10k = df_10k(df),
+  dt_36525 = dt_36525(dt),
+  dt_365 = dt_365(dt),
+  dt_10k = dt_10k(dt),
+  times = 25
+)
+```
+
+
 
 
 
