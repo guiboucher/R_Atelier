@@ -25,15 +25,15 @@ html_vspace <- function(px = 50) {
 ```
 
 
-# Contexte
-
-Trouver la manière la plus juste et efficace de calculer l'âge.
+# Objectif
+Trouver la meilleure méthode pour calculer l'âge.
+Dans le cas où une personne serait née le 29 février, la méthode pourrait tout être bonne que l'anniversaire se fasse le 28 février ou le 1$^{er}$ mars lors des années non bissextiles. La méthode sera considérée comme bonne si elle est constante au fil des années.
 
 ```{r, results="asis", echo=FALSE}
 html_vspace()
 ```
 
-# Exigences
+# Paramètres et librairies
 
 ```{r, message=FALSE, warning=FALSE}
 library(data.table)
@@ -44,7 +44,7 @@ library(stringr)
 
 
 # Performance
-n_benchmark <- 1  # Nombre d'itérations
+n_benchmark <- 10  # Nombre d'itérations
 performance_nobs <- 1e2  # Nombre d'observations du tableau
 
 # Taux de succès
@@ -56,46 +56,35 @@ html_vspace()
 ```
 
 # Méthodes
+L'âge calculé devrait être de 10 ans.
 
 ## Diviser par 365.25
-
-Calculer le nombre de jours entre la date de naissance et la date où l'on veut déterminer l'âge, puis diviser par 365,25.
-
+Calculer le nombre de jours entre la date de naissance et la date où l'on veut déterminer l'âge, puis diviser par `365.25`.
 ```{r}
-date_naissance <- as_date("2001-01-01")
-age <- vector("integer", 10)
-for (i in 1:10) {  # Calculer l'âge des 10 premières années
-  date_calcul <- as_date(paste0(2001 + i,"-01-01"))  # Date pour calcul âge : 2022 à 2011
-  age[i] <- as.integer((date_calcul - date_naissance) / 365.25)  # Calcul de l'âge
-  names(age)[i] <- paste0(2001 + i,"-01-01")
-}
-print(age)
+naissance <- as_date("2001-01-01")
+calcul_age <- as_date("2010-01-01")
+as.integer(date_calcul - naissance) / 365.25
+floor(as.integer(date_calcul - naissance) / 365.25)
 ```
-
-Le résultat devrait être un vecteur allant de 1 à 10. On remarque qu’il n’y a que deux bonnes valeurs : l’année 2005 indiquant 4 ans et l’année 2009 indiquant 8 ans.
 
 ```{r, results="asis", echo=FALSE}
 html_vspace(10)
 ```
 
 ## Diviser par 365
-
+Calculer le nombre de jours entre la date de naissance et la date où l'on veut déterminer l'âge, puis diviser par `365`.
 ```{r}
-date_naissance <- as_date("2000-02-29")
-date_calcul <- as_date(c("2001-02-28", "2001-03-01", "2004-02-28", "2004-02-29", "2004-03-01"))
-age <- floor(as.integer(date_calcul - date_naissance) / 365)
-names(age) <- as.character(date_calcul)
-age
+naissance <- as_date("2001-01-01")
+calcul_age <- as_date("2010-01-01")
+as.integer(date_calcul - naissance) / 365
+floor(as.integer(date_calcul - naissance) / 365)
 ```
-
-On devrait avoir un vecteur de `{0, 1, 3, 4, 4}`, donc diviser par 365 ne fonctionne pas.
 
 ```{r, results="asis", echo=FALSE}
 html_vspace(10)
 ```
 
 ## Diviser par 10000
-
 Convertir une date `AAAA-MM-JJ` en un **nombre entier** au format `AAAAMMJJ`, puis diviser par 10000.
 
 ```{r}
@@ -123,17 +112,16 @@ Les valeurs `0.887` et `0.0071` démontre que les décimales de la méthode n'on
 html_vspace(10)
 ```
 
-## lubridate interval() / dyears(1)
+## lubridate : year() + as.period() + interval()
 
-Utiliser la date de naissance et la date de calcul de l'âge dans la fonction `interval()` et diviser par `dyears(1)` pour convertir en année.
+Utiliser la date de naissance et la date de calcul de l'âge dans la fonction `interval()` et convertir en période et en année.
 
 ```{r}
 date_naissance <- as_date("2001-06-15")
 date_calcul <- as_date(paste0(2002:2011, "01-01"))
-age <- interval(date_naissance, date_calcul) / dyears(1)
+age <- year(as.period(interval(date_naissance, date_calcul)))
 names(age) <- date_calcul
 age
-floor(age)
 ```
 
 Bien que cette méthode semble parfaite et efficace, elle n'est pas constante dans la gestion des années bissextiles. Si l'anniversaire est le 29 février, l'anniversaire est parfois le 28 février, d'autres le 1$^{er}$ mars.
@@ -150,7 +138,6 @@ html_vspace(10)
 ```
 
 ## Comparaison MOIS et JOUR
-
 Calculer le nombre d'années entre la date de calcul et la date de naissance. Si la combinaison `mois-jour` de la date de calcul est plus petite que celle de la date de naissance soustraire 1 à la valeur précédemment calculée.  
 Cette méthode considère que l'anniversaire d'une date de naissance le 29 février sera le 1$^{er}$ mars lors des années non bissextiles.
 
@@ -167,6 +154,21 @@ age <- sapply(date_calcul, function(x) {
 })
 names(age) <- date_calcul
 age
+```
+
+```{r, results="asis", echo=FALSE}
+html_vspace(10)
+```
+
+## lubridate : decimal_date()
+Convertir les dates en années avec décimales et soustraire les deux valeurs en prenant la valeur plancher.
+```{r}
+date_naissance <- as_date("2001-06-15")
+date_calcul <- as_date(paste0(2002:2011, "01-01"))
+age <- decimal_date(date_calcul) - decimal_date(date_naissance)
+names(age) <- date_calcul
+age
+floor(age)
 ```
 
 
@@ -203,7 +205,7 @@ df_10k <- function(df) {
 }
 df_interval <- function(df) {
   df <- df %>%
-    mutate(AGE = floor(interval(DATE_NAISS, DATE_CALCUL) / dyears(1)))
+    mutate(AGE = year(as.period(interval(DATE_NAISS, DATE_CALCUL))))
 }
 df_moisjour <- function(df) {
   df <- df %>% mutate(
@@ -212,6 +214,9 @@ df_moisjour <- function(df) {
                   year(DATE_CALCUL) - year(DATE_NAISS) - 1,
                   year(DATE_CALCUL) - year(DATE_NAISS))
   )
+}
+df_decimal <- function(df) {
+  df <- df %>% mutate(AGE = floor(decimal_date(DATE_CALCUL) - decimal_date(DATE_NAISS)))
 }
 dt_36525 <- function(dt) {
   dt[, AGE := floor(as.integer(DATE_CALCUL - DATE_NAISS) / 365.25)]
@@ -225,7 +230,7 @@ dt_10k <- function(dt) {
   dt[, AGE := floor((DATE_CALC - DATE_NAIS) / 10000)]
 }
 dt_interval <- function(dt) {
-  dt[, AGE := floor(interval(DATE_NAISS, DATE_CALCUL) / dyears(1))]
+  dt[, AGE :=  year(as.period(interval(DATE_NAISS, DATE_CALCUL)))]
 }
 dt_moisjour <- function(dt) {
   dt[, AGE := fcase(
@@ -235,6 +240,9 @@ dt_moisjour <- function(dt) {
     default = year(DATE_CALCUL) - year(DATE_NAISS)
   )]
 }
+dt_decimal <- function(dt) {
+  dt[, AGE := floor(decimal_date(DATE_CALCUL) - decimal_date(DATE_NAISS))]
+}
 
 microbenchmark(
   df_36525 = df_36525(df),
@@ -242,11 +250,13 @@ microbenchmark(
   df_10k = df_10k(df),
   df_interval = df_interval(df),
   df_moisjour = df_moisjour(df),
+  df_decimal = df_decimal(df),
   dt_36525 = dt_36525(dt),
   dt_365 = dt_365(dt),
   dt_10k = dt_10k(dt),
   dt_interval = dt_interval(dt),
   dt_moisjour = dt_moisjour(dt),
+  dt_decimal = dt_decimal(dt),
   times = n_benchmark
 )
 ```
@@ -280,15 +290,18 @@ dt[, m365 := floor(as.integer(CALCUL - NAISS) / 365)]
 dt[, m10k := floor(
   (as.integer(str_remove_all(CALCUL, "-")) - as.integer(str_remove_all(NAISS, "-"))) / 10000
 )]
-dt[, mInt := floor(interval(NAISS, CALCUL) / dyears(1))]
+dt[, mInt :=  year(as.period(interval(NAISS, CALCUL)))]
+dt[, mDec := floor(decimal_date(CALCUL) - decimal_date(NAISS))]
 dt[, tx36525 := fcase(m36525 == REF, 1, default = 0)]
 dt[, tx365 := fcase(m365 == REF, 1, default = 0)]
 dt[, tx10k := fcase(m10k == REF, 1, default = 0)]
 dt[, txInt := fcase(mInt == REF, 1, default = 0)]
+dt[, txDec := fcase(mDec == REF, 1, default = 0)]
 dt[, .(Tx36525 = sum(tx36525) / .N,
        Tx365 = sum(tx365) / .N,
        Tx10k = sum(tx10k) / .N,
-       TxInt = sum(txInt) / .N)]
+       TxInt = sum(txInt) / .N,
+       TxDec = sum(txDec) / .N)]
 ```
 
 
