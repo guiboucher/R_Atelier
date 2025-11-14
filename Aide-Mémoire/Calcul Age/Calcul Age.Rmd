@@ -57,14 +57,20 @@ html_vspace()
 
 # Méthodes
 L'âge calculé devrait être de 10 ans.
+```{r}
+naissance <- as_date("2005-01-01")  # 1er janvier 2005
+calcul_age <- as_date("2015-06-15") #  15 juin    2015
+```
+
+```{r, results="asis", echo=FALSE}
+html_vspace(10)
+```
 
 ## Diviser par 365.25
-Calculer le nombre de jours entre la date de naissance et la date où l'on veut déterminer l'âge, puis diviser par `365.25`.
+Calculer le nombre de jours, puis diviser par `365.25`.
 ```{r}
-naissance <- as_date("2001-01-01")
-calcul_age <- as_date("2010-01-01")
-as.integer(date_calcul - naissance) / 365.25
-floor(as.integer(date_calcul - naissance) / 365.25)
+as.integer(calcul_age - naissance) / 365.25
+floor(as.integer(calcul_age - naissance) / 365.25)
 ```
 
 ```{r, results="asis", echo=FALSE}
@@ -74,10 +80,8 @@ html_vspace(10)
 ## Diviser par 365
 Calculer le nombre de jours entre la date de naissance et la date où l'on veut déterminer l'âge, puis diviser par `365`.
 ```{r}
-naissance <- as_date("2001-01-01")
-calcul_age <- as_date("2010-01-01")
-as.integer(date_calcul - naissance) / 365
-floor(as.integer(date_calcul - naissance) / 365)
+as.integer(calcul_age - naissance) / 365
+floor(as.integer(calcul_age - naissance) / 365)
 ```
 
 ```{r, results="asis", echo=FALSE}
@@ -88,24 +92,20 @@ html_vspace(10)
 Convertir une date `AAAA-MM-JJ` en un **nombre entier** au format `AAAAMMJJ`, puis diviser par 10000.
 
 ```{r}
-date_naissance <- as_date("2001-06-15")
-date_calcul <- as_date(paste0(2002:2011, "01-01"))
-# Convertir en entier au format AAAAMMJJ
-date_naissance <- as.integer(str_remove_all(date_naissance, "-"))
-date_calcul <- as.integer(str_remove_all(date_calcul, "-"))
-date_calcul - date_naissance
-(date_calcul - date_naissance) / 10000
-floor((date_calcul - date_naissance) / 10000)
+naissance_entier <- as.integer(str_remove_all(naissance, "-"))
+naissance_entier
+calcul_age_entier <- as.integer(str_remove_all(calcul_age, "-"))
+calcul_age_entier
+calcul_age_entier - naissance_entier
+(calcul_age_entier - naissance_entier) / 10000
+floor((calcul_age_entier - naissance_entier) / 10000)
 ```
-
 Diviser par 10000 et prendre la valeur plancher fonctionnera toujours pour calculer l'âge. **Notez bien** qu'il est important de prendre la valeur plancher (`floor()`) parce que les décimales n'ont pas de sens.
 
 ```{r}
-# Une journée
 (20210101 - 20201231) / 10000  # 31 décembre au 1er janvier
 (20210701 - 20210630) / 10000  # 30 juin au 1er juillet
 ```
-
 Les valeurs `0.887` et `0.0071` démontre que les décimales de la méthode n'ont pas de sens, car les deux représentent une journée.
 
 ```{r, results="asis", echo=FALSE}
@@ -113,35 +113,27 @@ html_vspace(10)
 ```
 
 ## lubridate : year() + as.period() + interval()
-
 Utiliser la date de naissance et la date de calcul de l'âge dans la fonction `interval()` et convertir en période et en année.
 
 ```{r}
-date_naissance <- as_date("2001-06-15")
-date_calcul <- as_date(paste0(2002:2011, "01-01"))
-age <- year(as.period(interval(date_naissance, date_calcul)))
-names(age) <- date_calcul
-age
+interval(naissance, calcul_age)
+as.period(interval(naissance, calcul_age))
+year(as.period(interval(naissance, calcul_age)))
 ```
-
-Bien que cette méthode semble parfaite et efficace, elle n'est pas constante dans la gestion des années bissextiles. Si l'anniversaire est le 29 février, l'anniversaire est parfois le 28 février, d'autres le 1$^{er}$ mars.
-```{r}
-date_naissance <- as_date("1980-02-29")
-date_calcul <- as_date(paste0(c(2001:2010), "02-28"))
-age <- floor(interval(date_naissance, date_calcul) / dyears(1))
-age
-```
-
 
 ```{r, results="asis", echo=FALSE}
 html_vspace(10)
 ```
 
 ## Comparaison MOIS et JOUR
-Calculer le nombre d'années entre la date de calcul et la date de naissance. Si la combinaison `mois-jour` de la date de calcul est plus petite que celle de la date de naissance soustraire 1 à la valeur précédemment calculée.  
+Calculer le nombre d'années entre la date de calcul et la date de naissance. Si la combinaison `mois-jour` de la date de calcul est plus petite que celle de la date de naissance soustraire 1 à la valeur précédemment calculée. Par exemple, si la date anniversaire est le 10 mars, soustraire 1 à l'âge calculé si la date est entre le 1$^{er}$ janvier et le 9 mars.  
 Cette méthode considère que l'anniversaire d'une date de naissance le 29 février sera le 1$^{er}$ mars lors des années non bissextiles.
 
 ```{r, class.source="textfont11"}
+age <- year(calcul_age) - year(naissance)
+age
+
+
 date_calcul <- as_date(paste0(2002:2011, "01-01"))
 age <- sapply(date_calcul, function(x) {
   date_naissance <- as_date("2001-06-15")
