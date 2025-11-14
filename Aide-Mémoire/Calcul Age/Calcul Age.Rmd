@@ -11,9 +11,10 @@ output:
 ```{r setup, include=FALSE, comment="#>"}
 knitr::opts_chunk$set(echo = TRUE)
 
-html_vspace <- function(px = 50) {
+html_vspace <- function(px = 100) {
   cat(paste0('<div style="height: ', px, 'px;"></div>'))
 }
+options(datatable.print.nrows = 10)
 ```
 ```{css, echo=FALSE}
 .textfont10 {font-size: 10px}
@@ -33,22 +34,24 @@ Dans le cas où une personne serait née le 29 février, la méthode pourrait to
 html_vspace()
 ```
 
-# Paramètres et librairies
+# Librairies et paramètres
 
 ```{r, message=FALSE, warning=FALSE}
 library(data.table)
 library(dplyr)
+library(knitr)
 library(lubridate)
 library(microbenchmark)
 library(stringr)
 
 
 # Performance
-n_benchmark <- 10  # Nombre d'itérations
-performance_nobs <- 1e2  # Nombre d'observations du tableau
+n_benchmark <- 50  # Nombre d'itérations
+performance_nobs <- 1e6  # Nombre d'observations du tableau
 
 # Taux de succès
-tx_succ_date_fin <- "2000-12-31"  # Date de fin pour analyse des taux de succès
+tx_succ_date_fin <- "2080-12-31"  # Date de fin pour analyse des taux de succès
+
 ```
 
 ```{r, results="asis", echo=FALSE}
@@ -90,7 +93,6 @@ html_vspace(10)
 
 ## Diviser par 10000
 Convertir une date `AAAA-MM-JJ` en un **nombre entier** au format `AAAAMMJJ`, puis diviser par 10000.
-
 ```{r}
 naissance_entier <- as.integer(str_remove_all(naissance, "-"))
 naissance_entier
@@ -112,6 +114,21 @@ Les valeurs `0.887` et `0.0071` démontre que les décimales de la méthode n'on
 html_vspace(10)
 ```
 
+## Comparaison MOIS et JOUR
+Calculer le nombre d'années entre la date de calcul et la date de naissance. Si la combinaison `mois-jour` de la date de calcul est plus petite que celle de la date de naissance soustraire 1 à la valeur précédemment calculée. Par exemple, si la date anniversaire est le 10 mars, soustraire 1 à l'âge calculé si la date est entre le 1$^{er}$ janvier et le 9 mars.  
+Cette méthode considère que l'anniversaire d'une date de naissance le 29 février sera le 1$^{er}$ mars lors des années non bissextiles.
+```{r, class.source="textfont11"}
+age <- year(calcul_age) - year(naissance)
+if (month(calcul_age) < month(naissance) | (month(calcul_age) == month(naissance) & day(calcul_age) < day(naissance))) {
+  age <- age - 1
+}
+age
+```
+
+```{r, results="asis", echo=FALSE}
+html_vspace(10)
+```
+
 ## lubridate : year() + as.period() + interval()
 Utiliser la date de naissance et la date de calcul de l'âge dans la fonction `interval()` et convertir en période et en année.
 
@@ -125,27 +142,12 @@ year(as.period(interval(naissance, calcul_age)))
 html_vspace(10)
 ```
 
-## Comparaison MOIS et JOUR
-Calculer le nombre d'années entre la date de calcul et la date de naissance. Si la combinaison `mois-jour` de la date de calcul est plus petite que celle de la date de naissance soustraire 1 à la valeur précédemment calculée. Par exemple, si la date anniversaire est le 10 mars, soustraire 1 à l'âge calculé si la date est entre le 1$^{er}$ janvier et le 9 mars.  
-Cette méthode considère que l'anniversaire d'une date de naissance le 29 février sera le 1$^{er}$ mars lors des années non bissextiles.
-
-```{r, class.source="textfont11"}
-age <- year(calcul_age) - year(naissance)
-age
-
-
-date_calcul <- as_date(paste0(2002:2011, "01-01"))
-age <- sapply(date_calcul, function(x) {
-  date_naissance <- as_date("2001-06-15")
-  age <- year(x) - year(date_naissance)  # Nombre d'années entre la date de calcul et la naissance
-  if (month(x) < month(date_naissance) | (month(x) == month(date_naissance) & day(x) < day(date_naissance))) {
-    # La date de naissance est le 15 juin. Soustraire 1 si la date est entre le 1er janvier et le 14 juin
-    age <- age - 1
-  }
-  return(age)
-})
-names(age) <- date_calcul
-age
+## lubridate : interval() / dyears(1)
+Calculer l'intervalle de temps entre deux dates et convertir en années.
+```{r}
+interval(naissance, calcul_age)
+interval(naissance, calcul_age) / dyears(1)
+floor(interval(naissance, calcul_age) / dyears(1))
 ```
 
 ```{r, results="asis", echo=FALSE}
@@ -155,12 +157,10 @@ html_vspace(10)
 ## lubridate : decimal_date()
 Convertir les dates en années avec décimales et soustraire les deux valeurs en prenant la valeur plancher.
 ```{r}
-date_naissance <- as_date("2001-06-15")
-date_calcul <- as_date(paste0(2002:2011, "01-01"))
-age <- decimal_date(date_calcul) - decimal_date(date_naissance)
-names(age) <- date_calcul
-age
-floor(age)
+decimal_date(calcul_age)
+decimal_date(naissance)
+decimal_date(calcul_age) - decimal_date(naissance)
+floor(decimal_date(calcul_age) - decimal_date(naissance))
 ```
 
 
@@ -169,150 +169,227 @@ html_vspace()
 ```
 
 
-# Test de performance
+# Test de performance et taux de succès
 
+## Performance
 ```{r}
 set.seed(42)
 dates_naiss <- seq(as_date("1961-01-01"), as_date("1980-12-31"), by = 1)
 dates_age <- seq(as_date("2001-01-01"), as_date("2021-12-31"), by = 1)
-df <- tibble(  # Pour tests dplyr
+df <- tibble(
   ID = 1:performance_nobs,
-  DATE_NAISS = sample(dates_naiss, performance_nobs, replace = TRUE),
-  DATE_CALCUL = sample(dates_age, performance_nobs, replace = TRUE)
+  NAISS = sample(dates_naiss, performance_nobs, replace = TRUE),
+  CALCUL = sample(dates_age, performance_nobs, replace = TRUE)
 )
 dt <- as.data.table(df)
 dt
 
+# Diviser par 365.25
 df_36525 <- function(df) {
-  df <- df %>% mutate(AGE = floor(as.integer(DATE_CALCUL - DATE_NAISS) / 365.25))
-}
-df_365 <- function(df) {
-  df <- df %>% mutate(AGE = floor(as.integer(DATE_CALCUL - DATE_NAISS) / 365))
-}
-df_10k <- function(df) {
-  df <- df %>%
-    mutate(DATE_CALCUL = as.integer(str_remove_all(DATE_CALCUL, "-")),
-           DATE_NAISS = as.integer(str_remove_all(DATE_NAISS, "-")),
-           AGE = floor((DATE_CALCUL - DATE_NAISS )/ 10000))
-}
-df_interval <- function(df) {
-  df <- df %>%
-    mutate(AGE = year(as.period(interval(DATE_NAISS, DATE_CALCUL))))
-}
-df_moisjour <- function(df) {
-  df <- df %>% mutate(
-    AGE = if_else(month(DATE_CALCUL) < month(DATE_NAISS) |
-                    (month(DATE_CALCUL) == month(DATE_NAISS) & day(DATE_CALCUL) < day(DATE_NAISS)),
-                  year(DATE_CALCUL) - year(DATE_NAISS) - 1,
-                  year(DATE_CALCUL) - year(DATE_NAISS))
-  )
-}
-df_decimal <- function(df) {
-  df <- df %>% mutate(AGE = floor(decimal_date(DATE_CALCUL) - decimal_date(DATE_NAISS)))
+  df <- df %>% mutate(AGE = floor(as.integer(CALCUL - NAISS) / 365.25))
+  return(df)
 }
 dt_36525 <- function(dt) {
-  dt[, AGE := floor(as.integer(DATE_CALCUL - DATE_NAISS) / 365.25)]
+  dt[, AGE := floor(as.integer(CALCUL - NAISS) / 365.25)]
+}
+
+# Diviser par 365
+df_365 <- function(df) {
+  df <- df %>% mutate(AGE = floor(as.integer(CALCUL - NAISS) / 365))
+  return(df)
 }
 dt_365 <- function(dt) {
-  dt[, AGE := floor(as.integer(DATE_CALCUL - DATE_NAISS) / 365)]
+  dt[, AGE := floor(as.integer(CALCUL - NAISS) / 365)]
+}
+
+# Diviser par 10k
+df_10k <- function(df) {
+  df <- df %>%
+    mutate(
+      AGE = floor(
+        (as.integer(str_remove_all(CALCUL, "-")) - as.integer(str_remove_all(NAISS, "-"))) / 10000
+      )
+    )
+  return(df)
 }
 dt_10k <- function(dt) {
-  dt[, DATE_CALC := as.integer(str_remove_all(DATE_CALCUL, "-"))]
-  dt[, DATE_NAIS := as.integer(str_remove_all(DATE_NAISS, "-"))]
-  dt[, AGE := floor((DATE_CALC - DATE_NAIS) / 10000)]
+  dt[, AGE := floor(
+    (as.integer(str_remove_all(CALCUL, "-")) - as.integer(str_remove_all(NAISS, "-"))) / 10000
+  )]
 }
-dt_interval <- function(dt) {
-  dt[, AGE :=  year(as.period(interval(DATE_NAISS, DATE_CALCUL)))]
+
+# Comparaison Mois-Jour
+df_moisjour <- function(df) {
+  df <- df %>% mutate(
+    AGE = if_else(month(CALCUL) < month(NAISS) |
+                    (month(CALCUL) == month(NAISS) & day(CALCUL) < day(NAISS)),
+                  year(CALCUL) - year(NAISS) - 1,
+                  year(CALCUL) - year(NAISS))
+  )
+  return(df)
 }
 dt_moisjour <- function(dt) {
   dt[, AGE := fcase(
-    month(DATE_CALCUL) < month(DATE_NAISS)
-      | (month(DATE_CALCUL) == month(DATE_NAISS) & day(DATE_CALCUL) < day(DATE_NAISS)),
-      year(DATE_CALCUL) - year(DATE_NAISS) - 1,
-    default = year(DATE_CALCUL) - year(DATE_NAISS)
+    month(CALCUL) < month(NAISS)
+      | (month(CALCUL) == month(NAISS) & day(CALCUL) < day(NAISS)),
+      year(CALCUL) - year(DATE_NAISS) - 1,
+    default = year(CALCUL) - year(NAISS)
   )]
 }
-dt_decimal <- function(dt) {
-  dt[, AGE := floor(decimal_date(DATE_CALCUL) - decimal_date(DATE_NAISS))]
+
+# lubridate : year() + as.period() + interval()
+df_yr_per_int <- function(df) {
+  df <- df %>% mutate(AGE = year(as.period(interval(NAISS, CALCUL))))
+  return(df)
+}
+dt_yr_per_int <- function(dt) {
+  dt[, AGE := year(as.period(interval(NAISS, CALCUL)))]
 }
 
-microbenchmark(
-  df_36525 = df_36525(df),
-  df_365 = df_365(df),
-  df_10k = df_10k(df),
-  df_interval = df_interval(df),
-  df_moisjour = df_moisjour(df),
-  df_decimal = df_decimal(df),
-  dt_36525 = dt_36525(dt),
-  dt_365 = dt_365(dt),
-  dt_10k = dt_10k(dt),
-  dt_interval = dt_interval(dt),
-  dt_moisjour = dt_moisjour(dt),
-  dt_decimal = dt_decimal(dt),
+# lubridate : interval() / dyears(1)
+df_int_dyr <- function(df) {
+  df <- df %>% mutate(AGE = floor(interval(NAISS, CALCUL) / dyears(1)))
+  return(df)
+}
+dt_int_dyr <- function(dt) {
+  dt[, AGE := floor(interval(NAISS, CALCUL) / dyears(1))]
+}
+
+# lubridate : decimal_date()
+df_dec_date <- function(df) {
+  df <- df %>% mutate(AGE = floor(decimal_date(CALCUL) - decimal_date(NAISS)))
+  return(df)
+}
+dt_dec_date <- function(dt) {
+  dt[, AGE := floor(decimal_date(CALCUL) - decimal_date(NAISS))]
+}
+
+
+test_perfo <- microbenchmark(
+  df_36525 = df_36525(df), dt_36525 = dt_36525(dt),
+  df_365 = df_365(df), dt_365 = dt_365(dt),
+  df_10k = df_10k(df), dt_10k = dt_10k(dt),
+  df_moisjour = df_moisjour(df), dt_moisjour = df_moisjour(dt),
+  df_yr_per_int = df_yr_per_int(df), dt_yr_per_int = dt_yr_per_int(dt),
+  df_int_dyr = df_int_dyr(df), dt_int_dyr = dt_int_dyr(dt),
+  df_dec_date = df_dec_date(df), dt_dec_date = dt_dec_date(dt),
+  
   times = n_benchmark
 )
-```
+test_perfo
 
+
+```
 
 ```{r, results="asis", echo=FALSE}
-html_vspace()
+html_vspace(10)
 ```
 
-
-# Taux de succès
+## Taux de succès
 Pour toutes les dates de naissance en 1980, calculer l'âge pour toutes les dates suivantes jusqu'en `r year(tx_succ_date_fin)`.  
-La méthode `mois-jour` sera utilisée comme référence.
+La méthode `Comparaison Mois-Jour` sera utilisée comme référence et la création des colonnes se fera avec `data.table`
 ```{r}
-vec_naiss <- seq(as_date("1980-01-01"), as_date("1980-12-31"), 1)
-vec_calcul <- seq(as_date("1980-01-01"), as_date(tx_succ_date_fin), 1)
 dt <- as.data.table(expand.grid(
-  NAISS = vec_naiss,
-  CALCUL = vec_calcul
+  NAISS = seq(as_date("1980-01-01"), as_date("1980-12-31"), 1),
+  CALCUL = seq(as_date("1980-01-01"), as_date(tx_succ_date_fin), 1)
 ))
 dt <- dt[NAISS <= CALCUL]
 setkey(dt)
 dt
+# Valeur de la colonne référence - méthode Comparison Mois-Jour
 dt[, REF := fcase(
   month(CALCUL) < month(NAISS) | (month(CALCUL) == month(NAISS) & day(CALCUL) < day(NAISS)),
     year(CALCUL) - year(NAISS) - 1,
   default = year(CALCUL) - year(NAISS)
 )]
-dt[, m36525 := floor(as.integer(CALCUL - NAISS) / 365.25)]
-dt[, m365 := floor(as.integer(CALCUL - NAISS) / 365)]
-dt[, m10k := floor(
+# Valeur des autres méthodes
+dt[, `_36525` := floor(as.integer(CALCUL - NAISS) / 365.25)]
+dt[, `_365` := floor(as.integer(CALCUL - NAISS) / 365)]
+dt[, `_10k` := floor(
   (as.integer(str_remove_all(CALCUL, "-")) - as.integer(str_remove_all(NAISS, "-"))) / 10000
 )]
-dt[, mInt :=  year(as.period(interval(NAISS, CALCUL)))]
-dt[, mDec := floor(decimal_date(CALCUL) - decimal_date(NAISS))]
-dt[, tx36525 := fcase(m36525 == REF, 1, default = 0)]
-dt[, tx365 := fcase(m365 == REF, 1, default = 0)]
-dt[, tx10k := fcase(m10k == REF, 1, default = 0)]
-dt[, txInt := fcase(mInt == REF, 1, default = 0)]
-dt[, txDec := fcase(mDec == REF, 1, default = 0)]
-dt[, .(Tx36525 = sum(tx36525) / .N,
-       Tx365 = sum(tx365) / .N,
-       Tx10k = sum(tx10k) / .N,
-       TxInt = sum(txInt) / .N,
-       TxDec = sum(txDec) / .N)]
+dt[, `_yr_per_int` := year(as.period(interval(NAISS, CALCUL)))]
+dt[, `_int_dyr` := floor(interval(NAISS, CALCUL) / dyears(1))]
+dt[, `_dec_date` := floor(decimal_date(CALCUL) - decimal_date(NAISS))]
+
+# Calculer le taux de succès
+cols <- names(dt)[!names(dt) %in% c("NAISS", "CALCUL", "REF")]
+TxSucc <- vector("list", length(cols))
+names(TxSucc) <- cols
+for (col in (cols)) {
+  dt[, paste0("Tx", col) := 0L]
+  dt[get(col) == REF, paste0("Tx", col) := 1L]
+  tx_succ <- dt[, .(METHODE = col,
+                    TX_SUCC = sum(get(paste0("Tx", col))) / .N * 100)]
+  TxSucc[[col]] <- tx_succ
+}
+TxSucc <- rbindlist(TxSucc)
+setorder(TxSucc, -TX_SUCC, METHODE)
 ```
 
 
+```{r, results="asis", echo=FALSE}
+html_vspace()
+```
 
 
+# Conclusion
 
+```{r, echo=FALSE}
+stats_perfo <- function(dt_benchmark) {
+  ndigit <- min(nchar(dt_benchmark$time))
+  
+  if (ndigit <= 3) {
+    unit <- "nanosecondes"
+    divide_unit <- 1
+  } else if (ndigit <= 6) {
+    unit <- "microsecondes"
+    divide_unit <- 1e3
+  } else if (ndigit <= 9) {
+    unit <- "millisecondes"
+    divide_unit <- 1e6
+  } else if (ndigit <= 12) {
+    unit <- "secondes"
+    divide_unit <- 1e9
+  } else {
+    unit <- "minutes"
+    divide_unit <- 1e9 * 60
+  }
+  
+  stats_data <- as.data.table(dt_benchmark)
+  stats_data <- stats_data[
+    , .(MIN = min(time) / divide_unit,
+        MOY = mean(time) / divide_unit,
+        MED = median(time) / divide_unit,
+        MAX = max(time) / divide_unit,
+        UNIT = unit,
+        NEVAL = .N),
+    .(expr)
+  ]
+  setnames(stats_data, "expr", "FCT")
+  stats_data[, FCT := as.character(FCT)]
+  stats_data[, METHODE := str_sub(FCT, 3, nchar(FCT))]
+  return(stats_data)
+}
 
+conclu_perfo <- stats_perfo(test_perfo)
+conclusion <- TxSucc[conclu_perfo, on = .(METHODE)]
+conclusion[METHODE == "_moisjour", TX_SUCC := 100]
+setorder(conclusion, -TX_SUCC, MED)
 
+meth_eff <- conclusion[1]$METHODE
+fct_efficace <- conclusion[1]$FCT
+if (str_sub(fct_efficace, 1, 2) == "df") {
+  lib_eff <- "dplyr"
+} else if (str_sub(fct_efficace, 1, 2) == "dt") {
+  lib_eff <- "data.table"
+}
+```
 
+La méthode la plus optimale est ``r meth_eff``.
 
-
-
-
-
-
-
-
-
-
-
+```{r, echo=FALSE, results="asis"}
+kable(conclusion)
+```
 
 
