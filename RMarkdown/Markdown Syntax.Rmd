@@ -1,0 +1,99 @@
+---
+title: "Markdown syntax"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# H1
+
+
+## H2
+
+
+### H3
+
+
+**bold text**
+
+
+*italicized text*
+
+
+> blockquote
+
+
+1. First item
+2. Second item
+3. Third item
+
+
+- First item
+- Second item
+- Third item
+
+
+`code`
+
+
+---
+
+
+[title](https://www.example.com)
+
+
+![Image INESSS](INESSSlogo.jpg)
+
+
+| Syntax | Description |
+| ----------- | ----------- |
+| Header | Title |
+| Paragraph | Text |
+
+
+```
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25
+}
+```
+
+
+Here's a sentence with a footnote. [^1]
+
+[^1]: This is the footnote.
+
+
+### My Great Heading {#custom-id}
+
+
+First Term
+: This is the definition of the first term.
+
+Second Term
+: This is one definition of the second term.
+: This is another definition of the second term.
+
+
+~~The world is flat.~~
+
+
+- [x] Write the press release
+- [ ] Update the website
+- [ ] Contact the media
+
+
+That is so funny! :joy:
+
+
+I need to highlight these ==very important words==.  
+I need to highlight these <mark>very important words</mark>.
+
+
+H~2~O
+
+
+X^2^
