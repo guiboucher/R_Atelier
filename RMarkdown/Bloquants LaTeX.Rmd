@@ -1,0 +1,28 @@
+---
+title: "Bloquants LaTeX"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Titre 4
+Les titres 4 (#### Titre) se mélangeaient avec le texte qui suivait et je ne pouvais pas mettre de *nouvelle ligne* (\\newline, \\n, \\\\). J'ai contourné le problème en mettant un point de couleur blanc. Le *texte*, qui était uniquement un point, me permettait d'isoler le titre de niveau 4 ou plus du texte de la section.
+```
+#### Titre 4 ou plus \\textcolor{white}{.}
+Le texte de la section
+```
+
+## Caractères spéciaux
+Le symbole `%` en LaTeX est le symbole pour écrire des commentaires. Il y avait des pourcentages dans les titres de colonnes des tableaux et cela mettait tout le reste du tableau en commentaire. Il fallait tout simplement ajouter un `\`, mais pour appliquer ce principe dans un *code chunk R* il fallait le réfléchir.
+
+Au final on veut `\%`.  
+Puisque `\` est un symbole spécial, il faut l'*escape* en mettant un autre `\` devant : `\\`.  
+Mais puisqu'on est dans un *code chunk R*, il faut réappliquer le même principe. On se retrouve donc avec `\\\\%`.  
+```{r, results="asis"}
+nom_colonnes <- c("Fréquence", "% Mois", "% Total")
+stringr::str_replace_all(nom_colonnes, "%", "\\\\%")
+```
+
+

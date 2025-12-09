@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 **bold text**
+__bold text__
 
 
 *italicized text*
@@ -86,7 +87,7 @@ Second Term
 - [ ] Contact the media
 
 
-That is so funny! :joy:
+That is so funny!
 
 
 I need to highlight these ==very important words==.  

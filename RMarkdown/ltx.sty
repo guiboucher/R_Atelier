@@ -1,0 +1,51 @@
+﻿% Quelques packages kableExtra
+\usepackage{booktabs}  % style tableau
+\usepackage{longtable}  % tableau sur plusieurs pages
+\usepackage{array}  % type tableau
+\usepackage{multirow}  % plusieurs lignes - même cellules
+\usepackage[table]{xcolor}  % couleur
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}  % créer une cellule (dans page)
+
+% Sections et En-têtes & pieds de pages
+\usepackage{sectsty}  % titre et sous-titre
+\usepackage{fancyhdr}  % en-têtes et pieds de pages
+\pagestyle{fancy}
+\lhead{Analyse de Variation Systématique}
+\chead{}
+\rhead{}
+\usepackage[yyyymmdd,hhmmss]{datetime}
+\lfoot{Éxécution réalisée le \today{} à \currenttime{}}
+\cfoot{}
+\rfoot{\thepage}
+
+% Tableaux et figures
+\usepackage{caption}
+\captionsetup{labelformat=empty,labelsep=none} % supprimer les captions et les labels
+
+% Encoding & Langues
+\usepackage[utf8]{inputenc}  % encoding
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel} % french étant la langue désirée
+
+% Symboles
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+% FONCTIONS
+
+%Commande pour indenter un paragraphe complet
+\newenvironment{myindentpar}[1]%
+  {\begin{list}{}%
+          {\setlength{\leftmargin}{#1}}%
+          \item[]%
+  }
+  {\end{list}}

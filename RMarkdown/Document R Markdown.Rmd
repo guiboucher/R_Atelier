@@ -3,7 +3,7 @@ title: "Document R Markdown"
 output:
   html_document:
     toc: true
-    toc_float: true
+    toc_float: false
 ---
 
 ```{r setup, include=FALSE}
@@ -59,7 +59,8 @@ cat("Code Markdown pour **Caractères gras**")
 cat("Le <strong>code HTML</strong> fonctionne aussi")
 ```
 
-Il est possible de faire des boucles.
+
+### Avantages des boucles
 ```{r, results="asis", message=FALSE, warning=FALSE}
 library(dplyr)
 library(kableExtra)

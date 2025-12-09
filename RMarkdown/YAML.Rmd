@@ -1,0 +1,16 @@
+---
+title: "Titre"
+subtitle: "Sous-Titre"
+author: "Auteur(s)"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: true  # table des matières
+    number_sections: yes  # Numéroter les Titres
+    includes:
+      in_header: ltx.sty  # Fichier contenant du code LaTeX - Équivaut à un source() de R
+
+geometry: "left=1.15cm,right=1.15cm,top=1.5cm,bottom=1.5cm"  # configurer chaque marge
+geometry: "margin=1cm"  # configurer les marges avec la même valeur - guillemets peut-être facultatif
+classoption: landscape  # Format paysage
+---
