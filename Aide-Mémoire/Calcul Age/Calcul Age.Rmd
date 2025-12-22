@@ -8,8 +8,9 @@ output:
     toc_depth: 2
 ---
 
-```{r setup, include=FALSE, comment="#>"}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "#>")
+library(kableExtra)
 
 html_vspace <- function(px = 100) {
   cat(paste0('<div style="height: ', px, 'px;"></div>'))
@@ -37,6 +38,7 @@ html_vspace()
 # Librairies et paramètres
 
 ```{r, message=FALSE, warning=FALSE}
+# Librairies
 library(data.table)
 library(dplyr)
 library(knitr)
@@ -44,13 +46,12 @@ library(lubridate)
 library(microbenchmark)
 library(stringr)
 
-
 # Performance
-n_benchmark <- 50  # Nombre d'itérations
-performance_nobs <- 1e6  # Nombre d'observations du tableau
+n_benchmark <- 10  # Nombre d'itérations
+performance_nobs <- 1e3  # Nombre d'observations du tableau
 
 # Taux de succès
-tx_succ_date_fin <- "2080-12-31"  # Date de fin pour analyse des taux de succès
+tx_succ_date_fin <- "2020-12-31"  # Date de fin pour analyse des taux de succès
 
 ```
 
@@ -102,7 +103,7 @@ calcul_age_entier - naissance_entier
 (calcul_age_entier - naissance_entier) / 10000
 floor((calcul_age_entier - naissance_entier) / 10000)
 ```
-Diviser par 10000 et prendre la valeur plancher fonctionnera toujours pour calculer l'âge. **Notez bien** qu'il est important de prendre la valeur plancher (`floor()`) parce que les décimales n'ont pas de sens.
+Diviser par 10000 et prendre la valeur plancher fonctionnera toujours pour calculer l'âge. **Notez bien** qu'il est important de prendre la valeur plancher (`floor()`) parce que les décimales n'ont pas de sens analytique.
 
 ```{r}
 (20210101 - 20201231) / 10000  # 31 décembre au 1er janvier
@@ -115,8 +116,13 @@ html_vspace(10)
 ```
 
 ## Comparaison MOIS et JOUR
-Calculer le nombre d'années entre la date de calcul et la date de naissance. Si la combinaison `mois-jour` de la date de calcul est plus petite que celle de la date de naissance soustraire 1 à la valeur précédemment calculée. Par exemple, si la date anniversaire est le 10 mars, soustraire 1 à l'âge calculé si la date est entre le 1$^{er}$ janvier et le 9 mars.  
-Cette méthode considère que l'anniversaire d'une date de naissance le 29 février sera le 1$^{er}$ mars lors des années non bissextiles.
+1) Calculer le nombre d'années entre la date de calcul et la date de naissance.  
+2) Si la combinaison `mois-jour` de la date de calcul est plus petite que celle de la date de naissance soustraire 1 à la valeur précédemment calculée.
+
+Exemple où l'anniversaire est le 10 mars 2000 et l'année de calcul est en 2020.
+1) 2020 - 2000 = 20  
+2) Soustraire 1 à l'âge calculé si la date est entre le 1$^{er}$ janvier et le 9 mars.  
+Cette méthode considère que l'anniversaire d'une naissance le 29 février sera le 1$^{er}$ mars lors des années non bissextiles. Dans certain pays c'est le 28 février.
 ```{r, class.source="textfont11"}
 age <- year(calcul_age) - year(naissance)
 if (month(calcul_age) < month(naissance) | (month(calcul_age) == month(naissance) & day(calcul_age) < day(naissance))) {
@@ -131,7 +137,6 @@ html_vspace(10)
 
 ## lubridate : year() + as.period() + interval()
 Utiliser la date de naissance et la date de calcul de l'âge dans la fonction `interval()` et convertir en période et en année.
-
 ```{r}
 interval(naissance, calcul_age)
 as.period(interval(naissance, calcul_age))
@@ -184,6 +189,7 @@ df <- tibble(
 dt <- as.data.table(df)
 dt
 
+### NOTE : df pour data.frame (dplyr) et dt pour data.table ###
 # Diviser par 365.25
 df_36525 <- function(df) {
   df <- df %>% mutate(AGE = floor(as.integer(CALCUL - NAISS) / 365.25))
@@ -296,13 +302,14 @@ dt <- as.data.table(expand.grid(
 dt <- dt[NAISS <= CALCUL]
 setkey(dt)
 dt
-# Valeur de la colonne référence - méthode Comparison Mois-Jour
+
+# Valeur de la colonne référence - méthode Comparaison Mois-Jour
 dt[, REF := fcase(
   month(CALCUL) < month(NAISS) | (month(CALCUL) == month(NAISS) & day(CALCUL) < day(NAISS)),
     year(CALCUL) - year(NAISS) - 1,
   default = year(CALCUL) - year(NAISS)
 )]
-# Valeur des autres méthodes
+# Valeur des autres méthodes (data.table uniquement)
 dt[, `_36525` := floor(as.integer(CALCUL - NAISS) / 365.25)]
 dt[, `_365` := floor(as.integer(CALCUL - NAISS) / 365)]
 dt[, `_10k` := floor(
@@ -311,6 +318,7 @@ dt[, `_10k` := floor(
 dt[, `_yr_per_int` := year(as.period(interval(NAISS, CALCUL)))]
 dt[, `_int_dyr` := floor(interval(NAISS, CALCUL) / dyears(1))]
 dt[, `_dec_date` := floor(decimal_date(CALCUL) - decimal_date(NAISS))]
+dt
 
 # Calculer le taux de succès
 cols <- names(dt)[!names(dt) %in% c("NAISS", "CALCUL", "REF")]
@@ -320,11 +328,12 @@ for (col in (cols)) {
   dt[, paste0("Tx", col) := 0L]
   dt[get(col) == REF, paste0("Tx", col) := 1L]
   tx_succ <- dt[, .(METHODE = col,
-                    TX_SUCC = sum(get(paste0("Tx", col))) / .N * 100)]
+                    TX_SUCC = round(sum(get(paste0("Tx", col))) / .N * 100, 2))]
   TxSucc[[col]] <- tx_succ
 }
 TxSucc <- rbindlist(TxSucc)
 setorder(TxSucc, -TX_SUCC, METHODE)
+TxSucc
 ```
 
 
@@ -389,7 +398,30 @@ if (str_sub(fct_efficace, 1, 2) == "df") {
 La méthode la plus optimale est ``r meth_eff``.
 
 ```{r, echo=FALSE, results="asis"}
-kable(conclusion)
+kbl(conclusion) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 ```
 
+
+```{r, results="asis", echo=FALSE}
+html_vspace()
+```
+
+
+# Annexe
+
+## Échantillon âge incorrect
+
+```{r, echo=FALSE}
+annexe_ech_inc <- dt[
+  REF != `_36525` | REF != `_365` |
+    REF != `_10k` |
+    REF != `_yr_per_int` |
+    REF != `_int_dyr` |
+    REF != `_dec_date`,
+  .(NAISS, CALCUL, REF, `_36525`, `_365`, `_int_dyr`, `_dec_date`)
+]
+kbl(annexe_ech_inc[1:50]) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+```
 
