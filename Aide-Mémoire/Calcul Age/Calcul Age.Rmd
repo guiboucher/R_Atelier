@@ -413,15 +413,18 @@ html_vspace()
 ## Échantillon âge incorrect
 
 ```{r, echo=FALSE}
-annexe_ech_inc <- dt[
-  REF != `_36525` | REF != `_365` |
-    REF != `_10k` |
-    REF != `_yr_per_int` |
-    REF != `_int_dyr` |
-    REF != `_dec_date`,
-  .(NAISS, CALCUL, REF, `_36525`, `_365`, `_int_dyr`, `_dec_date`)
-]
-kbl(annexe_ech_inc[1:50]) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+cols <- c("_36525", "_365", "_int_dyr", "_dec_date")
+annexe_ech_inc <- vector("list", length(cols))
+for (i in 1:length(cols)) {
+  annexe_ech_inc[[i]] <- dt[REF != get(cols[i])][1:10]
+}
+annexe_ech_inc <- unique(rbindlist(annexe_ech_inc))[, .(NAISS, CALCUL, REF, `_36525`, `_365`, `_int_dyr`, `_dec_date`)]
+kbl(annexe_ech_inc) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(4, background = ifelse(annexe_ech_inc$`_36525` != annexe_ech_inc$REF, "red", "white")) %>%
+  column_spec(5, background = ifelse(annexe_ech_inc$`_365` != annexe_ech_inc$REF, "red", "white")) %>%
+  column_spec(6, background = ifelse(annexe_ech_inc$`_int_dyr` != annexe_ech_inc$REF, "red", "white")) %>%
+  column_spec(7, background = ifelse(annexe_ech_inc$`_dec_date` != annexe_ech_inc$REF, "red", "white"))
+
 ```
 
