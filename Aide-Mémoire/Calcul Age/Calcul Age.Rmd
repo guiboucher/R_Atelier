@@ -47,11 +47,11 @@ library(microbenchmark)
 library(stringr)
 
 # Performance
-n_benchmark <- 10  # Nombre d'itérations
-performance_nobs <- 1e3  # Nombre d'observations du tableau
+n_benchmark <- 50  # Nombre d'itérations
+performance_nobs <- 1e7  # Nombre d'observations du tableau
 
 # Taux de succès
-tx_succ_date_fin <- "2020-12-31"  # Date de fin pour analyse des taux de succès
+tx_succ_date_fin <- "2040-12-31"  # Date de fin pour analyse des taux de succès
 
 ```
 

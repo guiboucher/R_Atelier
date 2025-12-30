@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-12-23" />
+<meta name="date" content="2025-12-29" />
 
 <title>Calcul Age</title>
 
@@ -1703,7 +1703,7 @@ border-radius: 0px;
 
 
 <h1 class="title toc-ignore">Calcul Age</h1>
-<h4 class="date">2025-12-23</h4>
+<h4 class="date">2025-12-29</h4>
 
 </div>
 
@@ -1737,11 +1737,11 @@ library(microbenchmark)
 library(stringr)
 
 # Performance
-n_benchmark &lt;- 10  # Nombre d&#39;itérations
-performance_nobs &lt;- 1e3  # Nombre d&#39;observations du tableau
+n_benchmark &lt;- 50  # Nombre d&#39;itérations
+performance_nobs &lt;- 1e7  # Nombre d&#39;observations du tableau
 
 # Taux de succès
-tx_succ_date_fin &lt;- &quot;2020-12-31&quot;  # Date de fin pour analyse des taux de succès</code></pre>
+tx_succ_date_fin &lt;- &quot;2040-12-31&quot;  # Date de fin pour analyse des taux de succès</code></pre>
 <div style="height: 100px;">
 
 </div>
@@ -1896,19 +1896,19 @@ df &lt;- tibble(
 )
 dt &lt;- as.data.table(df)
 dt</code></pre>
-<pre><code>#&gt;          ID      NAISS     CALCUL
-#&gt;       &lt;int&gt;     &lt;Date&gt;     &lt;Date&gt;
-#&gt;    1:     1 1968-02-22 2005-03-16
-#&gt;    2:     2 1972-02-21 2020-05-01
-#&gt;    3:     3 1967-06-27 2011-04-11
-#&gt;    4:     4 1975-06-09 2012-05-28
-#&gt;    5:     5 1964-01-03 2020-06-01
-#&gt;   ---                            
-#&gt;  996:   996 1974-01-27 2017-11-02
-#&gt;  997:   997 1972-04-02 2003-09-01
-#&gt;  998:   998 1963-12-21 2006-03-23
-#&gt;  999:   999 1971-10-06 2014-08-13
-#&gt; 1000:  1000 1964-01-03 2007-04-10</code></pre>
+<pre><code>#&gt;                 ID      NAISS     CALCUL
+#&gt;              &lt;int&gt;     &lt;Date&gt;     &lt;Date&gt;
+#&gt;        1:        1 1968-02-22 2015-06-15
+#&gt;        2:        2 1972-02-21 2011-08-08
+#&gt;        3:        3 1967-06-27 2021-12-24
+#&gt;        4:        4 1975-06-09 2020-07-03
+#&gt;        5:        5 1964-01-03 2008-01-12
+#&gt;       ---                               
+#&gt;  9999996:  9999996 1975-01-20 2021-01-07
+#&gt;  9999997:  9999997 1975-03-19 2008-05-08
+#&gt;  9999998:  9999998 1979-08-09 2015-09-01
+#&gt;  9999999:  9999999 1972-05-28 2006-04-19
+#&gt; 10000000: 10000000 1975-03-26 2008-12-06</code></pre>
 <pre class="r"><code>### NOTE : df pour data.frame (dplyr) et dt pour data.table ###
 # Diviser par 365.25
 df_36525 &lt;- function(df) {
@@ -2003,22 +2003,37 @@ test_perfo &lt;- microbenchmark(
   times = n_benchmark
 )
 test_perfo</code></pre>
-<pre><code>#&gt; Unit: microseconds
-#&gt;           expr    min     lq    mean  median     uq     max neval
-#&gt;       df_36525  810.2  826.1 1147.68  910.65  994.6  3262.7    10
-#&gt;       dt_36525  405.9  424.0  715.77  468.85  545.0  2946.8    10
-#&gt;         df_365  799.1  904.4 1207.09  942.80 1000.1  3716.9    10
-#&gt;         dt_365  346.5  366.5  644.78  382.45  509.0  2825.0    10
-#&gt;         df_10k 4096.9 4545.4 5045.07 4630.90 4838.6  8711.5    10
-#&gt;         dt_10k 3565.2 3791.4 4280.85 3914.65 4250.6  7234.5    10
-#&gt;    df_moisjour 3454.9 3654.2 4564.58 3711.45 3925.4 11018.0    10
-#&gt;    dt_moisjour 3697.9 3837.2 4096.80 3996.20 4152.4  4904.6    10
-#&gt;  df_yr_per_int 4011.8 4233.7 4800.08 4500.70 5004.2  7101.9    10
-#&gt;  dt_yr_per_int 3623.1 3749.8 4139.70 3939.55 4280.3  6020.7    10
-#&gt;     df_int_dyr 1455.2 1524.2 2384.06 1648.35 3040.8  5114.7    10
-#&gt;     dt_int_dyr 1116.3 1147.0 1474.92 1186.10 1219.1  3594.8    10
-#&gt;    df_dec_date 2254.7 2286.7 3385.18 2360.25 2816.1  8754.4    10
-#&gt;    dt_dec_date 1649.0 1745.7 2072.74 1854.55 1940.4  4265.0    10</code></pre>
+<pre><code>#&gt; Unit: milliseconds
+#&gt;           expr        min         lq       mean     median         uq
+#&gt;       df_36525   171.1265   190.8975   257.0724   225.2464   299.1148
+#&gt;       dt_36525   171.3625   193.3918   262.2417   216.4556   323.6474
+#&gt;         df_365   173.0752   191.1734   244.5272   204.8304   270.6682
+#&gt;         dt_365   171.3596   189.3438   237.7233   203.4033   263.8219
+#&gt;         df_10k 30372.3014 32814.4919 34681.5594 33916.8532 35059.8439
+#&gt;         dt_10k 29898.4315 32943.6195 34198.6871 33863.9756 35529.6769
+#&gt;    df_moisjour 22654.6313 25101.5671 26946.3281 25956.8987 26941.1723
+#&gt;    dt_moisjour 24110.6735 25791.8892 26817.5514 26173.3751 27162.4745
+#&gt;  df_yr_per_int 25404.6410 27650.4173 28448.0199 28197.4254 29151.2689
+#&gt;  dt_yr_per_int 25293.5477 27497.4553 28660.4156 28303.3979 29351.8456
+#&gt;     df_int_dyr   178.7027   201.1357   250.1694   207.4485   246.6742
+#&gt;     dt_int_dyr   179.7107   197.0247   266.6437   219.2099   358.7703
+#&gt;    df_dec_date  9155.3671  9759.1940 10388.3631 10168.8861 10393.5150
+#&gt;    dt_dec_date  9066.5871  9800.1338 10318.5242 10284.6511 10791.4778
+#&gt;         max neval
+#&gt;    561.9698    50
+#&gt;    508.9576    50
+#&gt;    546.3817    50
+#&gt;    454.1400    50
+#&gt;  49370.8449    50
+#&gt;  42389.4067    50
+#&gt;  59644.8069    50
+#&gt;  39812.3716    50
+#&gt;  35223.8793    50
+#&gt;  35280.2466    50
+#&gt;    685.8725    50
+#&gt;    434.1166    50
+#&gt;  25377.0096    50
+#&gt;  12602.5105    50</code></pre>
 <div style="height: 10px;">
 
 </div>
@@ -2026,7 +2041,7 @@ test_perfo</code></pre>
 <div id="taux-de-succès" class="section level2">
 <h2>Taux de succès</h2>
 <p>Pour toutes les dates de naissance en 1980, calculer l’âge pour
-toutes les dates suivantes jusqu’en 2020.<br />
+toutes les dates suivantes jusqu’en 2040.<br />
 La méthode <code>Comparaison Mois-Jour</code> sera utilisée comme
 référence et la création des colonnes se fera avec
 <code>data.table</code></p>
@@ -2046,11 +2061,11 @@ dt</code></pre>
 #&gt;       4: 1980-01-01 1980-01-04
 #&gt;       5: 1980-01-01 1980-01-05
 #&gt;      ---                      
-#&gt; 5414417: 1980-12-31 2020-12-27
-#&gt; 5414418: 1980-12-31 2020-12-28
-#&gt; 5414419: 1980-12-31 2020-12-29
-#&gt; 5414420: 1980-12-31 2020-12-30
-#&gt; 5414421: 1980-12-31 2020-12-31</code></pre>
+#&gt; 8088047: 1980-12-31 2040-12-27
+#&gt; 8088048: 1980-12-31 2040-12-28
+#&gt; 8088049: 1980-12-31 2040-12-29
+#&gt; 8088050: 1980-12-31 2040-12-30
+#&gt; 8088051: 1980-12-31 2040-12-31</code></pre>
 <pre class="r"><code># Valeur de la colonne référence - méthode Comparaison Mois-Jour
 dt[, REF := fcase(
   month(CALCUL) &lt; month(NAISS) | (month(CALCUL) == month(NAISS) &amp; day(CALCUL) &lt; day(NAISS)),
@@ -2076,11 +2091,11 @@ dt</code></pre>
 #&gt;       4: 1980-01-01 1980-01-04     0      0     0     0           0        0
 #&gt;       5: 1980-01-01 1980-01-05     0      0     0     0           0        0
 #&gt;      ---                                                                    
-#&gt; 5414417: 1980-12-31 2020-12-27    39     39    40    39          39       39
-#&gt; 5414418: 1980-12-31 2020-12-28    39     39    40    39          39       39
-#&gt; 5414419: 1980-12-31 2020-12-29    39     39    40    39          39       39
-#&gt; 5414420: 1980-12-31 2020-12-30    39     39    40    39          39       39
-#&gt; 5414421: 1980-12-31 2020-12-31    40     40    40    40          40       40
+#&gt; 8088047: 1980-12-31 2040-12-27    59     59    60    59          59       59
+#&gt; 8088048: 1980-12-31 2040-12-28    59     59    60    59          59       59
+#&gt; 8088049: 1980-12-31 2040-12-29    59     59    60    59          59       59
+#&gt; 8088050: 1980-12-31 2040-12-30    59     59    60    59          59       59
+#&gt; 8088051: 1980-12-31 2040-12-31    60     60    60    60          60       60
 #&gt;          _dec_date
 #&gt;              &lt;num&gt;
 #&gt;       1:         0
@@ -2089,11 +2104,11 @@ dt</code></pre>
 #&gt;       4:         0
 #&gt;       5:         0
 #&gt;      ---          
-#&gt; 5414417:        39
-#&gt; 5414418:        39
-#&gt; 5414419:        39
-#&gt; 5414420:        39
-#&gt; 5414421:        40</code></pre>
+#&gt; 8088047:        59
+#&gt; 8088048:        59
+#&gt; 8088049:        59
+#&gt; 8088050:        59
+#&gt; 8088051:        60</code></pre>
 <pre class="r"><code># Calculer le taux de succès
 cols &lt;- names(dt)[!names(dt) %in% c(&quot;NAISS&quot;, &quot;CALCUL&quot;, &quot;REF&quot;)]
 TxSucc &lt;- vector(&quot;list&quot;, length(cols))
@@ -2115,7 +2130,7 @@ TxSucc</code></pre>
 #&gt; 3:      _36525   99.83
 #&gt; 4:   _dec_date   99.83
 #&gt; 5:    _int_dyr   99.83
-#&gt; 6:        _365   98.68</code></pre>
+#&gt; 6:        _365   98.00</code></pre>
 <div style="height: 100px;">
 
 </div>
@@ -2168,80 +2183,22 @@ _moisjour
 df_moisjour
 </td>
 <td style="text-align:right;">
-3454.9
+22654.6313
 </td>
 <td style="text-align:right;">
-4564.58
+26946.3281
 </td>
 <td style="text-align:right;">
-3711.45
+25956.8987
 </td>
 <td style="text-align:right;">
-11018.0
+59644.8069
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-_10k
-</td>
-<td style="text-align:right;">
-100.00
-</td>
-<td style="text-align:left;">
-dt_10k
-</td>
-<td style="text-align:right;">
-3565.2
-</td>
-<td style="text-align:right;">
-4280.85
-</td>
-<td style="text-align:right;">
-3914.65
-</td>
-<td style="text-align:right;">
-7234.5
-</td>
-<td style="text-align:left;">
-microsecondes
-</td>
-<td style="text-align:right;">
-10
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-_yr_per_int
-</td>
-<td style="text-align:right;">
-100.00
-</td>
-<td style="text-align:left;">
-dt_yr_per_int
-</td>
-<td style="text-align:right;">
-3623.1
-</td>
-<td style="text-align:right;">
-4139.70
-</td>
-<td style="text-align:right;">
-3939.55
-</td>
-<td style="text-align:right;">
-6020.7
-</td>
-<td style="text-align:left;">
-microsecondes
-</td>
-<td style="text-align:right;">
-10
+50
 </td>
 </tr>
 <tr>
@@ -2255,22 +2212,22 @@ _moisjour
 dt_moisjour
 </td>
 <td style="text-align:right;">
-3697.9
+24110.6735
 </td>
 <td style="text-align:right;">
-4096.80
+26817.5514
 </td>
 <td style="text-align:right;">
-3996.20
+26173.3750
 </td>
 <td style="text-align:right;">
-4904.6
+39812.3716
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
+50
 </td>
 </tr>
 <tr>
@@ -2284,22 +2241,80 @@ _yr_per_int
 df_yr_per_int
 </td>
 <td style="text-align:right;">
-4011.8
+25404.6410
 </td>
 <td style="text-align:right;">
-4800.08
+28448.0199
 </td>
 <td style="text-align:right;">
-4500.70
+28197.4254
 </td>
 <td style="text-align:right;">
-7101.9
+35223.8793
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_yr_per_int
+</td>
+<td style="text-align:right;">
+100.00
+</td>
+<td style="text-align:left;">
+dt_yr_per_int
+</td>
+<td style="text-align:right;">
+25293.5477
+</td>
+<td style="text-align:right;">
+28660.4156
+</td>
+<td style="text-align:right;">
+28303.3979
+</td>
+<td style="text-align:right;">
+35280.2466
+</td>
+<td style="text-align:left;">
+millisecondes
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_10k
+</td>
+<td style="text-align:right;">
+100.00
+</td>
+<td style="text-align:left;">
+dt_10k
+</td>
+<td style="text-align:right;">
+29898.4315
+</td>
+<td style="text-align:right;">
+34198.6871
+</td>
+<td style="text-align:right;">
+33863.9756
+</td>
+<td style="text-align:right;">
+42389.4067
+</td>
+<td style="text-align:left;">
+millisecondes
+</td>
+<td style="text-align:right;">
+50
 </td>
 </tr>
 <tr>
@@ -2313,109 +2328,22 @@ _10k
 df_10k
 </td>
 <td style="text-align:right;">
-4096.9
+30372.3014
 </td>
 <td style="text-align:right;">
-5045.07
+34681.5594
 </td>
 <td style="text-align:right;">
-4630.90
+33916.8532
 </td>
 <td style="text-align:right;">
-8711.5
+49370.8449
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-_36525
-</td>
-<td style="text-align:right;">
-99.83
-</td>
-<td style="text-align:left;">
-dt_36525
-</td>
-<td style="text-align:right;">
-405.9
-</td>
-<td style="text-align:right;">
-715.77
-</td>
-<td style="text-align:right;">
-468.85
-</td>
-<td style="text-align:right;">
-2946.8
-</td>
-<td style="text-align:left;">
-microsecondes
-</td>
-<td style="text-align:right;">
-10
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-_36525
-</td>
-<td style="text-align:right;">
-99.83
-</td>
-<td style="text-align:left;">
-df_36525
-</td>
-<td style="text-align:right;">
-810.2
-</td>
-<td style="text-align:right;">
-1147.68
-</td>
-<td style="text-align:right;">
-910.65
-</td>
-<td style="text-align:right;">
-3262.7
-</td>
-<td style="text-align:left;">
-microsecondes
-</td>
-<td style="text-align:right;">
-10
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-_int_dyr
-</td>
-<td style="text-align:right;">
-99.83
-</td>
-<td style="text-align:left;">
-dt_int_dyr
-</td>
-<td style="text-align:right;">
-1116.3
-</td>
-<td style="text-align:right;">
-1474.92
-</td>
-<td style="text-align:right;">
-1186.10
-</td>
-<td style="text-align:right;">
-3594.8
-</td>
-<td style="text-align:left;">
-microsecondes
-</td>
-<td style="text-align:right;">
-10
+50
 </td>
 </tr>
 <tr>
@@ -2429,51 +2357,109 @@ _int_dyr
 df_int_dyr
 </td>
 <td style="text-align:right;">
-1455.2
+178.7027
 </td>
 <td style="text-align:right;">
-2384.06
+250.1694
 </td>
 <td style="text-align:right;">
-1648.35
+207.4485
 </td>
 <td style="text-align:right;">
-5114.7
+685.8725
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
+50
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-_dec_date
+_36525
 </td>
 <td style="text-align:right;">
 99.83
 </td>
 <td style="text-align:left;">
-dt_dec_date
+dt_36525
 </td>
 <td style="text-align:right;">
-1649.0
+171.3625
 </td>
 <td style="text-align:right;">
-2072.74
+262.2417
 </td>
 <td style="text-align:right;">
-1854.55
+216.4556
 </td>
 <td style="text-align:right;">
-4265.0
+508.9576
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_int_dyr
+</td>
+<td style="text-align:right;">
+99.83
+</td>
+<td style="text-align:left;">
+dt_int_dyr
+</td>
+<td style="text-align:right;">
+179.7107
+</td>
+<td style="text-align:right;">
+266.6437
+</td>
+<td style="text-align:right;">
+219.2099
+</td>
+<td style="text-align:right;">
+434.1166
+</td>
+<td style="text-align:left;">
+millisecondes
+</td>
+<td style="text-align:right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_36525
+</td>
+<td style="text-align:right;">
+99.83
+</td>
+<td style="text-align:left;">
+df_36525
+</td>
+<td style="text-align:right;">
+171.1265
+</td>
+<td style="text-align:right;">
+257.0724
+</td>
+<td style="text-align:right;">
+225.2464
+</td>
+<td style="text-align:right;">
+561.9698
+</td>
+<td style="text-align:left;">
+millisecondes
+</td>
+<td style="text-align:right;">
+50
 </td>
 </tr>
 <tr>
@@ -2487,22 +2473,51 @@ _dec_date
 df_dec_date
 </td>
 <td style="text-align:right;">
-2254.7
+9155.3671
 </td>
 <td style="text-align:right;">
-3385.18
+10388.3631
 </td>
 <td style="text-align:right;">
-2360.25
+10168.8861
 </td>
 <td style="text-align:right;">
-8754.4
+25377.0096
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
+50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_dec_date
+</td>
+<td style="text-align:right;">
+99.83
+</td>
+<td style="text-align:left;">
+dt_dec_date
+</td>
+<td style="text-align:right;">
+9066.5871
+</td>
+<td style="text-align:right;">
+10318.5242
+</td>
+<td style="text-align:right;">
+10284.6511
+</td>
+<td style="text-align:right;">
+12602.5105
+</td>
+<td style="text-align:left;">
+millisecondes
+</td>
+<td style="text-align:right;">
+50
 </td>
 </tr>
 <tr>
@@ -2510,28 +2525,28 @@ microsecondes
 _365
 </td>
 <td style="text-align:right;">
-98.68
+98.00
 </td>
 <td style="text-align:left;">
 dt_365
 </td>
 <td style="text-align:right;">
-346.5
+171.3596
 </td>
 <td style="text-align:right;">
-644.78
+237.7233
 </td>
 <td style="text-align:right;">
-382.45
+203.4033
 </td>
 <td style="text-align:right;">
-2825.0
+454.1400
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
+50
 </td>
 </tr>
 <tr>
@@ -2539,28 +2554,28 @@ microsecondes
 _365
 </td>
 <td style="text-align:right;">
-98.68
+98.00
 </td>
 <td style="text-align:left;">
 df_365
 </td>
 <td style="text-align:right;">
-799.1
+173.0752
 </td>
 <td style="text-align:right;">
-1207.09
+244.5272
 </td>
 <td style="text-align:right;">
-942.80
+204.8305
 </td>
 <td style="text-align:right;">
-3716.9
+546.3817
 </td>
 <td style="text-align:left;">
-microsecondes
+millisecondes
 </td>
 <td style="text-align:right;">
-10
+50
 </td>
 </tr>
 </tbody>
