@@ -1,0 +1,164 @@
+---
+title: "Introduction à R"
+subtitle: "Intensif"
+author: "Guillaume Boucher"
+institute: "INSPQ"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    yolo: false
+---
+class: center, middle
+
+<!-- CODE POUR TOUTES LES DIAPOS
+<style type="text/css">
+.remark-slide-content {
+  font-size: 15px;
+}
+</style>
+-->
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      comment = "#>")
+```
+```{css, echo=FALSE}
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+```
+
+# Les bases
+
+---
+
+## Les commentaires
+Le symbole pour les commentaires est le dièse (`#`).
+```{r}
+# Ci-dessous est une addition :
+4 + 3
+
+# La ligne de code ci-dessous ne sera pas évaluée
+# 4 + 3
+```
+
+---
+
+## Arithmétique
+
+.pull-left[
+```{r}
+# Addition
+4 + 3
+
+# Multiplication
+4 * 3
+
+# Exposant
+4 ^ 3
+```
+]
+
+.pull-right[
+```{r}
+# Soustraction
+4 - 3
+
+# Division
+4 / 3
+
+# Modulo
+4 %% 6
+```
+]
+
+---
+
+## Utiliser des variables
+Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `<-` pour assigner à une variable une valeur.
+```{r}
+x <- 4
+y <- 3
+```
+On peut ensuite utiliser les variables pour faire des opérations
+```{r}
+x + y  # 4 + 3
+z <- x - y  # 1 = 4 - 3
+z * y  # 1 * 3
+```
+
+---
+
+## Type de données
+
+Nombres entiers : 4 (`integer`)
+```{r}
+integer <- 4
+```
+Exemple : année, age, code d'identification numérique.
+
+Nombres décimaux : 4.5 (`numeric`)
+```{r}
+numeric1 <- 4.5
+```
+Exemples : taux, ratio
+
+Nombres entiers en dehors de l'intervalle d'un entier standard (±2&nbsp;147&nbsp;483&nbsp;647)
+```{r}
+numeric2 <- 3e9  # équivalent à 3000000000
+```
+Exemple : identifiant des individus
+
+Logique ou booléen : Vrai et Faux (`logical`)
+```{r}
+logique1 <- TRUE
+logique2 <- FALSE
+```
+
+

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction à R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Guillaume Boucher" />
+    <meta name="date" content="2026-08-18" />
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introduction à R
+]
+.subtitle[
+## Intensif
+]
+.author[
+### Guillaume Boucher
+]
+.institute[
+### INSPQ
+]
+.date[
+### 2026-08-18
+]
+
+---
+
+class: center, middle
+
+&lt;!-- CODE POUR TOUTES LES DIAPOS
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+  font-size: 15px;
+}
+&lt;/style&gt;
+--&gt;
+
+&lt;style type="text/css"&gt;
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+&lt;/style&gt;
+
+# Les bases
+
+---
+
+## Les commentaires
+Le symbole pour les commentaires est le dièse (`#`).
+
+``` r
+# Ci-dessous est une addition :
+4 + 3
+```
+
+```
+#&gt; [1] 7
+```
+
+``` r
+# La ligne de code ci-dessous ne sera pas évaluée
+# 4 + 3
+```
+
+---
+
+## Arithmétique
+
+.pull-left[
+
+``` r
+# Addition
+4 + 3
+```
+
+```
+#&gt; [1] 7
+```
+
+``` r
+# Multiplication
+4 * 3
+```
+
+```
+#&gt; [1] 12
+```
+
+``` r
+# Exposant
+4 ^ 3
+```
+
+```
+#&gt; [1] 64
+```
+]
+
+.pull-right[
+
+``` r
+# Soustraction
+4 - 3
+```
+
+```
+#&gt; [1] 1
+```
+
+``` r
+# Division
+4 / 3
+```
+
+```
+#&gt; [1] 1.333333
+```
+
+``` r
+# Modulo
+4 %% 6
+```
+
+```
+#&gt; [1] 4
+```
+]
+
+---
+
+## Utiliser des variables
+Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `&lt;-` pour assigner à une variable une valeur.
+
+``` r
+x &lt;- 4
+y &lt;- 3
+```
+On peut ensuite utiliser les variables pour faire des opérations
+
+``` r
+x + y  # 4 + 3
+```
+
+```
+#&gt; [1] 7
+```
+
+``` r
+z &lt;- x - y  # 1 = 4 - 3
+z * y  # 1 * 3
+```
+
+```
+#&gt; [1] 3
+```
+
+---
+
+## Type de données
+
+Nombres entiers : 4 (`integer`)
+
+``` r
+integer &lt;- 4
+```
+Nombres décimaux : 4.5 (`numeric`)
+
+``` r
+numeric &lt;- 4.5
+```
+Nombres entiers en dehors de l'intervalle d'un entier standard (±2&amp;nbsp;147&amp;nbsp;483&amp;nbsp;647)
+
+``` r
+numeric &lt;- 3e9  # équivalent à 3000000000
+```
+Logique ou booléen : Vrai et Faux (`logical`)
+
+``` r
+logique1 &lt;- TRUE
+logique2 &lt;- FALSE
+```
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
