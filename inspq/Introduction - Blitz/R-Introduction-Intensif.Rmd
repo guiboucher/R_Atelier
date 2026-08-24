@@ -121,7 +121,7 @@ Le symbole pour les commentaires est le dièse (`#`).
 ---
 
 ## Utiliser des variables
-Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `<-` pour assigner à une variable une valeur.
+Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `<-` pour assigner à une variable une valeur. Le égal (`=`) fonctionne également, mais on priorisera ici la flèche.
 ```{r}
 x <- 4
 y <- 3
@@ -149,16 +149,170 @@ numeric1 <- 4.5
 ```
 Exemples : taux, ratio
 
-Nombres entiers en dehors de l'intervalle d'un entier standard (±2&nbsp;147&nbsp;483&nbsp;647)
+Nombres entiers en dehors de l'intervalle d'un entier standard seront aussi `numeric`&nbsp;: ±2&nbsp;147&nbsp;483&nbsp;647
 ```{r}
 numeric2 <- 3e9  # équivalent à 3000000000
 ```
 Exemple : identifiant des individus
+
+---
+
+## Type de données
 
 Logique ou booléen : Vrai et Faux (`logical`)
 ```{r}
 logique1 <- TRUE
 logique2 <- FALSE
 ```
+
+Texte : Chaîne de caractères (`character`)  
+Une chaîne de caractères se fait avec des guillemets simples&nbsp;(`''`) ou doubles&nbsp;(`""`). On doit utiliser une barre oblique inversée (`\`) lorsque le même guillemet est utilisé à l'intérieur de la chaîne de caractères (voir exemples 2 et 3).
+```{r}
+character1 <- "Il y a un atelier aujoud'hui"
+character2 <- 'Il y a un atelier aujourd\'hui'
+character3 <- "Voici des guillemets doubles : \" \""
+character4 <- 'Voici des guillemets doubles : " "'
+```
+
+---
+class: center, middle
+
+# Vecteurs
+
+---
+
+## Qu'est-ce qu'un vecteur ?
+Liste d'éléments qui partagent tous exactement **le même type de données**. Les vecteurs servent à stocker des données, même pour une seule valeur.
+
+On crée un vecteur avec la fonction `c()` : *combine values into a vector*.
+```{r}
+num_vec <- c(1, 4.5, 10, NA)
+chr_vec <- c("a", "b", "c", NA)
+logi_vec <- c(TRUE, FALSE, FALSE, NA)
+
+```
+\* Les valeurs manquantes sont désignées par `NA`  que ce soit des nombres ou du texte.
+
+---
+
+## Opérations sur un vecteur
+À partir du vecteur `qte`
+```{r}
+qte <- c(1, 3, 4, 5)
+```
+
+
+.pull-left[
+L'arithmétique se fait sur chaque valeur.
+```{r}
+qte + 4
+qte * 2
+```
+]
+
+.pull-right[
+D'autres renvoient une seule valeur.
+```{r}
+sum(qte)
+mean(qte)
+```
+]
+
+---
+
+## Opérations sur un vecteur
+À partir des vecteurs `qte1` et `qte2`
+```{r}
+qte1 <- c(1, 3, 4, 5)
+qte2 <- c(2, 1, 8, 4)
+```
+Les opérations se font selon la position des valeurs lorsque les vecteurs ont plusieurs valeurs et le **même nombre** de valeurs.
+```{r}
+qte2 + qte1 # 2+1, 1+3, 8+4, 4+5
+qte2 * qte1 # 2*1, 1+3, 8*7, 4*5
+```
+
+---
+
+## Sélection d'une valeur dans un vecteur
+Toujours à partir du vecteur `qte`
+```{r}
+qte <- c(1, 3, 4, 5)
+```
+On sélectionne une valeur en utilisant les crochets `[]`.
+
+.pull-left[
+Une seule valeur
+```{r}
+qte[2]
+qte[3]
+```
+]
+.pull-right[
+Plusieurs valeurs
+```{r}
+qte[c(2, 4)]
+qte[c(2:4)]  # ou qte[2:4]
+qte[c(FALSE,TRUE,FALSE,TRUE)]
+```
+]
+
+---
+
+## Comparaisons
+Liste des opérateurs de comparaison :
+
+- < : plus petit que
+- <= : plus petit que ou égal à
+- \> : plus grand que
+- \>= : plus grand que ou égal à 
+- == : égal à
+- != : différent, n'est pas égal à
+
+À partir des vecteur `qte1` et `qte2`
+```{r}
+qte1 <- c(1, 3, 4, 5)
+qte2 <- c(2, 1, 8, 4)
+```
+Est-ce que la valeur de `qte2` est plus petite que la valeur de `qte1`
+```{r}
+qte2 > qte1
+```
+
+---
+
+## Sélection et comparaison
+.pull-left[
+Puisqu'on pouvait sélectionner des valeurs avec `TRUE` et `FALSE`
+```{r}
+qte2[c(FALSE,TRUE,FALSE,TRUE)]
+```
+]
+.pull-right[
+Et qu'une comparaison retourne un vecteur `TRUE` et `FALSE`
+```{r}
+qte2 > qte1
+```
+]
+
+<br><br>
+
+On peut combiner les deux concepts
+.pull-left[
+```{r}
+qte2
+```
+]
+.pull-right[
+```{r}
+qte1
+```
+]
+```{r}
+qte2[qte2 > qte1]
+```
+
+---
+
 
 
