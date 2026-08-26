@@ -25,8 +25,36 @@ class: center, middle
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       comment = "#>")
+
+names_iris_init <- names(iris)
+
+fil_ariane <- function(...) {
+  sections <- c(...)
+  cat('<div class="breadcrumb">\n')
+  for (i in 1:length(sections)) {
+    cat('    <span>',sections[i],'</span>\n',
+        sep = "")
+  }
+  cat('</div>')
+}
 ```
 ```{css, echo=FALSE}
+/* Fil d'ariane */
+.breadcrumb {
+  position: absolute;
+  bottom: 10px;
+  left: 60px;
+  font-size: 12px;
+  color: #777;
+}
+.breadcrumb span + span:before {
+  content: " > ";
+  padding: 0 5px;
+  color: #ccc;
+}
+
+
+/* Taille du texte ou du code */
 .textfont15 {font-size: 15px}
 .textfont16 {font-size: 16px}
 .textfont17 {font-size: 17px}
@@ -37,7 +65,7 @@ knitr::opts_chunk$set(echo = TRUE,
 .code80 .remark-code {font-size: 80%}
 .code85 .remark-code {font-size: 85%}
 .code88 .remark-code {font-size: 88%}
-.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code90 .remark-code {font-size: 90%} /* Par défaut */
 .code95 .remark-code {font-size: 95%}
 
 
@@ -77,8 +105,11 @@ knitr::opts_chunk$set(echo = TRUE,
 # Les bases
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Commentaires")
+```
 
-## Les commentaires
+## Commentaires
 Le symbole pour les commentaires est le dièse (`#`).
 ```{r}
 # Ci-dessous est une addition :
@@ -89,6 +120,9 @@ Le symbole pour les commentaires est le dièse (`#`).
 ```
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Arithmétique")
+```
 
 ## Arithmétique
 
@@ -119,8 +153,11 @@ Le symbole pour les commentaires est le dièse (`#`).
 ]
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Variables")
+```
 
-## Utiliser des variables
+## Variables
 Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `<-` pour assigner à une variable une valeur. Le égal (`=`) fonctionne également, mais on priorisera ici la flèche.
 ```{r}
 x <- 4
@@ -134,6 +171,9 @@ z * y  # 1 * 3
 ```
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Type de données")
+```
 
 ## Type de données
 
@@ -156,8 +196,9 @@ numeric2 <- 3e9  # équivalent à 3000000000
 Exemple : identifiant des individus
 
 ---
-
-## Type de données
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Type de données")
+```
 
 Logique ou booléen : Vrai et Faux (`logical`)
 ```{r}
@@ -180,6 +221,9 @@ class: center, middle
 # Vecteurs
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Qu'est-ce qu'un vecteur")
+```
 
 ## Qu'est-ce qu'un vecteur ?
 Liste d'éléments qui partagent tous exactement **le même type de données**. Les vecteurs servent à stocker des données, même pour une seule valeur.
@@ -194,6 +238,9 @@ logi_vec <- c(TRUE, FALSE, FALSE, NA)
 \* Les valeurs manquantes sont désignées par `NA`  que ce soit des nombres ou du texte.
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Opérations sur un vecteur")
+```
 
 ## Opérations sur un vecteur
 À partir du vecteur `qte`
@@ -219,8 +266,10 @@ mean(qte)
 ]
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Opérations sur un vecteur")
+```
 
-## Opérations sur un vecteur
 À partir des vecteurs `qte1` et `qte2`
 ```{r}
 qte1 <- c(1, 3, 4, 5)
@@ -233,8 +282,11 @@ qte2 * qte1 # 2*1, 1+3, 8*7, 4*5
 ```
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Sélection d'une valeur")
+```
 
-## Sélection d'une valeur dans un vecteur
+## Sélection d'une valeur
 Toujours à partir du vecteur `qte`
 ```{r}
 qte <- c(1, 3, 4, 5)
@@ -258,6 +310,9 @@ qte[c(FALSE,TRUE,FALSE,TRUE)]
 ]
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Comparaisons")
+```
 
 ## Comparaisons
 Liste des opérateurs de comparaison :
@@ -269,19 +324,39 @@ Liste des opérateurs de comparaison :
 - == : égal à
 - != : différent, n'est pas égal à
 
+<p style="margin-bottom:0;">
 À partir des vecteur `qte1` et `qte2`
+</p>
+.pull-left[
 ```{r}
 qte1 <- c(1, 3, 4, 5)
-qte2 <- c(2, 1, 8, 4)
 ```
-Est-ce que la valeur de `qte2` est plus petite que la valeur de `qte1`
+]
+.pull-right[
+```{r}
+qte2 <- c(2, 1, 4, 3)
+```
+]
+
+<p style="margin-bottom:0;">
+On peut comparer les valeurs
+</p>
+.pull-left[
 ```{r}
 qte2 > qte1
 ```
+]
+.pull-right[
+```{r}
+qte2 == qte1
+```
+]
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Comparaisons")
+```
 
-## Sélection et comparaison
 .pull-left[
 Puisqu'on pouvait sélectionner des valeurs avec `TRUE` et `FALSE`
 ```{r}
@@ -295,7 +370,7 @@ qte2 > qte1
 ```
 ]
 
-<br><br>
+<br>
 
 On peut combiner les deux concepts
 .pull-left[
@@ -313,6 +388,304 @@ qte2[qte2 > qte1]
 ```
 
 ---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Comparaisons")
+```
+
+Lorsque les vecteurs n'ont pas le même nombre de valeurs, celui qui en a le moins doit être un multiple de celui qui en a le plus.
+```{r}
+qte1 <- c(5, 1, 3, 4)
+qte2 <- c(2, 4)
+qte1 < qte2  # 5<2, 1<4, 3<2, 4<4
+```
+Sinon un message d'avertissement apparait
+```{r warning=TRUE}
+qte1 <- c(5, 1, 3)
+qte2 <- c(2, 4)
+qte1 < qte2  # 5<2, 1<4, 3<2
+```
+
+---
+class: center, middle
+
+# Factor
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Qu'est-ce qu'un factor")
+```
+
+## Qu'est-ce qu'un *factor*?
+
+Un *factor* en R est un type de données spécial à utiliser avec les chaînes de caractères.   Visuellement c'est du texte, mais voici comment R voit un *factor* :
+
+1. R stocke chaque catégorie sous forme de nombre entier (1, 2, 3...).
+2. R associe chaque nombre à une étiquette de texte.
+3. Cette astuce aide R à faire des calculs et des graphiques plus rapidement.
+
+Un facteur contient des `Levels` qui sont les valeurs permises du `factor` (domaine de valeur).
+```{r}
+factor(c("a", "b", "c"), levels = c("a", "b"))
+```
+Puisque `"c"` n'est pas une valeur de `levels`, le vecteur `c("a", "b", "c")` devient `c("a", "b", NA)`
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Trier un factor")
+```
+
+## Trier un *factor*
+
+Par défaut les *Levels* sont les valeurs unique en ordre alphabétique.
+```{r}
+factor(c("petit", "grand", "moyen", "petit", "grand"))
+```
+
+Il est possible de donner un sens analytique aux données avec les arguments `levels` et `ordered`.
+```{r}
+factor(
+  x = c("petit", "grand", "moyen", "petit", "grand"),
+  levels = c("petit", "moyen", "grand"),
+  ordered = TRUE
+)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Attention aux factor")
+```
+
+## Attention aux *factor*
+
+Supposons le `factor` suivant :
+```{r}
+presence <- factor(
+  x = c("Mercredi", "Lundi", "Samedi"),
+  levels = c("Dimanche", "Lundi", "Mardi", "Mercredi",
+             "Jeudi", "Vendredi", "Samedi"),
+  ordered = TRUE
+)
+sort(presence)
+```
+
+R stocke chaque catégorie sous forme de nombre entier
+```{r}
+as.integer(presence)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Attention aux factor")
+```
+
+Dans le cas où on aurait des nombres sous la forme de `factor`
+```{r}
+factor(c("200", "100", "200", "400"))
+```
+Convertir en `numeric` ne retournera pas les valeurs attendues
+```{r}
+as.numeric(factor(c("200", "100", "200", "400")))
+```
+Il faut d'abord convertir en `character`
+```{r}
+as.numeric(as.character(factor(c("200", "100", "200", "400"))))
+```
+
+---
+class: center, middle
+
+# data.frame
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Qu'est-ce qu'un data.frame")
+```
+
+## Qu'est-ce qu'un data.frame
+
+Un `data.frame` est une grille de données exactement comme une feuille Excel.
+- Chaque ligne est une observation (un individu)
+- Chaque colonne est une variable (son numéro d'identification, son âge, son nom...)
+
+Chaque colonne est **un vecteur** et toutes les colonnes doivent avoir **la même longueur** ou être un multiple ou un facteur de toutes les autres.
+```{r}
+data.frame(  # 4 observations
+  ID = 1:4,  # 1 à 4
+  SEXE = c("M", "F"),  # 2 est facteur de 4, sera répété 2 fois
+  AGE = c(45, 18, 25, 56),
+  PROVINCE = "Québec"  # 1 est facteur de 4
+)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Fonctions de base")
+```
+
+## Fonctions de base
+
+`View()` pour ouvrir dans l'éditeur
+```{r, eval=FALSE}
+View(iris)
+```
+
+`head()` et `tail()` pour voir les six premières ou dernières lignes d'une table.
+```{r}
+head(iris)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Fonctions de base")
+```
+
+`str()` pour visualiser la structure
+```{r}
+str(iris)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Fonctions de base")
+```
+
+`summary` pour un résumé statistique rapide
+```{r}
+summary(iris)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Fonctions de base")
+```
+
+`names()` pour renommer les colonnes
+```{r}
+names(iris)
+names(iris) <- c("sepal_length", "sepal_width", "petal_length",
+                 "petal_width", "species")
+names(iris)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Fonctions de base")
+names(iris) <- names_iris_init
+```
 
 
+`dim()` pour voir le nombre de lignes et de colonnes
+```{r}
+dim(iris)
+```
 
+`nrow()` pour voir le nombre de ligne
+```{r}
+nrow(iris)
+```
+
+`ncol()` pour voir le nombre de colonnes
+```{r}
+ncol(iris)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Sélection des colonnes")
+```
+
+## Sélection des colonnes
+
+Nom de la table + `$` + nom de la colonne : vecteur
+```{r, eval=FALSE}
+iris$Sepal.Width  # nom data + $ + nom colonne
+```
+```{r, echo=FALSE}
+head(iris$Sepal.Width)
+```
+
+Nom de la table + `[["nom de la colonne"]]` : vecteur
+```{r, eval=FALSE}
+iris[["Sepal.Width"]]
+```
+```{r, echo=FALSE}
+head(iris[["Sepal.Width"]])
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Sélection des colonnes")
+```
+
+Nom de la table + `["nom de la colonne"]` : vecteur
+```{r, eval=FALSE}
+iris[, "Sepal.Width"]
+```
+```{r, echo=FALSE}
+head(iris[, "Sepal.Width"])
+```
+
+Nom de la table + `[, c("colonne1", "colonne2")]` : data.frame
+```{r, eval=FALSE}
+iris[, c("Sepal.Width", "Sepal.Length")]
+```
+```{r, echo=FALSE}
+head(iris[, c("Sepal.Width", "Sepal.Length")])
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Sélection des lignes")
+```
+
+## Sélection des lignes
+```{r}
+iris[1, ]  # première ligne
+iris[21:25, ]  # lignes 21 à 25
+iris[c(2, 4), ]  # lignes 2 et 4
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Filtrer")
+```
+
+## Filtrer
+
+À partir d'un vecteur `TRUE` et `FALSE`
+```{r, eval=FALSE}
+iris$Sepal.Length > 5
+```
+```{r, echo=FALSE}
+head(iris$Sepal.Length > 5)
+```
+On sélectionne les lignes qui respectent la condition
+```{r, eval=FALSE}
+iris[iris$Sepal.Length > 5, ]
+```
+```{r, echo=FALSE}
+head(iris[iris$Sepal.Length > 5, ])
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("data.frame", "Filtrer")
+```
+
+```{r, eval=FALSE}
+iris[iris$Species == "setosa", ]
+```
+```{r, echo=FALSE}
+head(iris[iris$Species == "setosa", ])
+```
+
+```{r, eval=FALSE}
+iris[iris$Species == "setosa" & iris$Sepal.Length > 5, ]
+```
+```{r, echo=FALSE}
+head(iris[iris$Species == "setosa" & iris$Sepal.Length > 5, ])
+```
+
+---
+
+## Créer une colonne

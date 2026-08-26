@@ -4,7 +4,7 @@
     <title>Introduction à R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Guillaume Boucher" />
-    <meta name="date" content="2026-08-24" />
+    <meta name="date" content="2026-08-26" />
     <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### INSPQ
 ]
 .date[
-### 2026-08-24
+### 2026-08-26
 ]
 
 ---
@@ -42,6 +42,22 @@ class: center, middle
 --&gt;
 
 &lt;style type="text/css"&gt;
+/* Fil d'ariane */
+.breadcrumb {
+  position: absolute;
+  bottom: 10px;
+  left: 60px;
+  font-size: 12px;
+  color: #777;
+}
+.breadcrumb span + span:before {
+  content: " &gt; ";
+  padding: 0 5px;
+  color: #ccc;
+}
+
+
+/* Taille du texte ou du code */
 .textfont15 {font-size: 15px}
 .textfont16 {font-size: 16px}
 .textfont17 {font-size: 17px}
@@ -52,7 +68,7 @@ class: center, middle
 .code80 .remark-code {font-size: 80%}
 .code85 .remark-code {font-size: 85%}
 .code88 .remark-code {font-size: 88%}
-.code90 .remark-code {font-size: 90%} /*Par défaut*/
+.code90 .remark-code {font-size: 90%} /* Par défaut */
 .code95 .remark-code {font-size: 95%}
 
 
@@ -92,8 +108,12 @@ class: center, middle
 # Les bases
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Commentaires&lt;/span&gt;
+&lt;/div&gt;
 
-## Les commentaires
+## Commentaires
 Le symbole pour les commentaires est le dièse (`#`).
 
 ``` r
@@ -111,6 +131,10 @@ Le symbole pour les commentaires est le dièse (`#`).
 ```
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Arithmétique&lt;/span&gt;
+&lt;/div&gt;
 
 ## Arithmétique
 
@@ -175,8 +199,12 @@ Le symbole pour les commentaires est le dièse (`#`).
 ]
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Variables&lt;/span&gt;
+&lt;/div&gt;
 
-## Utiliser des variables
+## Variables
 Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `&lt;-` pour assigner à une variable une valeur. Le égal (`=`) fonctionne également, mais on priorisera ici la flèche.
 
 ``` r
@@ -203,6 +231,10 @@ z * y  # 1 * 3
 ```
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Type de données&lt;/span&gt;
+&lt;/div&gt;
 
 ## Type de données
 
@@ -228,8 +260,10 @@ numeric2 &lt;- 3e9  # équivalent à 3000000000
 Exemple : identifiant des individus
 
 ---
-
-## Type de données
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Type de données&lt;/span&gt;
+&lt;/div&gt;
 
 Logique ou booléen : Vrai et Faux (`logical`)
 
@@ -254,6 +288,10 @@ class: center, middle
 # Vecteurs
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Qu'est-ce qu'un vecteur&lt;/span&gt;
+&lt;/div&gt;
 
 ## Qu'est-ce qu'un vecteur ?
 Liste d'éléments qui partagent tous exactement **le même type de données**. Les vecteurs servent à stocker des données, même pour une seule valeur.
@@ -268,6 +306,10 @@ logi_vec &lt;- c(TRUE, FALSE, FALSE, NA)
 \* Les valeurs manquantes sont désignées par `NA`  que ce soit des nombres ou du texte.
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Opérations sur un vecteur&lt;/span&gt;
+&lt;/div&gt;
 
 ## Opérations sur un vecteur
 À partir du vecteur `qte`
@@ -318,8 +360,11 @@ mean(qte)
 ]
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Opérations sur un vecteur&lt;/span&gt;
+&lt;/div&gt;
 
-## Opérations sur un vecteur
 À partir des vecteurs `qte1` et `qte2`
 
 ``` r
@@ -345,8 +390,12 @@ qte2 * qte1 # 2*1, 1+3, 8*7, 4*5
 ```
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Sélection d'une valeur&lt;/span&gt;
+&lt;/div&gt;
 
-## Sélection d'une valeur dans un vecteur
+## Sélection d'une valeur
 Toujours à partir du vecteur `qte`
 
 ``` r
@@ -402,6 +451,10 @@ qte[c(FALSE,TRUE,FALSE,TRUE)]
 ]
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Comparaisons&lt;/span&gt;
+&lt;/div&gt;
 
 ## Comparaisons
 Liste des opérateurs de comparaison :
@@ -413,25 +466,52 @@ Liste des opérateurs de comparaison :
 - == : égal à
 - != : différent, n'est pas égal à
 
+&lt;p style="margin-bottom:0;"&gt;
 À partir des vecteur `qte1` et `qte2`
+&lt;/p&gt;
+.pull-left[
 
 ``` r
 qte1 &lt;- c(1, 3, 4, 5)
-qte2 &lt;- c(2, 1, 8, 4)
 ```
-Est-ce que la valeur de `qte2` est plus petite que la valeur de `qte1`
+]
+.pull-right[
+
+``` r
+qte2 &lt;- c(2, 1, 4, 3)
+```
+]
+
+&lt;p style="margin-bottom:0;"&gt;
+On peut comparer les valeurs
+&lt;/p&gt;
+.pull-left[
 
 ``` r
 qte2 &gt; qte1
 ```
 
 ```
-#&gt; [1]  TRUE FALSE  TRUE FALSE
+#&gt; [1]  TRUE FALSE FALSE FALSE
+```
+]
+.pull-right[
+
+``` r
+qte2 == qte1
 ```
 
----
+```
+#&gt; [1] FALSE FALSE  TRUE FALSE
+```
+]
 
-## Sélection et comparaison
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Comparaisons&lt;/span&gt;
+&lt;/div&gt;
+
 .pull-left[
 Puisqu'on pouvait sélectionner des valeurs avec `TRUE` et `FALSE`
 
@@ -440,7 +520,7 @@ qte2[c(FALSE,TRUE,FALSE,TRUE)]
 ```
 
 ```
-#&gt; [1] 1 4
+#&gt; [1] 1 3
 ```
 ]
 .pull-right[
@@ -451,11 +531,11 @@ qte2 &gt; qte1
 ```
 
 ```
-#&gt; [1]  TRUE FALSE  TRUE FALSE
+#&gt; [1]  TRUE FALSE FALSE FALSE
 ```
 ]
 
-&lt;br&gt;&lt;br&gt;
+&lt;br&gt;
 
 On peut combiner les deux concepts
 .pull-left[
@@ -465,7 +545,7 @@ qte2
 ```
 
 ```
-#&gt; [1] 2 1 8 4
+#&gt; [1] 2 1 4 3
 ```
 ]
 .pull-right[
@@ -484,13 +564,521 @@ qte2[qte2 &gt; qte1]
 ```
 
 ```
-#&gt; [1] 2 8
+#&gt; [1] 2
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Comparaisons&lt;/span&gt;
+&lt;/div&gt;
+
+Lorsque les vecteurs n'ont pas le même nombre de valeurs, celui qui en a le moins doit être un multiple de celui qui en a le plus.
+
+``` r
+qte1 &lt;- c(5, 1, 3, 4)
+qte2 &lt;- c(2, 4)
+qte1 &lt; qte2  # 5&lt;2, 1&lt;4, 3&lt;2, 4&lt;4
+```
+
+```
+#&gt; [1] FALSE  TRUE FALSE FALSE
+```
+Sinon un message d'avertissement apparait
+
+``` r
+qte1 &lt;- c(5, 1, 3)
+qte2 &lt;- c(2, 4)
+qte1 &lt; qte2  # 5&lt;2, 1&lt;4, 3&lt;2
+```
+
+```
+#&gt; Warning in qte1 &lt; qte2: la taille d'un objet plus long n'est pas multiple de la taille d'un objet plus court
+```
+
+```
+#&gt; [1] FALSE  TRUE FALSE
+```
+
+---
+class: center, middle
+
+# Factor
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Qu'est-ce qu'un factor&lt;/span&gt;
+&lt;/div&gt;
+
+## Qu'est-ce qu'un *factor*?
+
+Un *factor* en R est un type de données spécial à utiliser avec les chaînes de caractères.   Visuellement c'est du texte, mais voici comment R voit un *factor* :
+
+1. R stocke chaque catégorie sous forme de nombre entier (1, 2, 3...).
+2. R associe chaque nombre à une étiquette de texte.
+3. Cette astuce aide R à faire des calculs et des graphiques plus rapidement.
+
+Un facteur contient des `Levels` qui sont les valeurs permises du `factor` (domaine de valeur).
+
+``` r
+factor(c("a", "b", "c"), levels = c("a", "b"))
+```
+
+```
+#&gt; [1] a    b    &lt;NA&gt;
+#&gt; Levels: a b
+```
+Puisque `"c"` n'est pas une valeur de `levels`, le vecteur `c("a", "b", "c")` devient `c("a", "b", NA)`
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Trier un factor&lt;/span&gt;
+&lt;/div&gt;
+
+## Trier un *factor*
+
+Par défaut les *Levels* sont les valeurs unique en ordre alphabétique.
+
+``` r
+factor(c("petit", "grand", "moyen", "petit", "grand"))
+```
+
+```
+#&gt; [1] petit grand moyen petit grand
+#&gt; Levels: grand moyen petit
+```
+
+Il est possible de donner un sens analytique aux données avec les arguments `levels` et `ordered`.
+
+``` r
+factor(
+  x = c("petit", "grand", "moyen", "petit", "grand"),
+  levels = c("petit", "moyen", "grand"),
+  ordered = TRUE
+)
+```
+
+```
+#&gt; [1] petit grand moyen petit grand
+#&gt; Levels: petit &lt; moyen &lt; grand
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Attention aux factor&lt;/span&gt;
+&lt;/div&gt;
+
+## Attention aux *factor*
+
+Supposons le `factor` suivant :
+
+``` r
+presence &lt;- factor(
+  x = c("Mercredi", "Lundi", "Samedi"),
+  levels = c("Dimanche", "Lundi", "Mardi", "Mercredi",
+             "Jeudi", "Vendredi", "Samedi"),
+  ordered = TRUE
+)
+sort(presence)
+```
+
+```
+#&gt; [1] Lundi    Mercredi Samedi  
+#&gt; Levels: Dimanche &lt; Lundi &lt; Mardi &lt; Mercredi &lt; Jeudi &lt; Vendredi &lt; Samedi
+```
+
+R stocke chaque catégorie sous forme de nombre entier
+
+``` r
+as.integer(presence)
+```
+
+```
+#&gt; [1] 4 2 7
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Attention aux factor&lt;/span&gt;
+&lt;/div&gt;
+
+Dans le cas où on aurait des nombres sous la forme de `factor`
+
+``` r
+factor(c("200", "100", "200", "400"))
+```
+
+```
+#&gt; [1] 200 100 200 400
+#&gt; Levels: 100 200 400
+```
+Convertir en `numeric` ne retournera pas les valeurs attendues
+
+``` r
+as.numeric(factor(c("200", "100", "200", "400")))
+```
+
+```
+#&gt; [1] 2 1 2 3
+```
+Il faut d'abord convertir en `character`
+
+``` r
+as.numeric(as.character(factor(c("200", "100", "200", "400"))))
+```
+
+```
+#&gt; [1] 200 100 200 400
+```
+
+---
+class: center, middle
+
+# data.frame
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Qu'est-ce qu'un data.frame&lt;/span&gt;
+&lt;/div&gt;
+
+## Qu'est-ce qu'un data.frame
+
+Un `data.frame` est une grille de données exactement comme une feuille Excel.
+- Chaque ligne est une observation (un individu)
+- Chaque colonne est une variable (son numéro d'identification, son âge, son nom...)
+
+Chaque colonne est **un vecteur** et toutes les colonnes doivent avoir **la même longueur** ou être un multiple ou un facteur de toutes les autres.
+
+``` r
+data.frame(  # 4 observations
+  ID = 1:4,  # 1 à 4
+  SEXE = c("M", "F"),  # 2 est facteur de 4, sera répété 2 fois
+  AGE = c(45, 18, 25, 56),
+  PROVINCE = "Québec"  # 1 est facteur de 4
+)
+```
+
+```
+#&gt;   ID SEXE AGE PROVINCE
+#&gt; 1  1    M  45   Québec
+#&gt; 2  2    F  18   Québec
+#&gt; 3  3    M  25   Québec
+#&gt; 4  4    F  56   Québec
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Fonctions de base&lt;/span&gt;
+&lt;/div&gt;
+
+## Fonctions de base
+
+`View()` pour ouvrir dans l'éditeur
+
+``` r
+View(iris)
+```
+
+`head()` et `tail()` pour voir les six premières ou dernières lignes d'une table.
+
+``` r
+head(iris)
+```
+
+```
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1          5.1         3.5          1.4         0.2  setosa
+#&gt; 2          4.9         3.0          1.4         0.2  setosa
+#&gt; 3          4.7         3.2          1.3         0.2  setosa
+#&gt; 4          4.6         3.1          1.5         0.2  setosa
+#&gt; 5          5.0         3.6          1.4         0.2  setosa
+#&gt; 6          5.4         3.9          1.7         0.4  setosa
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Fonctions de base&lt;/span&gt;
+&lt;/div&gt;
+
+`str()` pour visualiser la structure
+
+``` r
+str(iris)
+```
+
+```
+#&gt; 'data.frame':	150 obs. of  5 variables:
+#&gt;  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+#&gt;  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+#&gt;  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+#&gt;  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+#&gt;  $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Fonctions de base&lt;/span&gt;
+&lt;/div&gt;
+
+`summary` pour un résumé statistique rapide
+
+``` r
+summary(iris)
+```
+
+```
+#&gt;   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width          Species  
+#&gt;  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100   setosa    :50  
+#&gt;  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300   versicolor:50  
+#&gt;  Median :5.800   Median :3.000   Median :4.350   Median :1.300   virginica :50  
+#&gt;  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199                  
+#&gt;  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800                  
+#&gt;  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Fonctions de base&lt;/span&gt;
+&lt;/div&gt;
+
+`names()` pour renommer les colonnes
+
+``` r
+names(iris)
+```
+
+```
+#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"
+```
+
+``` r
+names(iris) &lt;- c("sepal_length", "sepal_width", "petal_length",
+                 "petal_width", "species")
+names(iris)
+```
+
+```
+#&gt; [1] "sepal_length" "sepal_width"  "petal_length" "petal_width"  "species"
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Fonctions de base&lt;/span&gt;
+&lt;/div&gt;
+
+
+`dim()` pour voir le nombre de lignes et de colonnes
+
+``` r
+dim(iris)
+```
+
+```
+#&gt; [1] 150   5
+```
+
+`nrow()` pour voir le nombre de ligne
+
+``` r
+nrow(iris)
+```
+
+```
+#&gt; [1] 150
+```
+
+`ncol()` pour voir le nombre de colonnes
+
+``` r
+ncol(iris)
+```
+
+```
+#&gt; [1] 5
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Sélection des colonnes&lt;/span&gt;
+&lt;/div&gt;
+
+## Sélection des colonnes
+
+Nom de la table + `$` + nom de la colonne : vecteur
+
+``` r
+iris$Sepal.Width  # nom data + $ + nom colonne
+```
+
+```
+#&gt; [1] 3.5 3.0 3.2 3.1 3.6 3.9
+```
+
+Nom de la table + `[["nom de la colonne"]]` : vecteur
+
+``` r
+iris[["Sepal.Width"]]
+```
+
+```
+#&gt; [1] 3.5 3.0 3.2 3.1 3.6 3.9
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Sélection des colonnes&lt;/span&gt;
+&lt;/div&gt;
+
+Nom de la table + `["nom de la colonne"]` : vecteur
+
+``` r
+iris[, "Sepal.Width"]
+```
+
+```
+#&gt; [1] 3.5 3.0 3.2 3.1 3.6 3.9
+```
+
+Nom de la table + `[, c("colonne1", "colonne2")]` : data.frame
+
+``` r
+iris[, c("Sepal.Width", "Sepal.Length")]
+```
+
+```
+#&gt;   Sepal.Width Sepal.Length
+#&gt; 1         3.5          5.1
+#&gt; 2         3.0          4.9
+#&gt; 3         3.2          4.7
+#&gt; 4         3.1          4.6
+#&gt; 5         3.6          5.0
+#&gt; 6         3.9          5.4
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Sélection des lignes&lt;/span&gt;
+&lt;/div&gt;
+
+## Sélection des lignes
+
+``` r
+iris[1, ]  # première ligne
+```
+
+```
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1          5.1         3.5          1.4         0.2  setosa
+```
+
+``` r
+iris[21:25, ]  # lignes 21 à 25
+```
+
+```
+#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 21          5.4         3.4          1.7         0.2  setosa
+#&gt; 22          5.1         3.7          1.5         0.4  setosa
+#&gt; 23          4.6         3.6          1.0         0.2  setosa
+#&gt; 24          5.1         3.3          1.7         0.5  setosa
+#&gt; 25          4.8         3.4          1.9         0.2  setosa
+```
+
+``` r
+iris[c(2, 4), ]  # lignes 2 et 4
+```
+
+```
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 2          4.9         3.0          1.4         0.2  setosa
+#&gt; 4          4.6         3.1          1.5         0.2  setosa
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Filtrer&lt;/span&gt;
+&lt;/div&gt;
+
+## Filtrer
+
+À partir d'un vecteur `TRUE` et `FALSE`
+
+``` r
+iris$Sepal.Length &gt; 5
+```
+
+```
+#&gt; [1]  TRUE FALSE FALSE FALSE FALSE  TRUE
+```
+On sélectionne les lignes qui respectent la condition
+
+``` r
+iris[iris$Sepal.Length &gt; 5, ]
+```
+
+```
+#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1           5.1         3.5          1.4         0.2  setosa
+#&gt; 6           5.4         3.9          1.7         0.4  setosa
+#&gt; 11          5.4         3.7          1.5         0.2  setosa
+#&gt; 15          5.8         4.0          1.2         0.2  setosa
+#&gt; 16          5.7         4.4          1.5         0.4  setosa
+#&gt; 17          5.4         3.9          1.3         0.4  setosa
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Filtrer&lt;/span&gt;
+&lt;/div&gt;
+
+
+``` r
+iris[iris$Species == "setosa", ]
+```
+
+```
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1          5.1         3.5          1.4         0.2  setosa
+#&gt; 2          4.9         3.0          1.4         0.2  setosa
+#&gt; 3          4.7         3.2          1.3         0.2  setosa
+#&gt; 4          4.6         3.1          1.5         0.2  setosa
+#&gt; 5          5.0         3.6          1.4         0.2  setosa
+#&gt; 6          5.4         3.9          1.7         0.4  setosa
+```
+
+
+``` r
+iris[iris$Species == "setosa" &amp; iris$Sepal.Length &gt; 5, ]
+```
+
+```
+#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1           5.1         3.5          1.4         0.2  setosa
+#&gt; 6           5.4         3.9          1.7         0.4  setosa
+#&gt; 11          5.4         3.7          1.5         0.2  setosa
+#&gt; 15          5.8         4.0          1.2         0.2  setosa
+#&gt; 16          5.7         4.4          1.5         0.4  setosa
+#&gt; 17          5.4         3.9          1.3         0.4  setosa
 ```
 
 ---
 
-
-
+## Créer une colonne
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
