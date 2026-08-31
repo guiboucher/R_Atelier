@@ -4,7 +4,6 @@
     <title>Introduction à R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Guillaume Boucher" />
-    <meta name="date" content="2026-08-26" />
     <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -17,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Introduction à R
 ]
 .subtitle[
-## Intensif
+## Atelier intensif
 ]
 .author[
 ### Guillaume Boucher
@@ -26,7 +25,7 @@ class: center, middle, inverse, title-slide
 ### INSPQ
 ]
 .date[
-### 2026-08-26
+### Le 8 septembre 2026
 ]
 
 ---
@@ -205,7 +204,7 @@ Le symbole pour les commentaires est le dièse (`#`).
 &lt;/div&gt;
 
 ## Variables
-Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `&lt;-` pour assigner à une variable une valeur. Le égal (`=`) fonctionne également, mais on priorisera ici la flèche.
+Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `&lt;-` pour assigner à une variable une valeur. Le signe égal (`=`) fonctionne également, mais on priorisera ici la flèche.
 
 ``` r
 x &lt;- 4
@@ -238,25 +237,67 @@ z * y  # 1 * 3
 
 ## Type de données
 
-Nombres entiers : 4 (`integer`)
+**Les entiers (`integer`)**
 
 ``` r
-integer &lt;- 4
+class(1:5)  # Vecteur de 1 à 5
 ```
-Exemple : année, age, code d'identification numérique.
 
-Nombres décimaux : 4.5 (`numeric`)
+```
+#&gt; [1] "integer"
+```
 
 ``` r
-numeric1 &lt;- 4.5
+class(4)  # Un entier seul peut parfois être considéré numérique
+```
+
+```
+#&gt; [1] "numeric"
+```
+
+``` r
+class(4L)  # Ajouter L précise à R qu'on veut un entier
+```
+
+```
+#&gt; [1] "integer"
+```
+&lt;br&gt;&lt;br&gt;
+Exemples : année, age, code d'identification numérique.
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Type de données&lt;/span&gt;
+&lt;/div&gt;
+
+**Numérique (`numeric`)**
+
+``` r
+class(4)
+```
+
+```
+#&gt; [1] "numeric"
+```
+
+``` r
+class(4.5)
+```
+
+```
+#&gt; [1] "numeric"
 ```
 Exemples : taux, ratio
+
+&lt;br&gt;
 
 Nombres entiers en dehors de l'intervalle d'un entier standard seront aussi `numeric`&amp;nbsp;: ±2&amp;nbsp;147&amp;nbsp;483&amp;nbsp;647
 
 ``` r
 numeric2 &lt;- 3e9  # équivalent à 3000000000
 ```
+&lt;br&gt;
 Exemple : identifiant des individus
 
 ---
@@ -265,14 +306,49 @@ Exemple : identifiant des individus
     &lt;span&gt;Type de données&lt;/span&gt;
 &lt;/div&gt;
 
-Logique ou booléen : Vrai et Faux (`logical`)
+**Logique  (`logical`)**
 
 ``` r
-logique1 &lt;- TRUE
-logique2 &lt;- FALSE
+class(TRUE)
 ```
 
-Texte : Chaîne de caractères (`character`)  
+```
+#&gt; [1] "logical"
+```
+
+``` r
+class(FALSE)
+```
+
+```
+#&gt; [1] "logical"
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Type de données&lt;/span&gt;
+&lt;/div&gt;
+
+**Chaîne de caractères (`character`)**
+
+``` r
+class("Bonjour")
+```
+
+```
+#&gt; [1] "character"
+```
+
+``` r
+class('Bonjour')
+```
+
+```
+#&gt; [1] "character"
+```
+
+&lt;br&gt;&lt;br&gt;
 Une chaîne de caractères se fait avec des guillemets simples&amp;nbsp;(`''`) ou doubles&amp;nbsp;(`""`). On doit utiliser une barre oblique inversée (`\`) lorsque le même guillemet est utilisé à l'intérieur de la chaîne de caractères (voir exemples 2 et 3).
 
 ``` r
@@ -280,6 +356,104 @@ character1 &lt;- "Il y a un atelier aujoud'hui"
 character2 &lt;- 'Il y a un atelier aujourd\'hui'
 character3 &lt;- "Voici des guillemets doubles : \" \""
 character4 &lt;- 'Voici des guillemets doubles : " "'
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Constantes&lt;/span&gt;
+&lt;/div&gt;
+
+## Constantes
+
+``` r
+pi
+```
+
+```
+#&gt; [1] 3.141593
+```
+
+``` r
+letters
+```
+
+```
+#&gt; [1] "a"   "b"   "c"   "d"   "e"   "..."
+```
+
+``` r
+LETTERS
+```
+
+```
+#&gt; [1] "A"   "B"   "C"   "D"   "E"   "..."
+```
+
+``` r
+month.abb
+```
+
+```
+#&gt; [1] "Jan" "Feb" "Mar" "Apr" "May" "..."
+```
+
+``` r
+month.name
+```
+
+```
+#&gt; [1] "January"  "February" "March"    "April"    "May"      "..."
+```
+
+---
+class: code80
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Les bases&lt;/span&gt;
+    &lt;span&gt;Fonctions&lt;/span&gt;
+&lt;/div&gt;
+
+## Fonctions
+`nom_fonction(argument1, argument2, ...)`
+
+``` r
+sqrt(25)
+```
+
+```
+#&gt; [1] 5
+```
+
+``` r
+round(pi, 2)
+```
+
+```
+#&gt; [1] 3.14
+```
+
+``` r
+c(1, 2, 4, NA)
+```
+
+```
+#&gt; [1]  1  2  4 NA
+```
+
+``` r
+mean(c(1, 2, 4, NA))
+```
+
+```
+#&gt; [1] NA
+```
+
+``` r
+mean(c(1, 2, 4, NA), na.rm = TRUE)
+```
+
+```
+#&gt; [1] 2.333333
 ```
 
 ---
@@ -304,6 +478,49 @@ chr_vec &lt;- c("a", "b", "c", NA)
 logi_vec &lt;- c(TRUE, FALSE, FALSE, NA)
 ```
 \* Les valeurs manquantes sont désignées par `NA`  que ce soit des nombres ou du texte.
+
+Une valeur unique est aussi un vecteur
+
+``` r
+length(c(1, 2, 3))
+```
+
+```
+#&gt; [1] 3
+```
+
+``` r
+length(1)
+```
+
+```
+#&gt; [1] 1
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Qu'est-ce qu'un vecteur&lt;/span&gt;
+&lt;/div&gt;
+
+Puisqu'un vecteur contient un même type de données, il convertira les nombre en caractères au besoin
+
+
+``` r
+c(1, 2, "bonjour")
+```
+
+```
+#&gt; [1] "1"       "2"       "bonjour"
+```
+
+``` r
+class(c(1, 2, "bonjour"))
+```
+
+```
+#&gt; [1] "character"
+```
 
 ---
 &lt;div class="breadcrumb"&gt;
@@ -382,7 +599,7 @@ qte2 + qte1 # 2+1, 1+3, 8+4, 4+5
 ```
 
 ``` r
-qte2 * qte1 # 2*1, 1+3, 8*7, 4*5
+qte2 * qte1 # 2x1, 1x3, 8x4, 4x5
 ```
 
 ```
@@ -612,14 +829,49 @@ class: center, middle
 &lt;/div&gt;
 
 ## Qu'est-ce qu'un *factor*?
+Un `factor` en R est un type de données spécial à utiliser avec les chaînes de caractères.
 
-Un *factor* en R est un type de données spécial à utiliser avec les chaînes de caractères.   Visuellement c'est du texte, mais voici comment R voit un *factor* :
+``` r
+sexe &lt;- factor(c("F", "M", "M", "F", "F"))
+```
+
+```
+#&gt; [1] F M M F F
+#&gt; Levels: F M
+```
+
+``` r
+class(sexe)
+```
+
+```
+#&gt; [1] "factor"
+```
+
+&lt;br&gt;
+
+Les `Levels` sont les valeurs qui existent à l'intérieur du `factor` (domaine de valeurs)
+
+``` r
+levels(sexe)
+```
+
+```
+#&gt; [1] "F" "M"
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Vecteurs&lt;/span&gt;
+    &lt;span&gt;Qu'est-ce qu'un factor&lt;/span&gt;
+&lt;/div&gt;
+
+Visuellement c'est du texte, mais voici comment R traite un *factor* :
 
 1. R stocke chaque catégorie sous forme de nombre entier (1, 2, 3...).
 2. R associe chaque nombre à une étiquette de texte.
 3. Cette astuce aide R à faire des calculs et des graphiques plus rapidement.
 
-Un facteur contient des `Levels` qui sont les valeurs permises du `factor` (domaine de valeur).
 
 ``` r
 factor(c("a", "b", "c"), levels = c("a", "b"))
@@ -741,6 +993,7 @@ class: center, middle
 # data.frame
 
 ---
+class: code80, textfont18
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;data.frame&lt;/span&gt;
     &lt;span&gt;Qu'est-ce qu'un data.frame&lt;/span&gt;
@@ -752,23 +1005,32 @@ Un `data.frame` est une grille de données exactement comme une feuille Excel.
 - Chaque ligne est une observation (un individu)
 - Chaque colonne est une variable (son numéro d'identification, son âge, son nom...)
 
-Chaque colonne est **un vecteur** et toutes les colonnes doivent avoir **la même longueur** ou être un multiple ou un facteur de toutes les autres.
+Chaque colonne est **un vecteur** et toutes les colonnes doivent avoir **la même longueur** ou être un multiple ou un facteur de toutes les autres (recyclage des données).
 
 ``` r
-data.frame(  # 4 observations
+df &lt;- data.frame(  # 4 observations/lignes
   ID = 1:4,  # 1 à 4
   SEXE = c("M", "F"),  # 2 est facteur de 4, sera répété 2 fois
   AGE = c(45, 18, 25, 56),
-  PROVINCE = "Québec"  # 1 est facteur de 4
+  PROVINCE = "Québec",  # 1 est facteur de 4
+  TERRITOIRE = c(3, 16, 6, 14)
 )
 ```
 
 ```
-#&gt;   ID SEXE AGE PROVINCE
-#&gt; 1  1    M  45   Québec
-#&gt; 2  2    F  18   Québec
-#&gt; 3  3    M  25   Québec
-#&gt; 4  4    F  56   Québec
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 1  1    M  45   Québec          3
+#&gt; 2  2    F  18   Québec         16
+#&gt; 3  3    M  25   Québec          6
+#&gt; 4  4    F  56   Québec         14
+```
+
+``` r
+class(df)
+```
+
+```
+#&gt; [1] "data.frame"
 ```
 
 ---
@@ -782,23 +1044,29 @@ data.frame(  # 4 observations
 `View()` pour ouvrir dans l'éditeur
 
 ``` r
-View(iris)
+View(df)
 ```
 
-`head()` et `tail()` pour voir les six premières ou dernières lignes d'une table.
+`head()` et `tail()` pour voir premières ou dernières lignes d'une table.
 
 ``` r
-head(iris)
+head(df, n = 2)  # par défaut n=6 : head(df) = head(df, n = 6)
 ```
 
 ```
-#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-#&gt; 1          5.1         3.5          1.4         0.2  setosa
-#&gt; 2          4.9         3.0          1.4         0.2  setosa
-#&gt; 3          4.7         3.2          1.3         0.2  setosa
-#&gt; 4          4.6         3.1          1.5         0.2  setosa
-#&gt; 5          5.0         3.6          1.4         0.2  setosa
-#&gt; 6          5.4         3.9          1.7         0.4  setosa
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 1  1    M  45   Québec          3
+#&gt; 2  2    F  18   Québec         16
+```
+
+``` r
+tail(df, n = 2)
+```
+
+```
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 3  3    M  25   Québec          6
+#&gt; 4  4    F  56   Québec         14
 ```
 
 ---
@@ -810,16 +1078,16 @@ head(iris)
 `str()` pour visualiser la structure
 
 ``` r
-str(iris)
+str(df)
 ```
 
 ```
-#&gt; 'data.frame':	150 obs. of  5 variables:
-#&gt;  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-#&gt;  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-#&gt;  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-#&gt;  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-#&gt;  $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+#&gt; 'data.frame':	4 obs. of  5 variables:
+#&gt;  $ ID        : int  1 2 3 4
+#&gt;  $ SEXE      : chr  "M" "F" "M" "F"
+#&gt;  $ AGE       : num  45 18 25 56
+#&gt;  $ PROVINCE  : chr  "Québec" "Québec" "Québec" "Québec"
+#&gt;  $ TERRITOIRE: num  3 16 6 14
 ```
 
 ---
@@ -831,17 +1099,17 @@ str(iris)
 `summary` pour un résumé statistique rapide
 
 ``` r
-summary(iris)
+summary(df)
 ```
 
 ```
-#&gt;   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width          Species  
-#&gt;  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100   setosa    :50  
-#&gt;  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300   versicolor:50  
-#&gt;  Median :5.800   Median :3.000   Median :4.350   Median :1.300   virginica :50  
-#&gt;  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199                  
-#&gt;  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800                  
-#&gt;  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500
+#&gt;        ID           SEXE                AGE          PROVINCE           TERRITOIRE   
+#&gt;  Min.   :1.00   Length:4           Min.   :18.00   Length:4           Min.   : 3.00  
+#&gt;  1st Qu.:1.75   Class :character   1st Qu.:23.25   Class :character   1st Qu.: 5.25  
+#&gt;  Median :2.50   Mode  :character   Median :35.00   Mode  :character   Median :10.00  
+#&gt;  Mean   :2.50                      Mean   :36.00                      Mean   : 9.75  
+#&gt;  3rd Qu.:3.25                      3rd Qu.:47.75                      3rd Qu.:14.50  
+#&gt;  Max.   :4.00                      Max.   :56.00                      Max.   :16.00
 ```
 
 ---
@@ -850,25 +1118,26 @@ summary(iris)
     &lt;span&gt;Fonctions de base&lt;/span&gt;
 &lt;/div&gt;
 
-`names()` pour renommer les colonnes
+`names()` pour consulter ou renommer les colonnes
 
 ``` r
-names(iris)
+names(df)
 ```
 
 ```
-#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"
+#&gt; [1] "ID"         "SEXE"       "AGE"        "PROVINCE"   "TERRITOIRE"
 ```
 
 ``` r
-names(iris) &lt;- c("sepal_length", "sepal_width", "petal_length",
-                 "petal_width", "species")
-names(iris)
+names(df) &lt;- c("id", "sexe", "age", "prov", "terri")
+names(df)
 ```
 
 ```
-#&gt; [1] "sepal_length" "sepal_width"  "petal_length" "petal_width"  "species"
+#&gt; [1] "id"    "sexe"  "age"   "prov"  "terri"
 ```
+
+
 
 ---
 &lt;div class="breadcrumb"&gt;
@@ -880,27 +1149,27 @@ names(iris)
 `dim()` pour voir le nombre de lignes et de colonnes
 
 ``` r
-dim(iris)
+dim(df)
 ```
 
 ```
-#&gt; [1] 150   5
+#&gt; [1] 4 5
 ```
 
 `nrow()` pour voir le nombre de ligne
 
 ``` r
-nrow(iris)
+nrow(df)
 ```
 
 ```
-#&gt; [1] 150
+#&gt; [1] 4
 ```
 
 `ncol()` pour voir le nombre de colonnes
 
 ``` r
-ncol(iris)
+ncol(df)
 ```
 
 ```
@@ -915,24 +1184,34 @@ ncol(iris)
 
 ## Sélection des colonnes
 
-Nom de la table + `$` + nom de la colonne : vecteur
+Nom de la table + `$` + nom de la colonne
 
 ``` r
-iris$Sepal.Width  # nom data + $ + nom colonne
+df$AGE  # vecteur
 ```
 
 ```
-#&gt; [1] 3.5 3.0 3.2 3.1 3.6 3.9
+#&gt; [1] 45 18 25 56
 ```
 
-Nom de la table + `[["nom de la colonne"]]` : vecteur
+Nom de la table + `[["nom de la colonne"]]`
 
 ``` r
-iris[["Sepal.Width"]]
+df[["AGE"]]  # vecteur
 ```
 
 ```
-#&gt; [1] 3.5 3.0 3.2 3.1 3.6 3.9
+#&gt; [1] 45 18 25 56
+```
+
+Nom de la table + `[, "nom de la colonne"]`
+
+``` r
+df[, "AGE"]  # vecteur
+```
+
+```
+#&gt; [1] 45 18 25 56
 ```
 
 ---
@@ -941,30 +1220,32 @@ iris[["Sepal.Width"]]
     &lt;span&gt;Sélection des colonnes&lt;/span&gt;
 &lt;/div&gt;
 
-Nom de la table + `["nom de la colonne"]` : vecteur
+Nom de la table + `["nom de la colonne"]`
 
 ``` r
-iris[, "Sepal.Width"]
+df["AGE"]  # data.frame
 ```
 
 ```
-#&gt; [1] 3.5 3.0 3.2 3.1 3.6 3.9
+#&gt;   AGE
+#&gt; 1  45
+#&gt; 2  18
+#&gt; 3  25
+#&gt; 4  56
 ```
 
-Nom de la table + `[, c("colonne1", "colonne2")]` : data.frame
+Nom de la table + `[, c("colonne1", "colonne2")]`
 
 ``` r
-iris[, c("Sepal.Width", "Sepal.Length")]
+df[, c("AGE", "SEXE")]  # data.frame
 ```
 
 ```
-#&gt;   Sepal.Width Sepal.Length
-#&gt; 1         3.5          5.1
-#&gt; 2         3.0          4.9
-#&gt; 3         3.2          4.7
-#&gt; 4         3.1          4.6
-#&gt; 5         3.6          5.0
-#&gt; 6         3.9          5.4
+#&gt;   AGE SEXE
+#&gt; 1  45    M
+#&gt; 2  18    F
+#&gt; 3  25    M
+#&gt; 4  56    F
 ```
 
 ---
@@ -976,35 +1257,33 @@ iris[, c("Sepal.Width", "Sepal.Length")]
 ## Sélection des lignes
 
 ``` r
-iris[1, ]  # première ligne
+df[1, ]  # première ligne
 ```
 
 ```
-#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-#&gt; 1          5.1         3.5          1.4         0.2  setosa
-```
-
-``` r
-iris[21:25, ]  # lignes 21 à 25
-```
-
-```
-#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-#&gt; 21          5.4         3.4          1.7         0.2  setosa
-#&gt; 22          5.1         3.7          1.5         0.4  setosa
-#&gt; 23          4.6         3.6          1.0         0.2  setosa
-#&gt; 24          5.1         3.3          1.7         0.5  setosa
-#&gt; 25          4.8         3.4          1.9         0.2  setosa
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 1  1    M  45   Québec          3
 ```
 
 ``` r
-iris[c(2, 4), ]  # lignes 2 et 4
+df[2:4, ]  # lignes 2 à 4
 ```
 
 ```
-#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-#&gt; 2          4.9         3.0          1.4         0.2  setosa
-#&gt; 4          4.6         3.1          1.5         0.2  setosa
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 2  2    F  18   Québec         16
+#&gt; 3  3    M  25   Québec          6
+#&gt; 4  4    F  56   Québec         14
+```
+
+``` r
+df[c(2, 4), ]  # lignes 2 et 4
+```
+
+```
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 2  2    F  18   Québec         16
+#&gt; 4  4    F  56   Québec         14
 ```
 
 ---
@@ -1018,26 +1297,25 @@ iris[c(2, 4), ]  # lignes 2 et 4
 À partir d'un vecteur `TRUE` et `FALSE`
 
 ``` r
-iris$Sepal.Length &gt; 5
+df$AGE &gt; 30
 ```
 
 ```
-#&gt; [1]  TRUE FALSE FALSE FALSE FALSE  TRUE
+#&gt; [1]  TRUE FALSE FALSE  TRUE
 ```
+
+&lt;br&gt;
+
 On sélectionne les lignes qui respectent la condition
 
 ``` r
-iris[iris$Sepal.Length &gt; 5, ]
+df[df$AGE &gt; 30, ]
 ```
 
 ```
-#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-#&gt; 1           5.1         3.5          1.4         0.2  setosa
-#&gt; 6           5.4         3.9          1.7         0.4  setosa
-#&gt; 11          5.4         3.7          1.5         0.2  setosa
-#&gt; 15          5.8         4.0          1.2         0.2  setosa
-#&gt; 16          5.7         4.4          1.5         0.4  setosa
-#&gt; 17          5.4         3.9          1.3         0.4  setosa
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 1  1    M  45   Québec          3
+#&gt; 4  4    F  56   Québec         14
 ```
 
 ---
@@ -1048,7 +1326,277 @@ iris[iris$Sepal.Length &gt; 5, ]
 
 
 ``` r
-iris[iris$Species == "setosa", ]
+df[df$TERRITOIRE %in% c(3, 6), ]
+```
+
+```
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 1  1    M  45   Québec          3
+#&gt; 3  3    M  25   Québec          6
+```
+`%in%` est utilisé pour sélectionner plusieurs valeurs, c'est équivalent à
+
+``` r
+df[df$TERRITOIRE == 3 | df$TERRITOIRE == 6, ]
+```
+
+```
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 1  1    M  45   Québec          3
+#&gt; 3  3    M  25   Québec          6
+```
+
+
+``` r
+df[df$TERRITOIRE %in% c(3, 6) &amp; df$AGE &gt; 30, ]
+```
+
+```
+#&gt;   ID SEXE AGE PROVINCE TERRITOIRE
+#&gt; 1  1    M  45   Québec          3
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Créer, modifier ou supprimer une colonne&lt;/span&gt;
+&lt;/div&gt;
+
+## Créer, modifier ou supprimer une colonne
+
+Rappel pour créer ou modifier un vecteur :
+
+``` r
+nouveau_nom &lt;- ancien_nom * 2  # Créer
+meme_nom &lt;- meme_nom * 2  # Modifier
+```
+
+Puisque les colonnes d'un `data.frame` sont des vecteurs, la création ou la modification des colonnes se fait de la même manière :
+
+``` r
+nom_data$nouveau_nom &lt;- nom_data$ancien_nom * 2  # Créer
+nom_data$meme_nom &lt;- nom_data$meme_nom * 2  # Modifier
+```
+
+Pour supprimer une colonne :
+
+``` r
+nom_data$colonne_a_supprimer &lt;- NULL
+```
+
+---
+
+**Créer une colonne**
+
+``` r
+iris$sep_len_5plus &lt;- iris$Sepal.Length &gt;= 5
+```
+
+```
+#&gt;   Sepal.Length Sepal.Width ... sep_len_5plus
+#&gt; 1          5.1         3.5 ...          TRUE
+#&gt; 2          4.9         3.0 ...         FALSE
+#&gt; 3          4.7         3.2 ...         FALSE
+#&gt; 4          4.6         3.1 ...         FALSE
+#&gt; 5          5.0         3.6 ...          TRUE
+#&gt; 6          5.4         3.9 ...          TRUE
+```
+
+
+``` r
+iris$Sepal.Length_x2 &lt;- iris$Sepal.Length * 2
+```
+
+```
+#&gt;   Sepal.Length Sepal.Width ... Sepal.Length_x2
+#&gt; 1          5.1         3.5 ...            10.2
+#&gt; 2          4.9         3.0 ...             9.8
+#&gt; 3          4.7         3.2 ...             9.4
+#&gt; 4          4.6         3.1 ...             9.2
+#&gt; 5          5.0         3.6 ...            10.0
+#&gt; 6          5.4         3.9 ...            10.8
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Créer, modifier ou supprimer une colonne&lt;/span&gt;
+&lt;/div&gt;
+
+**Modifier une colonne**
+
+
+``` r
+iris$Sepal.Length &lt;- iris$Sepal.Length * 2
+```
+
+```
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1         10.2         3.5          1.4         0.2  setosa
+#&gt; 2          9.8         3.0          1.4         0.2  setosa
+#&gt; 3          9.4         3.2          1.3         0.2  setosa
+#&gt; 4          9.2         3.1          1.5         0.2  setosa
+#&gt; 5         10.0         3.6          1.4         0.2  setosa
+#&gt; 6         10.8         3.9          1.7         0.4  setosa
+```
+
+**Supprimer une colonne**
+
+``` r
+iris$Sepal.Length &lt;- NULL
+```
+
+```
+#&gt;   Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1         3.5          1.4         0.2  setosa
+#&gt; 2         3.0          1.4         0.2  setosa
+#&gt; 3         3.2          1.3         0.2  setosa
+#&gt; 4         3.1          1.5         0.2  setosa
+#&gt; 5         3.6          1.4         0.2  setosa
+#&gt; 6         3.9          1.7         0.4  setosa
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;data.frame&lt;/span&gt;
+    &lt;span&gt;Trier&lt;/span&gt;
+&lt;/div&gt;
+
+## Trier
+
+La fonction `order()` indique les positions des valeurs dans le but de les réarranger.
+
+``` r
+order(iris$Sepal.Length)
+```
+
+```
+#&gt; [1] 14  9 39 43 42  4
+```
+
+``` r
+order(iris$Sepal.Length, decreasing = TRUE)
+```
+
+```
+#&gt; [1] 132 118 119 123 136 106
+```
+
+
+``` r
+iris[order(iris$Sepal.Length), ]
+```
+
+```
+#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 14          4.3         3.0          1.1         0.1  setosa
+#&gt; 9           4.4         2.9          1.4         0.2  setosa
+#&gt; 39          4.4         3.0          1.3         0.2  setosa
+#&gt; 43          4.4         3.2          1.3         0.2  setosa
+#&gt; 42          4.5         2.3          1.3         0.3  setosa
+#&gt; 4           4.6         3.1          1.5         0.2  setosa
+```
+
+---
+class: middle, center
+
+# Listes
+
+---
+class: code75
+
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Listes&lt;/span&gt;
+    &lt;span&gt;Qu'est-ce qu'une list&lt;/span&gt;
+&lt;/div&gt;
+
+## Qu'est-ce qu'une *list* ?
+
+Une liste permet de réunir une variété d'objets sous une même variable. Elle peut contenir tous les éléments qui existent, même une liste.
+
+
+``` r
+ma_liste &lt;- list(
+  PI = pi,
+  LETTRES = LETTERS[1:5],
+  FLEURS = iris[1:3, ]
+)
+```
+
+```
+#&gt; $PI
+#&gt; [1] 3.141593
+#&gt; 
+#&gt; $LETTRES
+#&gt; [1] "A" "B" "C" "D" "E"
+#&gt; 
+#&gt; $FLEURS
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1          5.1         3.5          1.4         0.2  setosa
+#&gt; 2          4.9         3.0          1.4         0.2  setosa
+#&gt; 3          4.7         3.2          1.3         0.2  setosa
+```
+
+``` r
+class(ma_liste)
+```
+
+```
+#&gt; [1] "list"
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Listes&lt;/span&gt;
+    &lt;span&gt;Sélectionner un élément d'une liste&lt;/span&gt;
+&lt;/div&gt;
+
+## Sélectionner un élément d'une liste
+
+``` r
+ma_liste[2]  # list
+```
+
+```
+#&gt; $LETTRES
+#&gt; [1] "A" "B" "C" "D" "E"
+```
+
+``` r
+ma_liste["LETTRES"]  # list
+```
+
+```
+#&gt; $LETTRES
+#&gt; [1] "A" "B" "C" "D" "E"
+```
+
+``` r
+ma_liste[[2]]  # vector
+```
+
+```
+#&gt; [1] "A" "B" "C" "D" "E"
+```
+
+``` r
+ma_liste$LETTRES  # vector
+```
+
+```
+#&gt; [1] "A" "B" "C" "D" "E"
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Listes&lt;/span&gt;
+    &lt;span&gt;Sélectionner un élément d'une liste&lt;/span&gt;
+&lt;/div&gt;
+
+Si l'élément d'une liste est un tableau
+
+``` r
+ma_liste$FLEURS
 ```
 
 ```
@@ -1056,29 +1604,84 @@ iris[iris$Species == "setosa", ]
 #&gt; 1          5.1         3.5          1.4         0.2  setosa
 #&gt; 2          4.9         3.0          1.4         0.2  setosa
 #&gt; 3          4.7         3.2          1.3         0.2  setosa
-#&gt; 4          4.6         3.1          1.5         0.2  setosa
-#&gt; 5          5.0         3.6          1.4         0.2  setosa
-#&gt; 6          5.4         3.9          1.7         0.4  setosa
 ```
-
+Les méthodes de sélection des colonnes sont les mêmes :
 
 ``` r
-iris[iris$Species == "setosa" &amp; iris$Sepal.Length &gt; 5, ]
+ma_liste$FLEURS$Sepal.Length
 ```
 
 ```
-#&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-#&gt; 1           5.1         3.5          1.4         0.2  setosa
-#&gt; 6           5.4         3.9          1.7         0.4  setosa
-#&gt; 11          5.4         3.7          1.5         0.2  setosa
-#&gt; 15          5.8         4.0          1.2         0.2  setosa
-#&gt; 16          5.7         4.4          1.5         0.4  setosa
-#&gt; 17          5.4         3.9          1.3         0.4  setosa
+#&gt; [1] 5.1 4.9 4.7
+```
+
+``` r
+ma_liste$FLEURS[["Sepal.Length"]]
+```
+
+```
+#&gt; [1] 5.1 4.9 4.7
+```
+
+``` r
+ma_liste$FLEURS[, 1]
+```
+
+```
+#&gt; [1] 5.1 4.9 4.7
 ```
 
 ---
+class: center, middle
 
-## Créer une colonne
+# Packages
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Packages&lt;/span&gt;
+    &lt;span&gt;Qu'est-ce qu'un package ?&lt;/span&gt;
+&lt;/div&gt;
+
+## Qu'est-ce qu'un *package* ?
+
+Un *package* est un ensemble de ressources :
+- Fonctions
+- Données (data.drames)
+- Documentation
+- ...
+
+On installe un package avec la fonction `install.packages()`.
+
+``` r
+install.packages("dplyr")
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Packages&lt;/span&gt;
+    &lt;span&gt;Utiliser un package&lt;/span&gt;
+&lt;/div&gt;
+
+## Utiliser un *package*
+
+Pour utiliser les ressources d'un package, on utilise la fonction `library()`.
+
+``` r
+library(dplyr)
+```
+
+La *library* est la bibliothèque et les *packages* sont des livres.&lt;br&gt;
+`library()` consiste à prendre un livre de la bibliothèque et le mettre sur son bureau afin de pouvoir l'utiliser.
+
+En pratique, les gens utilisent souvent *package* et *librairie* comme synonymes. Le terme technique important à retenir est **package**. Une librairie est plutôt l'endroit où les *packages* sont installés.
+
+---
+
+# Conclusion
+
+- Il est important de savoir ce qu'est un `vector` et un `data.frame`.
+- Il est impossible de tout connaître en R.
+- Une recherche Google ou une question à Copilot peut rapidement répondre à votre question plutôt que de connaître les milliers de fonctions et objets dans le *package* R de base.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

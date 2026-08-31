@@ -1,9 +1,9 @@
 ---
 title: "Introduction à R"
-subtitle: "Intensif"
+subtitle: "Atelier intensif"
 author: "Guillaume Boucher"
 institute: "INSPQ"
-date: "`r Sys.Date()`"
+date: "Le 8 septembre 2026"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -25,8 +25,6 @@ class: center, middle
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       comment = "#>")
-
-names_iris_init <- names(iris)
 
 fil_ariane <- function(...) {
   sections <- c(...)
@@ -158,7 +156,7 @@ fil_ariane("Les bases", "Variables")
 ```
 
 ## Variables
-Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `<-` pour assigner à une variable une valeur. Le égal (`=`) fonctionne également, mais on priorisera ici la flèche.
+Une variable permet de stocker une valeur ou un objet pour ensuite l'utiliser ultérieurement. On utilise la flèche `<-` pour assigner à une variable une valeur. Le signe égal (`=`) fonctionne également, mais on priorisera ici la flèche.
 ```{r}
 x <- 4
 y <- 3
@@ -177,22 +175,34 @@ fil_ariane("Les bases", "Type de données")
 
 ## Type de données
 
-Nombres entiers : 4 (`integer`)
+**Les entiers (`integer`)**
 ```{r}
-integer <- 4
+class(1:5)  # Vecteur de 1 à 5
+class(4)  # Un entier seul peut parfois être considéré numérique
+class(4L)  # Ajouter L précise à R qu'on veut un entier
 ```
-Exemple : année, age, code d'identification numérique.
+<br><br>
+Exemples : année, age, code d'identification numérique.
 
-Nombres décimaux : 4.5 (`numeric`)
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Type de données")
+```
+
+**Numérique (`numeric`)**
 ```{r}
-numeric1 <- 4.5
+class(4)
+class(4.5)
 ```
 Exemples : taux, ratio
+
+<br>
 
 Nombres entiers en dehors de l'intervalle d'un entier standard seront aussi `numeric`&nbsp;: ±2&nbsp;147&nbsp;483&nbsp;647
 ```{r}
 numeric2 <- 3e9  # équivalent à 3000000000
 ```
+<br>
 Exemple : identifiant des individus
 
 ---
@@ -200,19 +210,80 @@ Exemple : identifiant des individus
 fil_ariane("Les bases", "Type de données")
 ```
 
-Logique ou booléen : Vrai et Faux (`logical`)
+**Logique  (`logical`)**
 ```{r}
-logique1 <- TRUE
-logique2 <- FALSE
+class(TRUE)
+class(FALSE)
 ```
 
-Texte : Chaîne de caractères (`character`)  
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Type de données")
+```
+
+**Chaîne de caractères (`character`)**
+```{r}
+class("Bonjour")
+class('Bonjour')
+```
+
+<br><br>
 Une chaîne de caractères se fait avec des guillemets simples&nbsp;(`''`) ou doubles&nbsp;(`""`). On doit utiliser une barre oblique inversée (`\`) lorsque le même guillemet est utilisé à l'intérieur de la chaîne de caractères (voir exemples 2 et 3).
 ```{r}
 character1 <- "Il y a un atelier aujoud'hui"
 character2 <- 'Il y a un atelier aujourd\'hui'
 character3 <- "Voici des guillemets doubles : \" \""
 character4 <- 'Voici des guillemets doubles : " "'
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Constantes")
+```
+
+## Constantes
+```{r}
+pi
+```
+```{r, eval=FALSE}
+letters
+```
+```{r, echo=FALSE}
+c(letters[1:5], "...")
+```
+```{r, eval=FALSE}
+LETTERS
+```
+```{r, echo=FALSE}
+c(LETTERS[1:5], "...")
+```
+```{r, eval=FALSE}
+month.abb
+```
+```{r, echo=FALSE}
+c(month.abb[1:5], "...")
+```
+```{r, eval=FALSE}
+month.name
+```
+```{r, echo=FALSE}
+c(month.name[1:5], "...")
+```
+
+---
+class: code80
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Les bases", "Fonctions")
+```
+
+## Fonctions
+`nom_fonction(argument1, argument2, ...)`
+```{r}
+sqrt(25)
+round(pi, 2)
+c(1, 2, 4, NA)
+mean(c(1, 2, 4, NA))
+mean(c(1, 2, 4, NA), na.rm = TRUE)
 ```
 
 ---
@@ -233,9 +304,26 @@ On crée un vecteur avec la fonction `c()` : *combine values into a vector*.
 num_vec <- c(1, 4.5, 10, NA)
 chr_vec <- c("a", "b", "c", NA)
 logi_vec <- c(TRUE, FALSE, FALSE, NA)
-
 ```
 \* Les valeurs manquantes sont désignées par `NA`  que ce soit des nombres ou du texte.
+
+Une valeur unique est aussi un vecteur
+```{r}
+length(c(1, 2, 3))
+length(1)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Qu'est-ce qu'un vecteur")
+```
+
+Puisqu'un vecteur contient un même type de données, il convertira les nombre en caractères au besoin
+
+```{r}
+c(1, 2, "bonjour")
+class(c(1, 2, "bonjour"))
+```
 
 ---
 ```{r, echo=FALSE, results='asis'}
@@ -278,7 +366,7 @@ qte2 <- c(2, 1, 8, 4)
 Les opérations se font selon la position des valeurs lorsque les vecteurs ont plusieurs valeurs et le **même nombre** de valeurs.
 ```{r}
 qte2 + qte1 # 2+1, 1+3, 8+4, 4+5
-qte2 * qte1 # 2*1, 1+3, 8*7, 4*5
+qte2 * qte1 # 2x1, 1x3, 8x4, 4x5
 ```
 
 ---
@@ -416,14 +504,35 @@ fil_ariane("Vecteurs", "Qu'est-ce qu'un factor")
 ```
 
 ## Qu'est-ce qu'un *factor*?
+Un `factor` en R est un type de données spécial à utiliser avec les chaînes de caractères.
+```{r}
+sexe <- factor(c("F", "M", "M", "F", "F"))
+```
+```{r, echo=FALSE}
+sexe
+```
+```{r}
+class(sexe)
+```
 
-Un *factor* en R est un type de données spécial à utiliser avec les chaînes de caractères.   Visuellement c'est du texte, mais voici comment R voit un *factor* :
+<br>
+
+Les `Levels` sont les valeurs qui existent à l'intérieur du `factor` (domaine de valeurs)
+```{r}
+levels(sexe)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Vecteurs", "Qu'est-ce qu'un factor")
+```
+
+Visuellement c'est du texte, mais voici comment R traite un *factor* :
 
 1. R stocke chaque catégorie sous forme de nombre entier (1, 2, 3...).
 2. R associe chaque nombre à une étiquette de texte.
 3. Cette astuce aide R à faire des calculs et des graphiques plus rapidement.
 
-Un facteur contient des `Levels` qui sont les valeurs permises du `factor` (domaine de valeur).
 ```{r}
 factor(c("a", "b", "c"), levels = c("a", "b"))
 ```
@@ -497,6 +606,7 @@ class: center, middle
 # data.frame
 
 ---
+class: code80, textfont18
 ```{r, echo=FALSE, results='asis'}
 fil_ariane("data.frame", "Qu'est-ce qu'un data.frame")
 ```
@@ -507,14 +617,22 @@ Un `data.frame` est une grille de données exactement comme une feuille Excel.
 - Chaque ligne est une observation (un individu)
 - Chaque colonne est une variable (son numéro d'identification, son âge, son nom...)
 
-Chaque colonne est **un vecteur** et toutes les colonnes doivent avoir **la même longueur** ou être un multiple ou un facteur de toutes les autres.
+Chaque colonne est **un vecteur** et toutes les colonnes doivent avoir **la même longueur** ou être un multiple ou un facteur de toutes les autres (recyclage des données).
 ```{r}
-data.frame(  # 4 observations
+df <- data.frame(  # 4 observations/lignes
   ID = 1:4,  # 1 à 4
   SEXE = c("M", "F"),  # 2 est facteur de 4, sera répété 2 fois
   AGE = c(45, 18, 25, 56),
-  PROVINCE = "Québec"  # 1 est facteur de 4
+  PROVINCE = "Québec",  # 1 est facteur de 4
+  TERRITOIRE = c(3, 16, 6, 14)
 )
+```
+```{r, echo=FALSE}
+df_init <- df
+df
+```
+```{r}
+class(df)
 ```
 
 ---
@@ -526,12 +644,13 @@ fil_ariane("data.frame", "Fonctions de base")
 
 `View()` pour ouvrir dans l'éditeur
 ```{r, eval=FALSE}
-View(iris)
+View(df)
 ```
 
-`head()` et `tail()` pour voir les six premières ou dernières lignes d'une table.
+`head()` et `tail()` pour voir premières ou dernières lignes d'une table.
 ```{r}
-head(iris)
+head(df, n = 2)  # par défaut n=6 : head(df) = head(df, n = 6)
+tail(df, n = 2)
 ```
 
 ---
@@ -541,7 +660,7 @@ fil_ariane("data.frame", "Fonctions de base")
 
 `str()` pour visualiser la structure
 ```{r}
-str(iris)
+str(df)
 ```
 
 ---
@@ -551,7 +670,7 @@ fil_ariane("data.frame", "Fonctions de base")
 
 `summary` pour un résumé statistique rapide
 ```{r}
-summary(iris)
+summary(df)
 ```
 
 ---
@@ -559,34 +678,36 @@ summary(iris)
 fil_ariane("data.frame", "Fonctions de base")
 ```
 
-`names()` pour renommer les colonnes
+`names()` pour consulter ou renommer les colonnes
 ```{r}
-names(iris)
-names(iris) <- c("sepal_length", "sepal_width", "petal_length",
-                 "petal_width", "species")
-names(iris)
+names(df)
+names(df) <- c("id", "sexe", "age", "prov", "terri")
+names(df)
 ```
+```{r, echo=FALSE}
+df <- df_init  # reset data
+```
+
 
 ---
 ```{r, echo=FALSE, results='asis'}
 fil_ariane("data.frame", "Fonctions de base")
-names(iris) <- names_iris_init
 ```
 
 
 `dim()` pour voir le nombre de lignes et de colonnes
 ```{r}
-dim(iris)
+dim(df)
 ```
 
 `nrow()` pour voir le nombre de ligne
 ```{r}
-nrow(iris)
+nrow(df)
 ```
 
 `ncol()` pour voir le nombre de colonnes
 ```{r}
-ncol(iris)
+ncol(df)
 ```
 
 ---
@@ -596,20 +717,19 @@ fil_ariane("data.frame", "Sélection des colonnes")
 
 ## Sélection des colonnes
 
-Nom de la table + `$` + nom de la colonne : vecteur
-```{r, eval=FALSE}
-iris$Sepal.Width  # nom data + $ + nom colonne
-```
-```{r, echo=FALSE}
-head(iris$Sepal.Width)
+Nom de la table + `$` + nom de la colonne
+```{r}
+df$AGE  # vecteur
 ```
 
-Nom de la table + `[["nom de la colonne"]]` : vecteur
-```{r, eval=FALSE}
-iris[["Sepal.Width"]]
+Nom de la table + `[["nom de la colonne"]]`
+```{r}
+df[["AGE"]]  # vecteur
 ```
-```{r, echo=FALSE}
-head(iris[["Sepal.Width"]])
+
+Nom de la table + `[, "nom de la colonne"]`
+```{r}
+df[, "AGE"]  # vecteur
 ```
 
 ---
@@ -617,20 +737,14 @@ head(iris[["Sepal.Width"]])
 fil_ariane("data.frame", "Sélection des colonnes")
 ```
 
-Nom de la table + `["nom de la colonne"]` : vecteur
-```{r, eval=FALSE}
-iris[, "Sepal.Width"]
-```
-```{r, echo=FALSE}
-head(iris[, "Sepal.Width"])
+Nom de la table + `["nom de la colonne"]`
+```{r}
+df["AGE"]  # data.frame
 ```
 
-Nom de la table + `[, c("colonne1", "colonne2")]` : data.frame
-```{r, eval=FALSE}
-iris[, c("Sepal.Width", "Sepal.Length")]
-```
-```{r, echo=FALSE}
-head(iris[, c("Sepal.Width", "Sepal.Length")])
+Nom de la table + `[, c("colonne1", "colonne2")]`
+```{r}
+df[, c("AGE", "SEXE")]  # data.frame
 ```
 
 ---
@@ -640,9 +754,9 @@ fil_ariane("data.frame", "Sélection des lignes")
 
 ## Sélection des lignes
 ```{r}
-iris[1, ]  # première ligne
-iris[21:25, ]  # lignes 21 à 25
-iris[c(2, 4), ]  # lignes 2 et 4
+df[1, ]  # première ligne
+df[2:4, ]  # lignes 2 à 4
+df[c(2, 4), ]  # lignes 2 et 4
 ```
 
 ---
@@ -653,18 +767,15 @@ fil_ariane("data.frame", "Filtrer")
 ## Filtrer
 
 À partir d'un vecteur `TRUE` et `FALSE`
-```{r, eval=FALSE}
-iris$Sepal.Length > 5
+```{r}
+df$AGE > 30
 ```
-```{r, echo=FALSE}
-head(iris$Sepal.Length > 5)
-```
+
+<br>
+
 On sélectionne les lignes qui respectent la condition
-```{r, eval=FALSE}
-iris[iris$Sepal.Length > 5, ]
-```
-```{r, echo=FALSE}
-head(iris[iris$Sepal.Length > 5, ])
+```{r}
+df[df$AGE > 30, ]
 ```
 
 ---
@@ -672,20 +783,216 @@ head(iris[iris$Sepal.Length > 5, ])
 fil_ariane("data.frame", "Filtrer")
 ```
 
-```{r, eval=FALSE}
-iris[iris$Species == "setosa", ]
+```{r}
+df[df$TERRITOIRE %in% c(3, 6), ]
 ```
-```{r, echo=FALSE}
-head(iris[iris$Species == "setosa", ])
+`%in%` est utilisé pour sélectionner plusieurs valeurs, c'est équivalent à
+```{r}
+df[df$TERRITOIRE == 3 | df$TERRITOIRE == 6, ]
 ```
 
-```{r, eval=FALSE}
-iris[iris$Species == "setosa" & iris$Sepal.Length > 5, ]
+```{r}
+df[df$TERRITOIRE %in% c(3, 6) & df$AGE > 30, ]
 ```
-```{r, echo=FALSE}
-head(iris[iris$Species == "setosa" & iris$Sepal.Length > 5, ])
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("data.frame", "Créer, modifier ou supprimer une colonne")
+```
+
+## Créer, modifier ou supprimer une colonne
+
+Rappel pour créer ou modifier un vecteur :
+```{r, eval=FALSE}
+nouveau_nom <- ancien_nom * 2  # Créer
+meme_nom <- meme_nom * 2  # Modifier
+```
+
+Puisque les colonnes d'un `data.frame` sont des vecteurs, la création ou la modification des colonnes se fait de la même manière :
+```{r, eval=FALSE}
+nom_data$nouveau_nom <- nom_data$ancien_nom * 2  # Créer
+nom_data$meme_nom <- nom_data$meme_nom * 2  # Modifier
+```
+
+Pour supprimer une colonne :
+```{r, eval=FALSE}
+nom_data$colonne_a_supprimer <- NULL
 ```
 
 ---
 
-## Créer une colonne
+**Créer une colonne**
+```{r}
+iris$sep_len_5plus <- iris$Sepal.Length >= 5
+```
+```{r, echo=FALSE}
+iris$`...` <- "..."
+head(iris[, c(1, 2, 7, 6)])
+```
+
+```{r}
+iris$Sepal.Length_x2 <- iris$Sepal.Length * 2
+```
+```{r, echo=FALSE}
+head(iris[, c(1, 2, 7, 8)])
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("data.frame", "Créer, modifier ou supprimer une colonne")
+```
+
+**Modifier une colonne**
+```{r, echo=FALSE}
+data(iris)  # reset data
+```
+```{r}
+iris$Sepal.Length <- iris$Sepal.Length * 2
+```
+```{r, echo=FALSE}
+head(iris)
+```
+
+**Supprimer une colonne**
+```{r}
+iris$Sepal.Length <- NULL
+```
+```{r, echo=FALSE}
+head(iris)
+data(iris)  #reset data
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("data.frame", "Trier")
+```
+
+## Trier
+
+La fonction `order()` indique les positions des valeurs dans le but de les réarranger.
+```{r, eval=FALSE}
+order(iris$Sepal.Length)
+```
+```{r, echo=FALSE}
+head(order(iris$Sepal.Length))
+```
+```{r, eval=FALSE}
+order(iris$Sepal.Length, decreasing = TRUE)
+```
+```{r, echo=FALSE}
+head(order(iris$Sepal.Length, decreasing = TRUE))
+```
+
+```{r, eval=FALSE}
+iris[order(iris$Sepal.Length), ]
+```
+```{r, echo=FALSE}
+head(iris[order(iris$Sepal.Length), ])
+```
+
+---
+class: middle, center
+
+# Listes
+
+---
+class: code75
+
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Listes", "Qu'est-ce qu'une list")
+```
+
+## Qu'est-ce qu'une *list* ?
+
+Une liste permet de réunir une variété d'objets sous une même variable. Elle peut contenir tous les éléments qui existent, même une liste.
+
+```{r}
+ma_liste <- list(
+  PI = pi,
+  LETTRES = LETTERS[1:5],
+  FLEURS = iris[1:3, ]
+)
+```
+```{r, echo=FALSE}
+ma_liste
+```
+```{r}
+class(ma_liste)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Listes", "Sélectionner un élément d'une liste")
+```
+
+## Sélectionner un élément d'une liste
+```{r}
+ma_liste[2]  # list
+ma_liste["LETTRES"]  # list
+ma_liste[[2]]  # vector
+ma_liste$LETTRES  # vector
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Listes", "Sélectionner un élément d'une liste")
+```
+
+Si l'élément d'une liste est un tableau
+```{r}
+ma_liste$FLEURS
+```
+Les méthodes de sélection des colonnes sont les mêmes :
+```{r}
+ma_liste$FLEURS$Sepal.Length
+ma_liste$FLEURS[["Sepal.Length"]]
+ma_liste$FLEURS[, 1]
+```
+
+---
+class: center, middle
+
+# Packages
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Packages", "Qu'est-ce qu'un package ?")
+```
+
+## Qu'est-ce qu'un *package* ?
+
+Un *package* est un ensemble de ressources :
+- Fonctions
+- Données (data.drames)
+- Documentation
+- ...
+
+On installe un package avec la fonction `install.packages()`.
+```{r, eval=FALSE}
+install.packages("dplyr")
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Packages", "Utiliser un package")
+```
+
+## Utiliser un *package*
+
+Pour utiliser les ressources d'un package, on utilise la fonction `library()`.
+```{r, eval=FALSE}
+library(dplyr)
+```
+
+La *library* est la bibliothèque et les *packages* sont des livres.<br>
+`library()` consiste à prendre un livre de la bibliothèque et le mettre sur son bureau afin de pouvoir l'utiliser.
+
+En pratique, les gens utilisent souvent *package* et *librairie* comme synonymes. Le terme technique important à retenir est **package**. Une librairie est plutôt l'endroit où les *packages* sont installés.
+
+---
+
+# Conclusion
+
+- Il est important de savoir ce qu'est un `vector` et un `data.frame`.
+- Il est impossible de tout connaître en R.
+- Une recherche Google ou une question à Copilot peut rapidement répondre à votre question plutôt que de connaître les milliers de fonctions et objets dans le *package* R de base.
