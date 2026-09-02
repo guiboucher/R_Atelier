@@ -810,7 +810,8 @@ qte1 &lt; qte2  # 5&lt;2, 1&lt;4, 3&lt;2
 ```
 
 ```
-#&gt; Warning in qte1 &lt; qte2: la taille d'un objet plus long n'est pas multiple de la taille d'un objet plus court
+#&gt; Warning in qte1 &lt; qte2: la taille d'un objet plus long n'est pas multiple de la
+#&gt; taille d'un objet plus court
 ```
 
 ```
@@ -939,7 +940,7 @@ sort(presence)
 
 ```
 #&gt; [1] Lundi    Mercredi Samedi  
-#&gt; Levels: Dimanche &lt; Lundi &lt; Mardi &lt; Mercredi &lt; Jeudi &lt; Vendredi &lt; Samedi
+#&gt; 7 Levels: Dimanche &lt; Lundi &lt; Mardi &lt; Mercredi &lt; Jeudi &lt; ... &lt; Samedi
 ```
 
 R stocke chaque catégorie sous forme de nombre entier
@@ -1103,13 +1104,20 @@ summary(df)
 ```
 
 ```
-#&gt;        ID           SEXE                AGE          PROVINCE           TERRITOIRE   
-#&gt;  Min.   :1.00   Length:4           Min.   :18.00   Length:4           Min.   : 3.00  
-#&gt;  1st Qu.:1.75   Class :character   1st Qu.:23.25   Class :character   1st Qu.: 5.25  
-#&gt;  Median :2.50   Mode  :character   Median :35.00   Mode  :character   Median :10.00  
-#&gt;  Mean   :2.50                      Mean   :36.00                      Mean   : 9.75  
-#&gt;  3rd Qu.:3.25                      3rd Qu.:47.75                      3rd Qu.:14.50  
-#&gt;  Max.   :4.00                      Max.   :56.00                      Max.   :16.00
+#&gt;        ID           SEXE                AGE          PROVINCE        
+#&gt;  Min.   :1.00   Length:4           Min.   :18.00   Length:4          
+#&gt;  1st Qu.:1.75   Class :character   1st Qu.:23.25   Class :character  
+#&gt;  Median :2.50   Mode  :character   Median :35.00   Mode  :character  
+#&gt;  Mean   :2.50                      Mean   :36.00                     
+#&gt;  3rd Qu.:3.25                      3rd Qu.:47.75                     
+#&gt;  Max.   :4.00                      Max.   :56.00                     
+#&gt;    TERRITOIRE   
+#&gt;  Min.   : 3.00  
+#&gt;  1st Qu.: 5.25  
+#&gt;  Median :10.00  
+#&gt;  Mean   : 9.75  
+#&gt;  3rd Qu.:14.50  
+#&gt;  Max.   :16.00
 ```
 
 ---
@@ -1679,9 +1687,9 @@ En pratique, les gens utilisent souvent *package* et *librairie* comme synonymes
 
 # Conclusion
 
-- Il est important de savoir ce qu'est un `vector` et un `data.frame`.
+- Il est important de savoir ce qu'est un `vector`, un `data.frame` et comment utiliser les fonctions.
 - Il est impossible de tout connaître en R.
-- Une recherche Google ou une question à Copilot peut rapidement répondre à votre question plutôt que de connaître les milliers de fonctions et objets dans le *package* R de base.
+- Une recherche Google ou une question à Copilot peut rapidement répondre à votre question plutôt que de connaître les milliers de fonctions et objets disponibles dans le *package* R de base.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

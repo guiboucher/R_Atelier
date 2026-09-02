@@ -1,0 +1,358 @@
+---
+title: "R intermédiaire"
+subtitle: "Atelier intensif"
+author: "Guillaume Boucher"
+institute: "INSPQ"
+date: "Le 10 septembre 2026"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    yolo: false
+---
+<!-- CODE POUR TOUTES LES DIAPOS
+<style type="text/css">
+.remark-slide-content {
+  font-size: 15px;
+}
+</style>
+-->
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      comment = "#>")
+
+fil_ariane <- function(...) {
+  sections <- c(...)
+  cat('<div class="breadcrumb">\n')
+  for (i in 1:length(sections)) {
+    cat('    <span>',sections[i],'</span>\n',
+        sep = "")
+  }
+  cat('</div>')
+}
+```
+```{css, echo=FALSE}
+/* Fil d'ariane */
+.breadcrumb {
+  position: absolute;
+  bottom: 10px;
+  left: 60px;
+  font-size: 12px;
+  color: #777;
+}
+.breadcrumb span + span:before {
+  content: " > ";
+  padding: 0 5px;
+  color: #ccc;
+}
+
+
+/* Taille du texte ou du code */
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /* Par défaut */
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+```
+
+# R Intermédiaire
+
+Contrôle du flux
+
+- Conditions
+- Fonctions
+- Boucles
+
+---
+class: center, middle
+
+# Conditions
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Conditions", "Introduction")
+```
+
+## Utilité des conditions
+Une condition permet à R de prendre une décision selon qu'une règle est vraie (`TRUE`) ou fausse (`FALSE`).
+
+Exemple :<br>
+Si l'âge est de 65 ans ou plus,<br>
+alors la personne est considéré comme un aîné.<br>
+Sinon,<br>
+elle n'est pas considéré comme un aîné.
+```{r}
+age <- 72
+if (age >= 65) {
+  print("Aîné")
+} else {
+  print("Non aîné")
+}
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Conditions", "Structure d'une condition")
+```
+
+## Structure d'une condition
+
+```{r, eval=FALSE}
+if (condition) {
+  
+  action si TRUE
+  
+} else {
+  
+  action si FALSE
+  
+}
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Conditions", "Plusieurs conditions")
+```
+
+## Plusieurs conditions
+Lorsqu'il y a plusieurs conditions, la deuxième condition et les suivantes se font avec `else if`.
+```{r}
+age <- 45
+if (age >= 65) {
+  print("Aîné")
+} else if (age >= 18) {
+  print("Adulte")
+} else if (age < 18) {
+  print("Mineur")
+} else {
+  print(NA)
+}
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Conditions", "Conditions dans une condition")
+```
+
+## Conditions dans une condition
+Les conditions peuvent s'imbriquer les unes dans les autres
+```{r, eval=FALSE}
+if (note >= 60) {
+  if (note >= 90) {
+    print("A")
+  } else {
+    print("Réussite")
+  }
+} else {
+  if (note >= 50) {
+    print("Échec de peu")
+  } else {
+    print("Échec")
+  }
+}
+```
+
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Conditions", "Conditions sur un vecteur")
+```
+
+## Condition sur un vecteur
+`if` est utilisé pour prendre une décision dans un programme.<br>
+On utilise `ifelse()` pour appliquer une règle à toutes les valeurs d'un vecteur ou d'une colonne.
+```{r}
+age <- c(72, 54, 22, 65, 18)
+ifelse(test = age >= 65, yes = "Aîné", no = "Adulte")
+```
+
+```{r}
+age <- c(72, 54, 22, 65, 7)
+ifelse(
+  age >= 65,
+  "Aîné",
+  ifelse(age > 18,
+         "Adulte",
+         "Mineur")
+)
+```
+
+---
+class: center, middle
+
+# Fonctions
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Problème ?")
+```
+
+## Problème ?
+Voyez-vous un problème ici ?
+
+.pull-left[
+```{r, eval=FALSE}
+age <- 88
+if (age >= 65) {
+  print("Aîné")
+} else {
+  print("Non aîné")
+}
+
+age <- 44
+if (age >= 65) {
+  print("Aîné")
+} else {
+  print("Non aîné")
+}
+
+age <- 46
+if (age >= 65) {
+  print("Aîné")
+} else {
+  print("Non aîné")
+}
+```
+]
+
+.pull-right[
+```{r, eval=FALSE}
+age <- 36
+if (age >= 65) {
+  print("Aîné")
+} else {
+  print("Non aîné")
+}
+
+age <- 17
+if (age >= 65) {
+  print("Aîné")
+} else {
+  print("Non aîné")
+}
+
+age <- 5
+if (age >= 65) {
+  print("Aîné")
+} else {
+  print("Non aîné")
+}
+```
+]
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Utilité d'une fonction")
+```
+
+## Utilité d'une fonction
+Une fonction permet d'enregistrer une série d'instructions sous un nom afin de pouvoir les réutiliser.
+```{r}
+groupe_age <- function(age) {
+  if (age >= 65) {
+    return("Aîné")
+  } else {
+    return("Non aîné")
+  }
+}
+```
+```{r}
+class(groupe_age)
+```
+
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Utilité d'une fonction")
+```
+
+```{r}
+groupe_age(88)
+groupe_age(36)
+grp_age <- groupe_age(44)
+grp_age
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Structure d'une fonction")
+```
+
+## Structure d'une fonction
+
+### Nom de la fonction
+On commence par inscrire le nom de la fonction qu'on veut créer : `groupe_age`.
+
+### Créer la fonction
+On crée un objet fonction de la même manière qu'un `vector`, une `list`, un `data.frame`...
+```{r, eval=FALSE}
+groupe_age <- function() ...
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Structure d'une fonction")
+```
+
+### Arguments
+On inscrit les arguments à l'intérieur des parenthèses.
+```{r, eval=FALSE}
+groupe_age <- function(argument1, argument2)
+```
+Une fonction peut ne pas avoir d'argument.
+```{r}
+msg_bienvenue <- function() {
+  paste("Aujourd'hui nous sommes le", Sys.Date())
+}
+msg_bienvenue()
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Structure d'une fonction", "Arguments")
+```
+
+Les arguments avec une valeur

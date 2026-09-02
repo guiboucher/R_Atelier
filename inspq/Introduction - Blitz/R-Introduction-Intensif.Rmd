@@ -993,6 +993,6 @@ En pratique, les gens utilisent souvent *package* et *librairie* comme synonymes
 
 # Conclusion
 
-- Il est important de savoir ce qu'est un `vector` et un `data.frame`.
+- Il est important de savoir ce qu'est un `vector`, un `data.frame` et comment utiliser les fonctions.
 - Il est impossible de tout connaître en R.
-- Une recherche Google ou une question à Copilot peut rapidement répondre à votre question plutôt que de connaître les milliers de fonctions et objets dans le *package* R de base.
+- Une recherche Google ou une question à Copilot peut rapidement répondre à votre question plutôt que de connaître les milliers de fonctions et objets disponibles dans le *package* R de base.
