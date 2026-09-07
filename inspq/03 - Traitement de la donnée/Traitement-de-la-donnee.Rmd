@@ -1,0 +1,225 @@
+---
+title: "Traitement des données"
+subtitle: "Packages à prioriser"
+author: "Guillaume Boucher"
+institute: "INSPQ"
+date: "Le 15 septembre 2026"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    yolo: false
+---
+class: code85
+
+<!-- CODE POUR TOUTES LES DIAPOS
+<style type="text/css">
+.remark-slide-content {
+  font-size: 15px;
+}
+</style>
+-->
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      comment = "#>")
+
+fil_ariane <- function(...) {
+  sections <- c(...)
+  cat('<div class="breadcrumb">\n')
+  for (i in 1:length(sections)) {
+    cat('    <span>',sections[i],'</span>\n',
+        sep = "")
+  }
+  cat('</div>')
+}
+```
+```{css, echo=FALSE}
+/* Fil d'ariane */
+.breadcrumb {
+  position: absolute;
+  bottom: 10px;
+  left: 60px;
+  font-size: 12px;
+  color: #777;
+}
+.breadcrumb span + span:before {
+  content: " > ";
+  padding: 0 5px;
+  color: #ccc;
+}
+
+
+/* Taille du texte ou du code */
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code70 .remark-code {font-size: 70%}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /* Par défaut */
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+```
+
+# Tidyverse
+
+Les *packages* qui seront présentés sont inclus dans le [tidyverse](https://tidyverse.org/), un **ensemble de packages** R conçu pour la science des données.
+
+Le *tidyverse* s'installe et se charge de la même manière qu'un *package* normal.
+```{r, eval=FALSE}
+install.packages("tidyverse")  # installation
+library(tidyverse)             # chargement
+```
+Puisque `library(tidyverse)` charge un ensemble de *packages*, il est suggéré d'appeler uniquement le ou les *packages* utilisés, surtout si vous avez des enjeux d'espaces mémoires.  
+Exécuter `library(tidyverse)` est équivalent à
+```{r, eval=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(purrr)
+library(tibble)
+library(stringr)
+library(forcats)
+library(lubridate)
+```
+
+---
+class: center, middle
+
+# dplyr
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "Quand utiliser dplyr ?")
+```
+
+
+## Quand utiliser dplyr ?
+Aussitôt que vous êtes dans un `data.frame`, il est fortement conseillé d'utiliser `dplyr` plutôt que le R de base. Les noms intuitifs de ses fonctions rendent le code plus facile à comprendre entre collègues et il est majoritairement plus performant que le R de base.
+
+Les principales fonctions sont :
+- `select()` pour la sélection des variables;
+- `filter()` pour la sélection des observations;
+- `mutate()` pour l'ajout ou la modification de variables;
+- `group_by()` pour effectuer une opération *par groupe*;
+- `summarise()` pour des statistiques résumées;
+- `arrange()` pour trier les données.
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "Quand utiliser dplyr ?", "Concepts importants à connaître d'abord")
+```
+
+## Concepts importants à connaître d'abord
+Dans le tidyverse, il y a deux nouveaux concepts à connaître.
+
+1) Les *pipes* (`%>%`, `|>`) insèrent automatiquement le résultat précédent comme premier argument de la fonction suivante.
+```{r, echo=FALSE}
+`%>%` <- dplyr::`%>%`
+```
+```{r}
+mean(1:5)
+1:5 |> mean()
+1:5 %>% mean()
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "Quand utiliser dplyr ?", "Concepts importants à connaître d'abord")
+```
+
+## Concepts importants à connaître d'abord
+
+2) L'évaluation des données (*data masking*)  
+Permet d'utiliser des variables directement à l'intérieur d'une table. Il n'est plus nécessaire d'indiquer le nom de la table (`ma_table$ma_variable`).
+```{r, eval=FALSE}
+# Sans data masking (R de base)
+ma_table$poids / ma_table$taille^2
+
+# Avec data masking (tidyverse)
+mutate(ma_table, imc = poids / taille^2)
+
+# Avec data masking + pipes
+ma_table %>% mutate(imc = poids / taille^2)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "library(dplyr)")
+```
+
+## library(dplyr)
+
+```{r}
+library(dplyr)
+```
+
+Ce message indique quelles sont les fonctions du *package* `dplyr` qui ont le même nom qu'une fonction d'un autre *package*.
+
+L’utilisation des fonctions `filter` et `lag` sont maintenant par défaut celles de `dplyr` plutôt que `stats`.  
+Même chose pour les fonctions `intersect`, `setdiff`, `setequal` et `union` qui proviennent du *package* `base` (R de base).
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "library(dplyr)", "Objets masqués")
+```
+
+### Objets masqués
+Pour utiliser une fonction (objet) qui a été masqué par l'appel d'une `library`, il faut utiliser la méthode `nom_package::nom_fonction()` sinon on aura une erreur, ou pire, un résultat qui n'est pas le bon.
+```{r, error=TRUE}
+x <- 1:10
+stats::filter(x, rep(1, 3))
+
+# par défaut dplyr, dplyr::filter() où le premier argument doit
+# être un data.frame
+filter(x, rep(1, 3))
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select")
+```
+
+## select
+Sélection des colonnes nécessaires à l'analyse. S'il y a au moins une colonne qui n'est pas nécessaire dans votre code, `select` doit toujours être

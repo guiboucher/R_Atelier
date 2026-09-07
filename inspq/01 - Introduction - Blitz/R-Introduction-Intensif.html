@@ -30,7 +30,6 @@ class: center, middle, inverse, title-slide
 
 ---
 
-class: center, middle
 
 &lt;!-- CODE POUR TOUTES LES DIAPOS
 &lt;style type="text/css"&gt;
@@ -104,6 +103,13 @@ class: center, middle
 */
 &lt;/style&gt;
 
+# Objectif
+
+Cette formation a pour objectif de vous rendre autonomes dans votre apprentissage de R. Vous n'aurez pas à retenir toutes les fonctions ni toutes les syntaxes. L'important est surtout de comprendre les concepts fondamentaux, de savoir où chercher l'information et d'être capable de trouver et d'adapter des solutions à vos besoins.
+
+---
+class: center, middle
+
 # Les bases
 
 ---
@@ -113,7 +119,7 @@ class: center, middle
 &lt;/div&gt;
 
 ## Commentaires
-Le symbole pour les commentaires est le dièse (`#`).
+Le symbole pour les commentaires est le carré (`#`).
 
 ``` r
 # Ci-dessous est une addition :
@@ -240,14 +246,6 @@ z * y  # 1 * 3
 **Les entiers (`integer`)**
 
 ``` r
-class(1:5)  # Vecteur de 1 à 5
-```
-
-```
-#&gt; [1] "integer"
-```
-
-``` r
 class(4)  # Un entier seul peut parfois être considéré numérique
 ```
 
@@ -263,7 +261,7 @@ class(4L)  # Ajouter L précise à R qu'on veut un entier
 #&gt; [1] "integer"
 ```
 &lt;br&gt;&lt;br&gt;
-Exemples : année, age, code d'identification numérique.
+Exemples : année, âge, code d'identification numérique.
 
 ---
 &lt;div class="breadcrumb"&gt;
@@ -352,7 +350,7 @@ class('Bonjour')
 Une chaîne de caractères se fait avec des guillemets simples&amp;nbsp;(`''`) ou doubles&amp;nbsp;(`""`). On doit utiliser une barre oblique inversée (`\`) lorsque le même guillemet est utilisé à l'intérieur de la chaîne de caractères (voir exemples 2 et 3).
 
 ``` r
-character1 &lt;- "Il y a un atelier aujoud'hui"
+character1 &lt;- "Il y a un atelier aujourd'hui"
 character2 &lt;- 'Il y a un atelier aujourd\'hui'
 character3 &lt;- "Voici des guillemets doubles : \" \""
 character4 &lt;- 'Voici des guillemets doubles : " "'
@@ -403,7 +401,8 @@ month.name
 ```
 
 ```
-#&gt; [1] "January"  "February" "March"    "April"    "May"      "..."
+#&gt; [1] "January"  "February" "March"    "April"    "May"     
+#&gt; [6] "..."
 ```
 
 ---
@@ -433,23 +432,7 @@ round(pi, 2)
 ```
 
 ``` r
-c(1, 2, 4, NA)
-```
-
-```
-#&gt; [1]  1  2  4 NA
-```
-
-``` r
-mean(c(1, 2, 4, NA))
-```
-
-```
-#&gt; [1] NA
-```
-
-``` r
-mean(c(1, 2, 4, NA), na.rm = TRUE)
+mean(c(1, 2, 4))
 ```
 
 ```
@@ -468,7 +451,7 @@ class: center, middle
 &lt;/div&gt;
 
 ## Qu'est-ce qu'un vecteur ?
-Liste d'éléments qui partagent tous exactement **le même type de données**. Les vecteurs servent à stocker des données, même pour une seule valeur.
+Liste d'éléments qui partagent tous exactement **le même type de données**.
 
 On crée un vecteur avec la fonction `c()` : *combine values into a vector*.
 
@@ -490,7 +473,7 @@ length(c(1, 2, 3))
 ```
 
 ``` r
-length(1)
+length(c(1))
 ```
 
 ```
@@ -503,7 +486,7 @@ length(1)
     &lt;span&gt;Qu'est-ce qu'un vecteur&lt;/span&gt;
 &lt;/div&gt;
 
-Puisqu'un vecteur contient un même type de données, il convertira les nombre en caractères au besoin
+Puisqu'un vecteur contient un même type de données, il convertira les nombres en caractères au besoin.
 
 
 ``` r
@@ -684,7 +667,7 @@ Liste des opérateurs de comparaison :
 - != : différent, n'est pas égal à
 
 &lt;p style="margin-bottom:0;"&gt;
-À partir des vecteur `qte1` et `qte2`
+À partir des vecteurs `qte1` et `qte2`
 &lt;/p&gt;
 .pull-left[
 
@@ -810,8 +793,8 @@ qte1 &lt; qte2  # 5&lt;2, 1&lt;4, 3&lt;2
 ```
 
 ```
-#&gt; Warning in qte1 &lt; qte2: la taille d'un objet plus long n'est pas multiple de la
-#&gt; taille d'un objet plus court
+#&gt; Warning in qte1 &lt; qte2: la taille d'un objet plus long n'est
+#&gt; pas multiple de la taille d'un objet plus court
 ```
 
 ```
@@ -875,6 +858,18 @@ Visuellement c'est du texte, mais voici comment R traite un *factor* :
 
 
 ``` r
+sexe &lt;- factor(c("F", "M", "M", "F", "F"))
+```
+
+```
+#&gt;   VALEUR ETIQUETTE
+#&gt; 1      1         F
+#&gt; 2      2         M
+```
+
+
+
+``` r
 factor(c("a", "b", "c"), levels = c("a", "b"))
 ```
 
@@ -892,7 +887,7 @@ Puisque `"c"` n'est pas une valeur de `levels`, le vecteur `c("a", "b", "c")` de
 
 ## Trier un *factor*
 
-Par défaut les *Levels* sont les valeurs unique en ordre alphabétique.
+Par défaut les *Levels* sont les valeurs uniques en ordre alphabétique.
 
 ``` r
 factor(c("petit", "grand", "moyen", "petit", "grand"))
@@ -940,7 +935,7 @@ sort(presence)
 
 ```
 #&gt; [1] Lundi    Mercredi Samedi  
-#&gt; 7 Levels: Dimanche &lt; Lundi &lt; Mardi &lt; Mercredi &lt; Jeudi &lt; ... &lt; Samedi
+#&gt; 7 Levels: Dimanche &lt; Lundi &lt; Mardi &lt; Mercredi &lt; ... &lt; Samedi
 ```
 
 R stocke chaque catégorie sous forme de nombre entier
@@ -1104,20 +1099,20 @@ summary(df)
 ```
 
 ```
-#&gt;        ID           SEXE                AGE          PROVINCE        
-#&gt;  Min.   :1.00   Length:4           Min.   :18.00   Length:4          
-#&gt;  1st Qu.:1.75   Class :character   1st Qu.:23.25   Class :character  
-#&gt;  Median :2.50   Mode  :character   Median :35.00   Mode  :character  
-#&gt;  Mean   :2.50                      Mean   :36.00                     
-#&gt;  3rd Qu.:3.25                      3rd Qu.:47.75                     
-#&gt;  Max.   :4.00                      Max.   :56.00                     
-#&gt;    TERRITOIRE   
-#&gt;  Min.   : 3.00  
-#&gt;  1st Qu.: 5.25  
-#&gt;  Median :10.00  
-#&gt;  Mean   : 9.75  
-#&gt;  3rd Qu.:14.50  
-#&gt;  Max.   :16.00
+#&gt;        ID           SEXE                AGE       
+#&gt;  Min.   :1.00   Length:4           Min.   :18.00  
+#&gt;  1st Qu.:1.75   Class :character   1st Qu.:23.25  
+#&gt;  Median :2.50   Mode  :character   Median :35.00  
+#&gt;  Mean   :2.50                      Mean   :36.00  
+#&gt;  3rd Qu.:3.25                      3rd Qu.:47.75  
+#&gt;  Max.   :4.00                      Max.   :56.00  
+#&gt;    PROVINCE           TERRITOIRE   
+#&gt;  Length:4           Min.   : 3.00  
+#&gt;  Class :character   1st Qu.: 5.25  
+#&gt;  Mode  :character   Median :10.00  
+#&gt;                     Mean   : 9.75  
+#&gt;                     3rd Qu.:14.50  
+#&gt;                     Max.   :16.00
 ```
 
 ---
@@ -1133,7 +1128,8 @@ names(df)
 ```
 
 ```
-#&gt; [1] "ID"         "SEXE"       "AGE"        "PROVINCE"   "TERRITOIRE"
+#&gt; [1] "ID"         "SEXE"       "AGE"        "PROVINCE"  
+#&gt; [5] "TERRITOIRE"
 ```
 
 ``` r
@@ -1353,6 +1349,7 @@ df[df$TERRITOIRE == 3 | df$TERRITOIRE == 6, ]
 #&gt; 1  1    M  45   Québec          3
 #&gt; 3  3    M  25   Québec          6
 ```
+où la barre verticale (`|`) signifie `ou`/`or`.
 
 
 ``` r
@@ -1363,6 +1360,7 @@ df[df$TERRITOIRE %in% c(3, 6) &amp; df$AGE &gt; 30, ]
 #&gt;   ID SEXE AGE PROVINCE TERRITOIRE
 #&gt; 1  1    M  45   Québec          3
 ```
+La perluète (`&amp;`) signifie `et`/`and`.
 
 ---
 &lt;div class="breadcrumb"&gt;
@@ -1624,7 +1622,7 @@ ma_liste$FLEURS$Sepal.Length
 ```
 
 ``` r
-ma_liste$FLEURS[["Sepal.Length"]]
+ma_liste[["FLEURS"]]$Sepal.Length
 ```
 
 ```
@@ -1632,7 +1630,7 @@ ma_liste$FLEURS[["Sepal.Length"]]
 ```
 
 ``` r
-ma_liste$FLEURS[, 1]
+ma_liste[["FLEURS"]][["Sepal.Length"]]
 ```
 
 ```
@@ -1664,6 +1662,8 @@ On installe un package avec la fonction `install.packages()`.
 install.packages("dplyr")
 ```
 
+En date du 8 septembre 2026, il y a 24 887 *packages* de disponibles sur le [CRAN](https://cran.r-project.org/web/packages/).
+
 ---
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;Packages&lt;/span&gt;
@@ -1681,7 +1681,7 @@ library(dplyr)
 La *library* est la bibliothèque et les *packages* sont des livres.&lt;br&gt;
 `library()` consiste à prendre un livre de la bibliothèque et le mettre sur son bureau afin de pouvoir l'utiliser.
 
-En pratique, les gens utilisent souvent *package* et *librairie* comme synonymes. Le terme technique important à retenir est **package**. Une librairie est plutôt l'endroit où les *packages* sont installés.
+En pratique, les gens utilisent souvent *package* et *librairy* comme synonymes. Le terme technique important à retenir est **package**. Une librairie est plutôt l'endroit où les *packages* sont installés.
 
 ---
 

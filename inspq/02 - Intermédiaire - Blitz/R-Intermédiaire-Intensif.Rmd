@@ -57,6 +57,7 @@ fil_ariane <- function(...) {
 .textfont18 {font-size: 18px}
 .textfont19 {font-size: 19px}
 .textfont20 {font-size: 20px}
+.code70 .remark-code {font-size: 70%}
 .code75 .remark-code {font-size: 75%}
 .code80 .remark-code {font-size: 80%}
 .code85 .remark-code {font-size: 85%}
@@ -329,7 +330,7 @@ On commence par inscrire le nom de la fonction qu'on veut créer : `groupe_age`.
 ### Créer la fonction
 On crée un objet fonction de la même manière qu'un `vector`, une `list`, un `data.frame`...
 ```{r, eval=FALSE}
-groupe_age <- function() ...
+groupe_age <- function() {...}
 ```
 
 ---
@@ -355,4 +356,247 @@ msg_bienvenue()
 fil_ariane("Fonctions", "Structure d'une fonction", "Arguments")
 ```
 
-Les arguments avec une valeur
+Prenons par exemple la fonction `median` :
+```{r}
+args(median)
+```
+
+- **`x`** : *an object for which a method has been defined, or a numeric vector containing the values whose median is to be computed*.
+- **`na.rm = FALSE`** : *a logical value indicating whether NA values should be stripped before the computation proceeds*.
+- **`...`** : *potentially further arguments for methods; not used in the default method*.
+
+Le premier argument `x` n'a pas de valeur par défaut, il est donc **nécessaire** sinon il y aura une erreur.
+```{r, error=TRUE}
+median()
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Structure d'une fonction", "Arguments")
+```
+
+L'argument `na.rm` a la valeur `FALSE` par défaut alors il n'est pas nécessaire de l'inclure si la valeur par défaut est celle qu'on veut utiliser.
+```{r}
+median(x = 1:4)
+median(x = 1:4, na.rm = FALSE)
+```
+
+Il n'est pas nécessaire de nommer les arguments lorsque l'ordre est respecté.
+```{r}
+median(1:4, FALSE)
+```
+
+Au contraire, il est nécessaire de nommer les arguments lorsque l'ordre n'est pas respecté.
+```{r}
+median(na.rm = FALSE, x = 1:4)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Corps de la fonction")
+```
+
+## Corps de la fonction
+Exemple où on veut calculer l'indice de masse corporelle (IMC) :
+```{r}
+poids <- 80  # kg
+taille <- 1.75  # mètres
+poids / taille ^ 2
+```
+
+Les variables `poids` et `taille` sont les arguments de la fonction
+```{r, eval=FALSE}
+imc <- function(poids, taille) {...}
+```
+
+et le calcul de la variable `imc_val` est le corps de la fonction, les instructions à exécuter.
+```{r}
+imc <- function(poids, taille) {
+  poids / taille ^ 2
+}
+imc(poids = 80, taille = 1.75)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Fonctions", "Valeur retournée")
+```
+
+## Retour d'une fonction
+R accepte deux styles pour retourner la valeur d'une fonction :
+
+1. Retour implicite : la dernière ligne de code.
+```{r}
+imc <- function(poids, taille) {
+  poids / taille ^ 2
+}
+```
+2. Retour explicite : utiliser `return()`.
+```{r}
+imc <- function(poids, taille) {
+  return(poids / taille ^ 2)
+}
+
+imc <- function(poids, taille) {
+  imc_val <- poids / taille ^ 2
+  return(imc_val)
+}
+```
+
+---
+class: center, middle
+
+# Boucles
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Boucles", "Pourquoi utiliser une boucle")
+```
+
+## Pourquoi utiliser une boucle
+Une boucle permet de répéter un même bloc de code plusieurs fois de suite.
+
+Analogie simple :
+
+- Sans boucle, on dit : *Bonjour A*, *bonjour B*, *bonjour C*, ..., *bonjour Z*.
+- Avec une boucle, on dit : *Pour chaque personne dans la liste, dire bonjour*.
+
+---
+class: code85
+
+## For
+S'utilise quand on sait exactement combien de fois on veut répéter l'action.
+.pull-left[
+```{r}
+for (i in 1:3) {
+  print(i)
+}
+```
+]
+.pull-right[
+```{r}
+for (lettre in c("a","b","c")) {
+  print(lettre)
+}
+```
+]
+
+Reviens à exécuter manuellement :
+.pull-left[
+```{r, eval=FALSE}
+i <- 1
+print(i)
+i <- 2
+print(i)
+i <- 3
+print(i)
+```
+]
+.pull-right[
+```{r, eval=FALSE}
+i <- "a"
+print(i)
+i <- "b"
+print(i)
+i <- "c"
+print(i)
+```
+]
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Boucles", "While")
+```
+
+## While
+Utile quand on ne sait pas combien de tours il faut faire, mais on sait **quand** on doit arrêter.
+```{r, echo=FALSE}
+x <- 2
+```
+```{r}
+while (x <= 5) {
+  print(x)    # 2, 3, 4, 5
+  x <- x + 1  # 3, 4, 5, 6 est plus grand que 5 -> fin boucle
+}
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Boucles", "lapply")
+```
+
+## lapply
+C'est une fonction en R qui répète une même action sur chaque élément et renvoie le résultat sous la forme d'une liste.
+```{r}
+args(lapply)
+```
+- `X` : a vector (atomic or list) or an expression object. Other objects (including classed objects) will be coerced by base::as.list.
+- `FUN` : the function to be applied to each element of X: see ‘Details’. In the case of functions like +, %*%, the function name must be backquoted or quoted.
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Boucles", "lapply")
+```
+
+Exemple disponible dans la documentation :
+```{r}
+x <- list(a = 1:10, beta = exp(-3:3),
+          logic = c(TRUE, FALSE, FALSE,TRUE))
+lapply(x, mean)
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Boucles", "lapply")
+```
+
+Exemple avec une fonction personnalisée :
+```{r}
+# Prendre note que 1:5 est un vecteur comparativement à l'exemple
+# précédent qui était une liste.
+lapply(1:5, function(x) {
+  x^2 + 4
+})
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Boucles", "lapply")
+```
+
+Exemple sur un `data.frame` :
+```{r}
+lapply(iris[, 1:3], mean)
+```
+
+Comparativement à une boucle `for` :
+```{r}
+for (col in names(iris[, 1:3])) {
+  print(mean(iris[[col]]))
+}
+```
+
+---
+```{r, echo=FALSE, results='asis'}
+fil_ariane("Boucles", "sapply")
+```
+
+## sapply
+Le `l` dans `lapply` est pour `list` alors que le `s` dans `sapply` est pour `simplifié`
+```{r}
+sapply(iris[, 1:3], mean)
+sapply(iris[, 1:3], mean, simplify = FALSE)  # Équivalent à lapply
+```
+
+---
+
+# À retenir
+
+- Les **conditions** permettent de prendre des décisions.
+- Les **fonctions** permettent de réutiliser du code.
+- Les **boucles** permettent de répéter un traitement.
+- Ensemble, elles permettent d'écrire du code plus simple, robuste et maintenable.
+
+Question à se poser :
+
+> Est-ce que je suis en train de répéter quelque chose qui pourrait être automatisé ?

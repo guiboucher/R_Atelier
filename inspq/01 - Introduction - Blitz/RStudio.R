@@ -18,7 +18,7 @@
 #     résultat. "2 + 3" affiche "[1] 5".
 # Pour exécuter :
 # - Run en haut à droite du volet
-# - CTRL + ENTER
+# - CTRL + ENTRÉE
 2 + 3
 #     La console est comme une calculatrice qui permet de :
 #     - exécuter du code rapidement
@@ -40,19 +40,17 @@ df <- data.frame(
 #     D'autres onglets sont disponibles ou pourraient être disponibles :
 #     - History : Historique du code exécuté. Un double clic retourne le code dans la console.
 #     - Connections : Permet de se connecter à des bases de données SQL, Excel, Spark...
-#     - Build : Création de packages R.
 #     - Tutorial : Formation de base disponible directement dans RStudio.
 # 4) Volet Files / Plots / Packages / Help (en bas à droite)
 #     Files : Permet de naviguer dans les dossiers et les fichiers.
 #     Plots : Affiche les graphiques.
-hist(rnorm(100))
+hist(rnorm(100))  # histogramme(distribution normale())
 #     Packages : Montre les packages installés et chargés (crochet à gauche).
 #       Contient toute la documentation nécessaire à l'utilisation des fonctions et des tables.
 #     Help : Affiche l'aide de R
 ?mean
 #     Viewer : Afficher du contenu HTML produit par R. C'est une mini page Web.
-library(DT)
-datatable(iris)
+DT::datatable(iris)
 #     Presentation : Sert à afficher des présentation créées avec R Markdown (ioslides, Slidy, ...)
 
 

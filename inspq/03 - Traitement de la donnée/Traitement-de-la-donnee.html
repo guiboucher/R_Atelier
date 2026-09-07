@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Traitement des données</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Guillaume Boucher" />
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Traitement des données
+]
+.subtitle[
+## Packages à prioriser
+]
+.author[
+### Guillaume Boucher
+]
+.institute[
+### INSPQ
+]
+.date[
+### Le 15 septembre 2026
+]
+
+---
+
+class: code85
+
+&lt;!-- CODE POUR TOUTES LES DIAPOS
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+  font-size: 15px;
+}
+&lt;/style&gt;
+--&gt;
+
+&lt;style type="text/css"&gt;
+/* Fil d'ariane */
+.breadcrumb {
+  position: absolute;
+  bottom: 10px;
+  left: 60px;
+  font-size: 12px;
+  color: #777;
+}
+.breadcrumb span + span:before {
+  content: " &gt; ";
+  padding: 0 5px;
+  color: #ccc;
+}
+
+
+/* Taille du texte ou du code */
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code70 .remark-code {font-size: 70%}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /* Par défaut */
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+&lt;/style&gt;
+
+# Tidyverse
+
+Les *packages* qui seront présentés sont inclus dans le [tidyverse](https://tidyverse.org/), un **ensemble de packages** R conçu pour la science des données.
+
+Le *tidyverse* s'installe et se charge de la même manière qu'un *package* normal.
+
+``` r
+install.packages("tidyverse")  # installation
+library(tidyverse)             # chargement
+```
+Puisque `library(tidyverse)` charge un ensemble de *packages*, il est suggéré d'appeler uniquement le ou les *packages* utilisés, surtout si vous avez des enjeux d'espaces mémoires.  
+Exécuter `library(tidyverse)` est équivalent à
+
+``` r
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(purrr)
+library(tibble)
+library(stringr)
+library(forcats)
+library(lubridate)
+```
+
+---
+class: center, middle
+
+# dplyr
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;dplyr&lt;/span&gt;
+    &lt;span&gt;Quand utiliser dplyr ?&lt;/span&gt;
+&lt;/div&gt;
+
+
+## Quand utiliser dplyr ?
+Aussitôt que vous êtes dans un `data.frame`, il est fortement conseillé d'utiliser `dplyr` plutôt que le R de base. Les noms intuitifs de ses fonctions rendent le code plus facile à comprendre entre collègues et il est majoritairement plus performant que le R de base.
+
+Les principales fonctions sont :
+- `select()` pour la sélection des variables;
+- `filter()` pour la sélection des observations;
+- `mutate()` pour l'ajout ou la modification de variables;
+- `group_by()` pour effectuer une opération *par groupe*;
+- `summarise()` pour des statistiques résumées;
+- `arrange()` pour trier les données.
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;dplyr&lt;/span&gt;
+    &lt;span&gt;Quand utiliser dplyr ?&lt;/span&gt;
+    &lt;span&gt;Concepts importants à connaître d'abord&lt;/span&gt;
+&lt;/div&gt;
+
+## Concepts importants à connaître d'abord
+Dans le tidyverse, il y a deux nouveaux concepts à connaître.
+
+1) Les *pipes* (`%&gt;%`, `|&gt;`) insèrent automatiquement le résultat précédent comme premier argument de la fonction suivante.
+
+
+``` r
+mean(1:5)
+```
+
+```
+#&gt; [1] 3
+```
+
+``` r
+1:5 |&gt; mean()
+```
+
+```
+#&gt; [1] 3
+```
+
+``` r
+1:5 %&gt;% mean()
+```
+
+```
+#&gt; [1] 3
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;dplyr&lt;/span&gt;
+    &lt;span&gt;Quand utiliser dplyr ?&lt;/span&gt;
+    &lt;span&gt;Concepts importants à connaître d'abord&lt;/span&gt;
+&lt;/div&gt;
+
+## Concepts importants à connaître d'abord
+
+2) L'évaluation des données (*data masking*)  
+Permet d'utiliser des variables directement à l'intérieur d'une table. Il n'est plus nécessaire d'indiquer le nom de la table (`ma_table$ma_variable`).
+
+``` r
+# Sans data masking (R de base)
+ma_table$poids / ma_table$taille^2
+
+# Avec data masking (tidyverse)
+mutate(ma_table, imc = poids / taille^2)
+
+# Avec data masking + pipes
+ma_table %&gt;% mutate(imc = poids / taille^2)
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;dplyr&lt;/span&gt;
+    &lt;span&gt;library(dplyr)&lt;/span&gt;
+&lt;/div&gt;
+
+## library(dplyr)
+
+
+``` r
+library(dplyr)
+```
+
+Ce message indique quelles sont les fonctions du *package* `dplyr` qui ont le même nom qu'une fonction d'un autre *package*.
+
+L’utilisation des fonctions `filter` et `lag` sont maintenant par défaut celles de `dplyr` plutôt que `stats`.  
+Même chose pour les fonctions `intersect`, `setdiff`, `setequal` et `union` qui proviennent du *package* `base` (R de base).
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;dplyr&lt;/span&gt;
+    &lt;span&gt;library(dplyr)&lt;/span&gt;
+    &lt;span&gt;Objets masqués&lt;/span&gt;
+&lt;/div&gt;
+
+### Objets masqués
+Pour utiliser une fonction (objet) qui a été masqué par l'appel d'une `library`, il faut utiliser la méthode `nom_package::nom_fonction()` sinon on aura une erreur, ou pire, un résultat qui n'est pas le bon.
+
+``` r
+x &lt;- 1:10
+stats::filter(x, rep(1, 3))
+```
+
+```
+#&gt; Time Series:
+#&gt; Start = 1 
+#&gt; End = 10 
+#&gt; Frequency = 1 
+#&gt;  [1] NA  6  9 12 15 18 21 24 27 NA
+```
+
+``` r
+# par défaut dplyr, dplyr::filter() où le premier argument doit
+# être un data.frame
+filter(x, rep(1, 3))
+```
+
+```
+#&gt; Error in `UseMethod()`:
+#&gt; ! pas de méthode pour 'filter' applicable pour un objet de classe "c('integer', 'numeric')"
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;dplyr&lt;/span&gt;
+    &lt;span&gt;select&lt;/span&gt;
+&lt;/div&gt;
+
+## select
+Sélection des colonnes nécessaires à l'analyse. S'il y a au moins une colonne qui n'est pas nécessaire dans votre code, `select` doit toujours être
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -13,7 +13,6 @@ output:
       countIncrementalSlides: false
     yolo: false
 ---
-class: center, middle
 
 <!-- CODE POUR TOUTES LES DIAPOS
 <style type="text/css">
@@ -100,6 +99,13 @@ fil_ariane <- function(...) {
 */
 ```
 
+# Objectif
+
+Cette formation a pour objectif de vous rendre autonomes dans votre apprentissage de R. Vous n'aurez pas à retenir toutes les fonctions ni toutes les syntaxes. L'important est surtout de comprendre les concepts fondamentaux, de savoir où chercher l'information et d'être capable de trouver et d'adapter des solutions à vos besoins.
+
+---
+class: center, middle
+
 # Les bases
 
 ---
@@ -108,7 +114,7 @@ fil_ariane("Les bases", "Commentaires")
 ```
 
 ## Commentaires
-Le symbole pour les commentaires est le dièse (`#`).
+Le symbole pour les commentaires est le carré (`#`).
 ```{r}
 # Ci-dessous est une addition :
 4 + 3
@@ -177,12 +183,11 @@ fil_ariane("Les bases", "Type de données")
 
 **Les entiers (`integer`)**
 ```{r}
-class(1:5)  # Vecteur de 1 à 5
 class(4)  # Un entier seul peut parfois être considéré numérique
 class(4L)  # Ajouter L précise à R qu'on veut un entier
 ```
 <br><br>
-Exemples : année, age, code d'identification numérique.
+Exemples : année, âge, code d'identification numérique.
 
 ---
 ```{r, echo=FALSE, results='asis'}
@@ -230,7 +235,7 @@ class('Bonjour')
 <br><br>
 Une chaîne de caractères se fait avec des guillemets simples&nbsp;(`''`) ou doubles&nbsp;(`""`). On doit utiliser une barre oblique inversée (`\`) lorsque le même guillemet est utilisé à l'intérieur de la chaîne de caractères (voir exemples 2 et 3).
 ```{r}
-character1 <- "Il y a un atelier aujoud'hui"
+character1 <- "Il y a un atelier aujourd'hui"
 character2 <- 'Il y a un atelier aujourd\'hui'
 character3 <- "Voici des guillemets doubles : \" \""
 character4 <- 'Voici des guillemets doubles : " "'
@@ -281,9 +286,7 @@ fil_ariane("Les bases", "Fonctions")
 ```{r}
 sqrt(25)
 round(pi, 2)
-c(1, 2, 4, NA)
-mean(c(1, 2, 4, NA))
-mean(c(1, 2, 4, NA), na.rm = TRUE)
+mean(c(1, 2, 4))
 ```
 
 ---
@@ -297,7 +300,7 @@ fil_ariane("Vecteurs", "Qu'est-ce qu'un vecteur")
 ```
 
 ## Qu'est-ce qu'un vecteur ?
-Liste d'éléments qui partagent tous exactement **le même type de données**. Les vecteurs servent à stocker des données, même pour une seule valeur.
+Liste d'éléments qui partagent tous exactement **le même type de données**.
 
 On crée un vecteur avec la fonction `c()` : *combine values into a vector*.
 ```{r}
@@ -310,7 +313,7 @@ logi_vec <- c(TRUE, FALSE, FALSE, NA)
 Une valeur unique est aussi un vecteur
 ```{r}
 length(c(1, 2, 3))
-length(1)
+length(c(1))
 ```
 
 ---
@@ -318,7 +321,7 @@ length(1)
 fil_ariane("Vecteurs", "Qu'est-ce qu'un vecteur")
 ```
 
-Puisqu'un vecteur contient un même type de données, il convertira les nombre en caractères au besoin
+Puisqu'un vecteur contient un même type de données, il convertira les nombres en caractères au besoin.
 
 ```{r}
 c(1, 2, "bonjour")
@@ -413,7 +416,7 @@ Liste des opérateurs de comparaison :
 - != : différent, n'est pas égal à
 
 <p style="margin-bottom:0;">
-À partir des vecteur `qte1` et `qte2`
+À partir des vecteurs `qte1` et `qte2`
 </p>
 .pull-left[
 ```{r}
@@ -534,6 +537,17 @@ Visuellement c'est du texte, mais voici comment R traite un *factor* :
 3. Cette astuce aide R à faire des calculs et des graphiques plus rapidement.
 
 ```{r}
+sexe <- factor(c("F", "M", "M", "F", "F"))
+```
+```{r, echo=FALSE}
+data.frame(
+  VALEUR = 1:2,
+  ETIQUETTE = c("F", "M")
+)
+```
+
+
+```{r}
 factor(c("a", "b", "c"), levels = c("a", "b"))
 ```
 Puisque `"c"` n'est pas une valeur de `levels`, le vecteur `c("a", "b", "c")` devient `c("a", "b", NA)`
@@ -545,7 +559,7 @@ fil_ariane("Vecteurs", "Trier un factor")
 
 ## Trier un *factor*
 
-Par défaut les *Levels* sont les valeurs unique en ordre alphabétique.
+Par défaut les *Levels* sont les valeurs uniques en ordre alphabétique.
 ```{r}
 factor(c("petit", "grand", "moyen", "petit", "grand"))
 ```
@@ -790,10 +804,12 @@ df[df$TERRITOIRE %in% c(3, 6), ]
 ```{r}
 df[df$TERRITOIRE == 3 | df$TERRITOIRE == 6, ]
 ```
+où la barre verticale (`|`) signifie `ou`/`or`.
 
 ```{r}
 df[df$TERRITOIRE %in% c(3, 6) & df$AGE > 30, ]
 ```
+La perluète (`&`) signifie `et`/`and`.
 
 ---
 ```{r, echo=FALSE, results="asis"}
@@ -945,8 +961,8 @@ ma_liste$FLEURS
 Les méthodes de sélection des colonnes sont les mêmes :
 ```{r}
 ma_liste$FLEURS$Sepal.Length
-ma_liste$FLEURS[["Sepal.Length"]]
-ma_liste$FLEURS[, 1]
+ma_liste[["FLEURS"]]$Sepal.Length
+ma_liste[["FLEURS"]][["Sepal.Length"]]
 ```
 
 ---
@@ -972,6 +988,8 @@ On installe un package avec la fonction `install.packages()`.
 install.packages("dplyr")
 ```
 
+En date du 8 septembre 2026, il y a 24 887 *packages* de disponibles sur le [CRAN](https://cran.r-project.org/web/packages/).
+
 ---
 ```{r, echo=FALSE, results="asis"}
 fil_ariane("Packages", "Utiliser un package")
@@ -987,7 +1005,7 @@ library(dplyr)
 La *library* est la bibliothèque et les *packages* sont des livres.<br>
 `library()` consiste à prendre un livre de la bibliothèque et le mettre sur son bureau afin de pouvoir l'utiliser.
 
-En pratique, les gens utilisent souvent *package* et *librairie* comme synonymes. Le terme technique important à retenir est **package**. Une librairie est plutôt l'endroit où les *packages* sont installés.
+En pratique, les gens utilisent souvent *package* et *librairy* comme synonymes. Le terme technique important à retenir est **package**. Une librairie est plutôt l'endroit où les *packages* sont installés.
 
 ---
 
