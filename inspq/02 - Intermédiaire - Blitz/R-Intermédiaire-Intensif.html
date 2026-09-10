@@ -4,7 +4,7 @@
     <title>R intermédiaire</title>
     <meta charset="utf-8" />
     <meta name="author" content="Guillaume Boucher" />
-    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.32/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
   </head>
@@ -103,13 +103,11 @@ class: center, middle, inverse, title-slide
 */
 &lt;/style&gt;
 
-# R Intermédiaire
+&lt;p align="center"&gt;
+&lt;img src="Au-Menu.png" width="95%"&gt;
+&lt;/p&gt;
 
-Contrôle du flux
-
-- Conditions
-- Fonctions
-- Boucles
+L'objectif est de découvrir *les ingrédients* essentiels pour automatiser ses analyses en R.
 
 ---
 class: center, middle
@@ -122,47 +120,47 @@ class: center, middle
     &lt;span&gt;Introduction&lt;/span&gt;
 &lt;/div&gt;
 
-## Utilité des conditions
+## Une condition
 Une condition permet à R de prendre une décision selon qu'une règle est vraie (`TRUE`) ou fausse (`FALSE`).
 
-Exemple :&lt;br&gt;
-Si l'âge est de 65 ans ou plus,&lt;br&gt;
-alors la personne est considéré comme un aîné.&lt;br&gt;
-Sinon,&lt;br&gt;
-elle n'est pas considéré comme un aîné.
-
-``` r
-age &lt;- 72
-if (age &gt;= 65) {
-  print("Aîné")
-} else {
-  print("Non aîné")
-}
-```
-
-```
-#&gt; [1] "Aîné"
-```
-
----
-&lt;div class="breadcrumb"&gt;
-    &lt;span&gt;Conditions&lt;/span&gt;
-    &lt;span&gt;Structure d'une condition&lt;/span&gt;
-&lt;/div&gt;
-
-## Structure d'une condition
-
+On utilise le mot-clé conditionnel `if` pour créer la condition (`si`) :
 
 ``` r
 if (condition) {
-  
   action si TRUE
-  
-} else {
-  
-  action si FALSE
-  
 }
+```
+On ajoute le mot-clé conditionnel `else` (`sinon`) pour ajouter une condition par défaut :
+
+``` r
+if (condition) {
+  action si TRUE
+} else {
+  action si FALSE
+}
+```
+Les conditions sont entre parenthèses `()` et les actions entre les accolades `{}`.
+
+---
+
+### Exemple
+Si j'ai plus de 65 ans&lt;br&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Je suis un aîné&lt;br&gt;
+Sinon&lt;br&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Je ne suis pas un aîné.
+
+
+``` r
+age &lt;- 45
+if (age &gt;= 65) {
+  print("Je suis un aîné")
+} else {
+  print("Je ne suis pas un aîné")
+}
+```
+
+```
+#&gt; [1] "Je ne suis pas un aîné"
 ```
 
 ---
@@ -172,7 +170,9 @@ if (condition) {
 &lt;/div&gt;
 
 ## Plusieurs conditions
-Lorsqu'il y a plusieurs conditions, la deuxième condition et les suivantes se font avec `else if`.
+Lorsqu'il y a plusieurs conditions, la deuxième condition et les suivantes se font avec les mots-clés `else if` (`sinon si`).
+
+Suis-je un aîné, un adulte ou un mineur ?
 
 ``` r
 age &lt;- 45
@@ -180,7 +180,7 @@ if (age &gt;= 65) {
   print("Aîné")
 } else if (age &gt;= 18) {
   print("Adulte")
-} else if (age &lt; 18) {
+} else if (age &lt; 18 &amp; age &gt;= 0) {
   print("Mineur")
 } else {
   print(NA)
@@ -198,7 +198,7 @@ if (age &gt;= 65) {
 &lt;/div&gt;
 
 ## Conditions dans une condition
-Les conditions peuvent s'imbriquer les unes dans les autres
+Les conditions peuvent s'imbriquer les unes dans les autres.
 
 ``` r
 if (note &gt;= 60) {
@@ -229,27 +229,69 @@ On utilise `ifelse()` pour appliquer une règle à toutes les valeurs d'un vecte
 
 ``` r
 age &lt;- c(72, 54, 22, 65, 18)
-ifelse(test = age &gt;= 65, yes = "Aîné", no = "Adulte")
+ifelse(
+  test = age &gt;= 65,  # condition
+  yes = "Aîné",  # valeur si vrai
+  no = "Adulte"  # valeur si faux / par défaut
+)
 ```
 
 ```
 #&gt; [1] "Aîné"   "Adulte" "Adulte" "Aîné"   "Adulte"
 ```
 
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Conditions&lt;/span&gt;
+    &lt;span&gt;Conditions sur un vecteur&lt;/span&gt;
+&lt;/div&gt;
+
+S'il y a plusieurs conditions :
 
 ``` r
 age &lt;- c(72, 54, 22, 65, 7)
 ifelse(
-  age &gt;= 65,
-  "Aîné",
-  ifelse(age &gt; 18,
-         "Adulte",
-         "Mineur")
+  age &gt;= 65,  # condition 1
+  "Aîné",  # valeur si condition 1 est vraie
+  ifelse(age &gt; 18,  # condition 2
+         "Adulte",  # valeur si condition 2 est vraie
+         "Mineur")  # valeur par défaut
 )
 ```
 
 ```
 #&gt; [1] "Aîné"   "Adulte" "Adulte" "Aîné"   "Mineur"
+```
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Conditions&lt;/span&gt;
+    &lt;span&gt;ifelse - solutions alternatives&lt;/span&gt;
+&lt;/div&gt;
+
+## ifelse - solutions alternatives
+Selon la documentation, les alternatives ci-dessous seraient plus performantes et corrigeraient certaines incohérences du `ifelse()` de base.
+
+### package dplyr
+
+``` r
+age &lt;- c(72, 54, 22, 65, 18)
+dplyr::if_else(age &gt;= 65, "Aîné", "Adulte")
+```
+
+```
+#&gt; [1] "Aîné"   "Adulte" "Adulte" "Aîné"   "Adulte"
+```
+
+### package vctrs
+
+``` r
+age &lt;- c(72, 54, 22, 65, 18)
+vctrs::vec_if_else(age &gt;= 65, "Aîné", "Adulte")
+```
+
+```
+#&gt; [1] "Aîné"   "Adulte" "Adulte" "Aîné"   "Adulte"
 ```
 
 ---
@@ -390,13 +432,14 @@ grp_age
 On commence par inscrire le nom de la fonction qu'on veut créer : `groupe_age`.
 
 ### Créer la fonction
-On crée un objet fonction de la même manière qu'un `vector`, une `list`, un `data.frame`...
+On crée un objet `fonction` avec le mot-clé `function`.
 
 ``` r
-groupe_age &lt;- function() {...}
+groupe_age &lt;- function()
 ```
 
 ---
+class: code90
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;Fonctions&lt;/span&gt;
     &lt;span&gt;Structure d'une fonction&lt;/span&gt;
@@ -406,20 +449,31 @@ groupe_age &lt;- function() {...}
 On inscrit les arguments à l'intérieur des parenthèses.
 
 ``` r
-groupe_age &lt;- function(argument1, argument2)
+groupe_age &lt;- function(argument1, argument2, ...)
 ```
-Une fonction peut ne pas avoir d'argument.
+
+### Corps de la fonction
+On insère le code que la fonction doit exécuter à l'intérieur des accolades :
 
 ``` r
-msg_bienvenue &lt;- function() {
+groupe_age &lt;- function(argument1, argument2) {
+  code à exécuter
+}
+```
+
+Exemple d'une fonction sans arguments :
+
+``` r
+msg_bienvenue &lt;- function() {  # fonction sans arguments
   paste("Aujourd'hui nous sommes le", Sys.Date())
 }
 msg_bienvenue()
 ```
 
 ```
-#&gt; [1] "Aujourd'hui nous sommes le 2026-09-04"
+#&gt; [1] "Aujourd'hui nous sommes le 2026-09-09"
 ```
+
 
 ---
 &lt;div class="breadcrumb"&gt;
@@ -489,7 +543,7 @@ median(1:4, FALSE)
 #&gt; [1] 2.5
 ```
 
-Au contraire, il est nécessaire de nommer les arguments lorsque l'ordre n'est pas respecté.
+Au contraire, il est nécessaire de les nommer lorsque l'ordre n'est pas respecté.
 
 ``` r
 median(na.rm = FALSE, x = 1:4)
@@ -502,11 +556,12 @@ median(na.rm = FALSE, x = 1:4)
 ---
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;Fonctions&lt;/span&gt;
-    &lt;span&gt;Corps de la fonction&lt;/span&gt;
+    &lt;span&gt;Construire une fonction&lt;/span&gt;
 &lt;/div&gt;
 
-## Corps de la fonction
-Exemple où on veut calculer l'indice de masse corporelle (IMC) :
+## Construire une fonction
+Voici un exemple de comment construire une fonction à partir de son code.  
+On veut calculer l'indice de masse corporel.
 
 ``` r
 poids &lt;- 80  # kg
@@ -518,19 +573,54 @@ poids / taille ^ 2
 #&gt; [1] 26.12245
 ```
 
-Les variables `poids` et `taille` sont les arguments de la fonction
+On décide que le nom de la fonction est `calcul_imc` :
 
 ``` r
-imc &lt;- function(poids, taille) {...}
+calcul_imc &lt;- function() {
+  
+}
 ```
 
-et le calcul de la variable `imc_val` est le corps de la fonction, les instructions à exécuter.
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Fonctions&lt;/span&gt;
+    &lt;span&gt;Construire une fonction&lt;/span&gt;
+&lt;/div&gt;
+
+Quels seraient les arguments ?
 
 ``` r
-imc &lt;- function(poids, taille) {
+poids &lt;- 80
+taille &lt;- 1.75
+poids / taille ^ 2
+```
+
+--
+
+Les arguments sont le `poids` et la `taille`
+
+``` r
+calcul_imc &lt;- function(poids, taille) {
+  
+}
+```
+
+--
+
+Il reste à inclure le code à exécuter
+
+``` r
+calcul_imc &lt;- function(poids, taille) {
   poids / taille ^ 2
 }
-imc(poids = 80, taille = 1.75)
+```
+
+--
+
+Si mon poids est de 80 kg et ma taille est de 1,75 mètres, mon IMC serait de
+
+``` r
+calcul_imc(80, 1.75)
 ```
 
 ```
@@ -540,7 +630,13 @@ imc(poids = 80, taille = 1.75)
 ---
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;Fonctions&lt;/span&gt;
-    &lt;span&gt;Valeur retournée&lt;/span&gt;
+    &lt;span&gt;Corps de la fonction&lt;/span&gt;
+&lt;/div&gt;
+
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;Fonctions&lt;/span&gt;
+    &lt;span&gt;Retour d'une fonction&lt;/span&gt;
 &lt;/div&gt;
 
 ## Retour d'une fonction
@@ -549,18 +645,18 @@ R accepte deux styles pour retourner la valeur d'une fonction :
 1. Retour implicite : la dernière ligne de code.
 
 ``` r
-imc &lt;- function(poids, taille) {
+calcul_imc &lt;- function(poids, taille) {
   poids / taille ^ 2
 }
 ```
 2. Retour explicite : utiliser `return()`.
 
 ``` r
-imc &lt;- function(poids, taille) {
+calcul_imc &lt;- function(poids, taille) {
   return(poids / taille ^ 2)
 }
 
-imc &lt;- function(poids, taille) {
+calcul_imc &lt;- function(poids, taille) {
   imc_val &lt;- poids / taille ^ 2
   return(imc_val)
 }
@@ -582,8 +678,8 @@ Une boucle permet de répéter un même bloc de code plusieurs fois de suite.
 
 Analogie simple :
 
-- Sans boucle, on dit : *Bonjour A*, *bonjour B*, *bonjour C*, ..., *bonjour Z*.
-- Avec une boucle, on dit : *Pour chaque personne dans la liste, dire bonjour*.
+- Sans boucle, on dit : *Bonjour A*, *bonjour B*, *bonjour C*, ...
+- Avec une boucle, on dit : *Pour chaque personne dans la liste, dit bonjour*.
 
 ---
 class: code85
@@ -634,12 +730,12 @@ print(i)
 .pull-right[
 
 ``` r
-i &lt;- "a"
-print(i)
-i &lt;- "b"
-print(i)
-i &lt;- "c"
-print(i)
+lettre &lt;- "a"
+print(lettre)
+lettre &lt;- "b"
+print(lettre)
+lettre &lt;- "c"
+print(lettre)
 ```
 ]
 
@@ -650,7 +746,8 @@ print(i)
 &lt;/div&gt;
 
 ## While
-Utile quand on ne sait pas combien de tours il faut faire, mais on sait **quand** on doit arrêter.
+Utile quand on ne sait pas combien de tours il faut faire, mais on sait **quand** on doit arrêter.&lt;br&gt;
+On ne connait pas la valeur de `x`, mais on sait qu'après 5 on veut arrêter.
 
 
 ``` r
@@ -713,37 +810,50 @@ lapply(x, mean)
 ```
 
 ---
+class: code85
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;Boucles&lt;/span&gt;
     &lt;span&gt;lapply&lt;/span&gt;
 &lt;/div&gt;
 
-Exemple avec une fonction personnalisée :
 
 ``` r
-# Prendre note que 1:5 est un vecteur comparativement à l'exemple
-# précédent qui était une liste.
-lapply(1:5, function(x) {
-  x^2 + 4
+# Exemple de ifelse dans les diapos précédentes
+age &lt;- c(72, 54, 22, 65, 18)
+ifelse(
+  test = age &gt;= 65,  # condition
+  yes = "Aîné",  # valeur si vrai
+  no = "Adulte"  # valeur si faux / par défaut
+)
+```
+
+``` r
+lapply(age, function(x) {
+  if (x &gt;= 65) {
+    return("Aîné")
+  } else {
+    return("Adulte")
+  }
 })
 ```
 
 ```
 #&gt; [[1]]
-#&gt; [1] 5
+#&gt; [1] "Aîné"
 #&gt; 
 #&gt; [[2]]
-#&gt; [1] 8
+#&gt; [1] "Adulte"
 #&gt; 
 #&gt; [[3]]
-#&gt; [1] 13
+#&gt; [1] "Adulte"
 #&gt; 
 #&gt; [[4]]
-#&gt; [1] 20
+#&gt; [1] "Aîné"
 #&gt; 
 #&gt; [[5]]
-#&gt; [1] 29
+#&gt; [1] "Adulte"
 ```
+
 
 ---
 &lt;div class="breadcrumb"&gt;

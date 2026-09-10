@@ -286,7 +286,9 @@ fil_ariane("Les bases", "Fonctions")
 ```{r}
 sqrt(25)
 round(pi, 2)
-mean(c(1, 2, 4))
+mean(1:5)
+min(1:5)
+max(1:5)
 ```
 
 ---
@@ -661,7 +663,7 @@ fil_ariane("data.frame", "Fonctions de base")
 View(df)
 ```
 
-`head()` et `tail()` pour voir premières ou dernières lignes d'une table.
+`head()` et `tail()` pour voir les premières ou les dernières lignes d'une table.
 ```{r}
 head(df, n = 2)  # par défaut n=6 : head(df) = head(df, n = 6)
 tail(df, n = 2)
@@ -988,7 +990,7 @@ On installe un package avec la fonction `install.packages()`.
 install.packages("dplyr")
 ```
 
-En date du 8 septembre 2026, il y a 24 887 *packages* de disponibles sur le [CRAN](https://cran.r-project.org/web/packages/).
+En date du 8 septembre 2026, il y a 24 894 *packages* de disponibles sur le [CRAN](https://cran.r-project.org/web/packages/).
 
 ---
 ```{r, echo=FALSE, results="asis"}

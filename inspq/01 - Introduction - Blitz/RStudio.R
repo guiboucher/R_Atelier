@@ -2,7 +2,7 @@
 # R vs RStudio ? ------------------------------------------------------------------------------
 # R est le moteur alors que RStudio est la carrosserie de la voiture.
 # On pourrait remplacer RStudio par VSCode ou Positron, mais R n'est pas remplaçable.
-# Je préfère
+
 
 # Ouverture de RStudio ------------------------------------------------------------------------
 
@@ -65,6 +65,7 @@ DT::datatable(iris)
 
 # Code ----------------------------------------------------------------------------------------
 
+
 ## Insert Section ####
 # Ajoute une section qui se retrouve dans le menu de navigation (icone en haut à droite du volet).
 # Une section est créée de la manière suivante :
@@ -77,10 +78,10 @@ DT::datatable(iris)
 
 ## Commenter un bloc de code ####
 # CTRL + MAJ + C
-df <- data.frame(
-  NOM = paste(prenom, nom),
-  AGE = age
-)
+# df <- data.frame(
+#   NOM = paste(prenom, nom),
+#   AGE = age
+# )
 
 ## Source ####
 # Exécuter un script au complet
