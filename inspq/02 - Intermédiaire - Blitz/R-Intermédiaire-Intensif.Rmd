@@ -112,10 +112,10 @@ class: center, middle
 
 ---
 ```{r, echo=FALSE, results='asis'}
-fil_ariane("Conditions", "Introduction")
+fil_ariane("Conditions", "Qu'est-ce qu'une condition")
 ```
 
-## Une condition
+## Qu'est-ce qu'une condition
 Une condition permet à R de prendre une décision selon qu'une règle est vraie (`TRUE`) ou fausse (`FALSE`).
 
 On utilise le mot-clé conditionnel `if` pour créer la condition (`si`) :
@@ -137,7 +137,7 @@ Les conditions sont entre parenthèses `()` et les actions entre les accolades `
 ---
 
 ### Exemple
-Si j'ai plus de 65 ans<br>
+Si j'ai 65 ans ou plus<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Je suis un aîné<br>
 Sinon<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Je ne suis pas un aîné.
@@ -164,12 +164,12 @@ Suis-je un aîné, un adulte ou un mineur ?
 age <- 45
 if (age >= 65) {
   print("Aîné")
-} else if (age >= 18) {
+} else if (age >= 18) {  # < 65 géré par le premier si
   print("Adulte")
 } else if (age < 18 & age >= 0) {
   print("Mineur")
 } else {
-  print(NA)
+  print(NA) # utile pour trouver des erreur (âge négatif)
 }
 ```
 
@@ -394,8 +394,10 @@ msg_bienvenue()
 
 ---
 ```{r, echo=FALSE, results='asis'}
-fil_ariane("Fonctions", "Structure d'une fonction", "Arguments")
+fil_ariane("Fonctions", "Position et valeur des arguments")
 ```
+
+## Position et valeur des arguments
 
 Prenons par exemple la fonction `median` :
 ```{r}
@@ -487,12 +489,7 @@ calcul_imc <- function(poids, taille) {
 
 Si mon poids est de 80 kg et ma taille est de 1,75 mètres, mon IMC serait de
 ```{r}
-calcul_imc(80, 1.75)
-```
-
----
-```{r, echo=FALSE, results='asis'}
-fil_ariane("Fonctions", "Corps de la fonction")
+calcul_imc(poids = 80, taille = 1.75)
 ```
 
 ---
@@ -588,7 +585,8 @@ fil_ariane("Boucles", "While")
 
 ## While
 Utile quand on ne sait pas combien de tours il faut faire, mais on sait **quand** on doit arrêter.<br>
-On ne connait pas la valeur de `x`, mais on sait qu'après 5 on veut arrêter.
+
+Exemple où on ne connait pas la valeur de `x`, mais on sait que si `x` est plus grand que 5 on doit arrêter.
 ```{r, echo=FALSE}
 x <- 2
 ```
@@ -609,8 +607,8 @@ C'est une fonction en R qui répète une même action sur chaque élément et re
 ```{r}
 args(lapply)
 ```
-- `X` : a vector (atomic or list) or an expression object. Other objects (including classed objects) will be coerced by base::as.list.
-- `FUN` : the function to be applied to each element of X: see ‘Details’. In the case of functions like +, %*%, the function name must be backquoted or quoted.
+- `X` : *a vector (atomic or list) or an expression object. Other objects (including classed objects) will be coerced by base::as.list.*
+- `FUN` : *the function to be applied to each element of X: see ‘Details’. In the case of functions like +, %*%, the function name must be backquoted or quoted.*
 
 ---
 ```{r, echo=FALSE, results='asis'}

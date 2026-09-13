@@ -28,18 +28,15 @@ user_total <- bind_rows(user2021, user2022, user2023, user2024, user2025)
 
 
 
+# Boucle FOR ----------------------------------------------------------------------------------
 
-
-
-
-# Prochaine étape, mon directeur demande de faire la même chose, mais depuis 1996...
-# Deux options s'offrent à nous :
-# 1) Démissionner
-# 2) Boucles
-
-
-
-
-
-
-
+an_analyse <- 2021:2025
+user_total <- vector("list", length(an_analyse))
+for (i in 1:length(an_analyse)) {
+  user_total[[i]] <- read_csv2(
+    paste0("inspq/02 - Intermédiaire - Blitz/data/user_", an_analyse[[i]], ".csv"),
+    show_col_types = FALSE
+  )
+  user_total[[i]] <- user_total[[i]] %>% mutate(ANNEE = an_analyse[[i]])
+}
+user_total <- bind_rows(user_total)

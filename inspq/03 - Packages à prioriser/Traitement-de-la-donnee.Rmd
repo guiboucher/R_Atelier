@@ -1,0 +1,709 @@
+---
+title: "Packages à prioriser"
+subtitle: "Atelier intensif"
+author: "Guillaume Boucher"
+institute: "INSPQ"
+date: "Le 15 septembre 2026"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    yolo: false
+---
+class: code85
+
+<!-- CODE POUR TOUTES LES DIAPOS
+<style type="text/css">
+.remark-slide-content {
+  font-size: 15px;
+}
+</style>
+-->
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      comment = "#>")
+library(data.table)
+load("C:/Users/bougui01/Desktop/Mes Outils/R_Atelier/inspq/03 - Packages à prioriser/data_sample_rx.rda")
+setkey(cohort_rx_dx, NULL)
+
+fil_ariane <- function(...) {
+  sections <- c(...)
+  cat('<div class="breadcrumb">\n')
+  for (i in 1:length(sections)) {
+    cat('    <span>',sections[i],'</span>\n',
+        sep = "")
+  }
+  cat('</div>')
+}
+```
+```{css, echo=FALSE}
+/* Fil d'ariane */
+.breadcrumb {
+  position: absolute;
+  bottom: 10px;
+  left: 60px;
+  font-size: 12px;
+  color: #777;
+}
+.breadcrumb span + span:before {
+  content: " > ";
+  padding: 0 5px;
+  color: #ccc;
+}
+
+
+/* Taille du texte ou du code */
+.textfont15 {font-size: 15px}
+.textfont16 {font-size: 16px}
+.textfont17 {font-size: 17px}
+.textfont18 {font-size: 18px}
+.textfont19 {font-size: 19px}
+.textfont20 {font-size: 20px}
+.code70 .remark-code {font-size: 70%}
+.code75 .remark-code {font-size: 75%}
+.code80 .remark-code {font-size: 80%}
+.code85 .remark-code {font-size: 85%}
+.code88 .remark-code {font-size: 88%}
+.code90 .remark-code {font-size: 90%} /* Par défaut */
+.code95 .remark-code {font-size: 95%}
+
+
+/* *** EXEMPLES ***
+.my-style {
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.5em;
+  color: red;
+}
+.foobar code.r {
+  font-weight: bold;
+}
+.foobar code[class="remark-code"] {
+  display: block;
+  border: 1px solid red;
+}
+.remark-slide-content {
+  font-size: 28px;
+  padding: 20px 80px 20px 80px;
+}
+.remark-code, .remark-inline-code {
+  background: #f0f0f0;
+}
+.remark-code {
+  font-size: 24px;
+}
+.huge .remark-code {
+  font-size: 200% !important;
+}
+.tiny .remark-code {
+  font-size: 50% !important;
+}
+*/
+```
+
+# Tidyverse
+
+Les *packages* qui seront présentés font partis du [tidyverse](https://tidyverse.org/), un **ensemble de packages** R conçu pour la science des données.
+
+Le *tidyverse* s'installe et se charge de la même manière qu'un *package* normal.
+```{r, eval=FALSE}
+install.packages("tidyverse")  # installation
+library(tidyverse)             # chargement
+```
+Puisque `library(tidyverse)` charge un ensemble de *packages*, on suggère d'appeler uniquement le ou les *packages* utilisés, surtout si vous avez des enjeux d'espaces mémoires.  
+Exécuter `library(tidyverse)` est équivalent à
+```{r, eval=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(purrr)
+library(tibble)
+library(stringr)
+library(forcats)
+library(lubridate)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Tidyverse", "Concepts importants à connaître d'abord")
+```
+
+## Concepts importants à connaître d'abord
+Dans le tidyverse, il y a deux nouveaux concepts à connaître.
+
+1) Les *pipes* (`%>%`, `|>`) insèrent automatiquement le résultat précédent comme premier argument de la fonction suivante.
+```{r, echo=FALSE}
+`%>%` <- dplyr::`%>%`
+```
+```{r}
+mean(1:5)
+1:5 |> mean()
+1:5 %>% mean()
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Tidyverse", "Concepts importants à connaître d'abord")
+```
+
+## Concepts importants à connaître d'abord
+
+2) L'évaluation des données (*data masking*)  
+Permet d'utiliser des variables directement à l'intérieur d'une table. Il n'est plus nécessaire d'indiquer le nom de la table (`ma_table$ma_variable`).
+
+Pour calculer l'IMC :
+```{r, eval=FALSE}
+# Sans data masking (R de base)
+ma_table$imc <- ma_table$poids / ma_table$taille^2
+
+# Avec data masking (tidyverse)
+mutate(ma_table, imc = poids / taille^2)
+
+# Avec data masking + pipes
+ma_table %>% mutate(imc = poids / taille^2)
+```
+
+---
+class: code75
+```{r, echo=FALSE, results="asis"}
+fil_ariane("Table pour exemples")
+```
+# Table pour exemples
+```{r}
+cohort_rx_dx
+```
+<br>
+Prendre note que le nombre de lignes des tables affichées sera parfois deux, parfois six et d'autres fois plus. C'est uniquement une question d'espace disponible dans les diapositives.
+
+---
+class: center, middle
+
+# dplyr
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "Quand utiliser dplyr ?")
+```
+
+
+## Quand utiliser dplyr ?
+
+- Aussitôt que vous êtes dans un `data.frame`
+  + Pour manipuler et transformer **le contenu** d'un tableau.
+  + Lorsque les données ont la bonne forme, mais qu'on veut extraire des informations ou faire des calculs.
+- Filtrer, sélectionner, créer des colonnes, grouper, calculer des moyennes, trier...
+
+Les principales fonctions sont :
+- `select()` pour la sélection des variables (colonnes);
+- `filter()` pour la sélection des observations (lignes);
+- `mutate()` pour l'ajout ou la modification de variables;
+- `group_by()` pour effectuer une opération *par groupe*;
+- `summarise()` pour des statistiques résumées;
+- `arrange()` pour trier les données.
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "Utiliser dplyr")
+```
+
+## Utiliser dplyr
+
+```{r}
+library(dplyr)
+```
+
+Ce message indique quelles sont les fonctions du *package* `dplyr` qui ont le même nom qu'une fonction d'un autre *package*.
+
+L’utilisation des fonctions `filter` et `lag` sont maintenant par défaut celles de `dplyr` plutôt que `stats`.  
+Même chose pour les fonctions `intersect`, `setdiff`, `setequal` et `union` qui proviennent du *package* `base` (R de base).
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "Utiliser dplyr", "Objets masqués")
+```
+
+### Objets masqués
+L'ordre dans lequel les *packages* sont appelés a un impact sur quel objet est masqué par quoi. Il est préférable de charger les *packages* au début de son code pour éviter l'erreur ci-dessous :
+```{r, eval=FALSE}
+x <- 1:10
+filter(x, rep(1, 3))  # par défaut stats::filter()
+library(dplyr)
+filter(x, rep(1, 6))  # maintenant par défaut dplyr::filter()
+```
+> Erreur dans UseMethod("filter") :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pas de méthode pour 'filter' applicable pour un objet de classe<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"c('integer', 'numeric')"
+
+Le message d'erreur indique qu'on a essayé d'utiliser `filter()` sur un objet numérique alors que la fonction s'attend à recevoir un tableau.
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "Utiliser dplyr", "Objets masqués", "Note technique : les méthodes")
+```
+
+#### Note technique : les méthodes
+
+Exemple avec la fonction `print()` :
+```{r, eval=FALSE}
+print()  # fonction générique
+print.data.frame()  # Affichage des tableaux de données
+print.Date()  # Affichage des dates
+```
+
+Pour connaître toutes les méthodes d'une fonction :
+```{r}
+methods(print)[1:10]
+length(methods(print))
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select")
+```
+
+## select
+
+On utilise `select(.data, ...)` pour choisir ou exclure certaines colonnes.
+
+### Arguments
+
+- **`.data`** : Un `data.frame` ou tout ce qui en découle. Voir `tibble`, `lazy data.frame`, `data.table`...
+- **`...`** : 
+
+---
+class: code80
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select", "Sélection simple")
+```
+
+### Sélection simple
+```{r, eval=FALSE}
+select(cohort_rx_dx, id, code, start, duration) # prescriptions des ids
+```
+```{r, echo=FALSE}
+head(select(cohort_rx_dx, id, code, start, duration), 3)
+```
+
+```{r, eval=FALSE}
+# Cette méthode sera priorisée dans les prochains exemples
+cohort_rx_dx %>% select(id, code, start, duration)
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(id, code, start, duration), 3)
+```
+
+```{r}
+# Enregistrer le résultat dans l'objet "rx".
+# Cette table sera utilisée pour des exemples plus tard
+rx <- cohort_rx_dx %>% select(id, code, start, duration)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select", "Exclusion")
+```
+
+### Exclusion
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(-dx1, -dx2, -dx3)
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(-dx1, -dx2, -dx3))
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select", "Commence par")
+```
+
+### Commence par
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(id, code, start, starts_with("dx"))
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(id, code, start, starts_with("dx")) %>% filter(!is.na(dx1)))
+```
+<br>
+Voir aussi `ends_with()`.
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select", "Contient")
+```
+
+### Contient
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(contains("is"))
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(contains("is")))
+```
+
+---
+class: code80
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select", "Tout le reste")
+```
+
+### Tout le reste
+
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(id, sexe, naiss, rls, everything())
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(id, sexe, naiss, rls, everything()))
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select", "Selon type")
+```
+
+### Selon type
+
+Numériques
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(where(is.numeric))
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(where(is.numeric)), 2)
+```
+
+Caractères
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(where(is.character))
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(where(is.character)), 2)
+```
+<br>
+Voir aussi `is.factor`, `is.logical`, `is.Date`...
+
+---
+class: code80
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "select", "any_of / all_of")
+```
+
+### any_of / all_of
+
+```{r}
+cols <- c("id", "sexe", "age", "rls", "code_postal")
+```
+
+`any_of` ignore les colonnes absentes
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(any_of(cols))
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(any_of(cols)), n = 2)
+```
+
+`all_of` s'assure que toutes les colonnes sont présentes en indiquant un message d'erreur si ce n'est pas le cas.
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(all_of(cols))
+```
+```{r, echo=FALSE, error=TRUE}
+cohort_rx_dx %>% select(all_of(cols))
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "filter")
+```
+
+## filter
+On utilise `filter(.data, ...)` pour conserver les lignes et `filter_out(.data, ...)` pour les exclure.
+
+Quelques exemples à utiliser dans `filter()` ou `filter_out()` :
+.pull-left[
+```{r, eval=FALSE}
+<    # plus petit que
+>    # plus grand que
+==   # égal à
+%in% # égal à plusieurs valeurs
+
+&    # et
+!    # contraire de
+
+is.na()  # est valeur manquante
+```
+]
+.pull-right[
+```{r, eval=FALSE}
+<=  # plus petit ou égal à
+>=  # plus grand ou égal à
+!=  # n'est pas égal à
+
+  
+|   # ou
+
+
+between(x, y, z)  # [y, z] de x
+```
+]
+
+---
+class: code85
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "filter", "Condition simple")
+```
+
+### Condition simple
+
+Toutes les prescriptions avec une durée (ou une quantité) de 30 jours.
+```{r, eval=FALSE}
+cohort_rx_dx %>% select(id, sexe, naiss, code, duration) %>%
+  filter(duration == 30)
+```
+```{r, echo=FALSE}
+cohort_rx_dx %>% select(id, sexe, naiss, code, duration) %>%
+  filter(duration == 30)
+```
+
+---
+class: code80
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "filter", "Plusieurs conditions")
+```
+
+### Plusieurs conditions
+
+1) Toutes les prescriptions avec une durée (ou une quantité) de 30 jours.
+2) Exclure les RLS 1001, 1701 et 1801.
+3) Au moins un diagnostique (`dx1` a une valeur).
+```{r, eval=FALSE}
+# Séparer par des virgules = ET / AND
+cohort_rx_dx %>% select(id, sexe, rls, code, duration, dx1) %>%
+  filter(duration == 30, !rls %in% c("1001", "1701", "1801"), !is.na(dx1))
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(id, sexe, rls, code, duration, dx1) %>%
+  filter(duration == 30, !rls %in% c("1001", "1701", "1801"), !is.na(dx1)),
+  2)
+```
+
+```{r, eval=FALSE}
+# Avec le symbole & = ET / AND
+cohort_rx_dx %>% select(id, sexe, rls, code, duration, dx1) %>%
+  filter(duration == 30 & !rls %in% c("1001", "1701", "1801") & !is.na(dx1))
+```
+```{r, echo=FALSE}
+head(cohort_rx_dx %>% select(id, sexe, rls, code, duration, dx1) %>%
+  filter(duration == 30 & !rls %in% c("1001", "1701", "1801") & !is.na(dx1)),
+  2)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "mutate")
+```
+
+## mutate
+On utilise `mutate(.data, ...)` pour créer ou modifier des colonnes.
+
+### Créer une colonne
+Indiquer la fin théorique de la prescription.
+```{r, eval=FALSE}
+rx %>% mutate(end = start + duration - 1)
+```
+```{r, echo=FALSE}
+head(rx %>% mutate(end = start + duration - 1), 3)
+```
+
+Pour sauvegarder les résultats (modifier `rx`)
+```{r}
+rx <- rx %>% mutate(end = start + duration - 1)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "mutate", "Créer plusieurs colonnes")
+```
+
+### Créer plusieurs colonnes
+```{r, eval=FALSE}
+rx <- rx %>%
+  mutate(end = start + duration - 1,
+         qte_desc = case_when(
+           duration == 1   ~ "unique",
+           duration == 30  ~ "mensuel",
+           duration == 90  ~ "trimestriel",
+           is.na(duration) ~ NA,
+           
+           .default = "autre"
+         ))
+rx
+```
+```{r, echo=FALSE}
+rx <- rx %>%
+  mutate(end = start + duration - 1,
+         qte_desc = case_when(
+           duration == 1   ~ "unique",
+           duration == 30  ~ "mensuel",
+           duration == 90  ~ "trimestriel",
+           is.na(duration) ~ NA,
+           
+           .default = "autre"
+         ))
+rx[c(1, 3, 6, 10, 17416)]
+rx <- rx %>% select(-end, -qte_desc)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "group_by")
+```
+
+## group_by
+On utilise `group_by(.data, ...)` pour faire une analyse pour chaque groupe.
+
+Supposons qu'on voudrait calculer le nombre de jours qu'un individu s'est fait prescrire un médicament.
+
+Sans `group_by`
+```{r}
+rx[c(1:3, 298:300), c("id", "duration")] %>%
+  mutate(cumulatif = cumsum(duration))
+```
+Les 32 jours du `id 1` s'ajoute aux premiers 45 jours du `id 2`.
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "group_by")
+```
+
+Avec `group_by`
+```{r, eval=FALSE}
+rx[c(1:3, 298:300), c("id", "duration")] %>%
+  group_by(id) %>%
+  mutate(cumulatif = cumsum(duration))
+```
+```{r, echo=FALSE}
+rx[c(1:3, 298:300), c("id", "duration")] %>%
+  group_by(id) %>%
+  mutate(cumulatif = cumsum(duration)) %>%
+  as.data.table()
+```
+
+Dès qu'on arrive au `id 2`, la somme cumulative recommence.
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "group_by", "ungroup")
+```
+
+### ungroup
+
+On utilise `ungroup` pour supprimer un `group_by` qui précède.
+```{r}
+rx[c(1:3, 298:300)] %>%
+  select(id, start, duration) %>%
+  group_by(id) %>%
+  mutate(cumulatif = cumsum(duration),
+         min_start_id = min(start)) %>%  # date min par id
+  ungroup() %>%
+  mutate(min_start_tout = min(start))  # date min pour tout
+```
+
+---
+class: code85
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "summarise / summarize")
+```
+
+## summarise / summarize
+On utilise `summarise(.data, ..., .by = NULL)` (ou `summarize()`) pour créer les statistiques.
+```{r, eval=FALSE}
+rx %>%
+  filter(!is.na(duration)) %>%
+  mutate(annee = lubridate::year(start)) %>%
+  summarize(MIN = min(duration),
+            Q1 = round(quantile(duration, 0.25), 1),
+            MOY = round(mean(duration), 1),
+            MEDIAN = median(duration),
+            Q3 = round(quantile(duration, 0.75), 1),
+            MAX = max(duration),
+            N = n(),
+            
+            .by = c("code", "annee"))
+```
+```{r, echo=FALSE}
+head(
+rx %>%
+  filter(!is.na(duration)) %>%
+  mutate(annee = lubridate::year(start)) %>%
+  summarize(MIN = min(duration),
+            Q1 = round(quantile(duration, 0.25), 1),
+            MOY = round(mean(duration), 1),
+            MEDIAN = median(duration),
+            Q3 = round(quantile(duration, 0.75), 1),
+            MAX = max(duration),
+            N = n(),
+            
+            .by = c("code", "annee"))
+)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "arrange")
+```
+
+## arrange
+On utilise `arrange(.data, ..., .by_group = FALSE)` pour trier les données dans l'ordre souhaité. Par défaut, les données sont triées en ordre croissant. On utilise `desc()` pour trier par ordre décroissant.
+```{r}
+rx %>% arrange(id, code, desc(start))
+```
+
+---
+
+Après un `summarize()` :
+```{r, eval=FALSE}
+rx %>%
+  filter(!is.na(duration)) %>%
+  mutate(annee = lubridate::year(start)) %>%
+  summarize(MIN = min(duration),
+            Q1 = round(quantile(duration, 0.25), 1),
+            MOY = round(mean(duration), 1),
+            MEDIAN = median(duration),
+            Q3 = round(quantile(duration, 0.75), 1),
+            MAX = max(duration),
+            N = n(),
+            
+            .by = c("code", "annee")) %>%
+  arrange(code, annee)
+```
+```{r, echo=FALSE}
+head(
+rx %>%
+  filter(!is.na(duration)) %>%
+  mutate(annee = lubridate::year(start)) %>%
+  summarize(MIN = min(duration),
+            Q1 = round(quantile(duration, 0.25), 1),
+            MOY = round(mean(duration), 1),
+            MEDIAN = median(duration),
+            Q3 = round(quantile(duration, 0.75), 1),
+            MAX = max(duration),
+            N = n(),
+            
+            .by = c("code", "annee")) %>%
+  arrange(code, annee)
+)
+```
+
+
+
+
+
+
+
+---
+
+## Notes
+
+- vignettes
+- doc-case_when
