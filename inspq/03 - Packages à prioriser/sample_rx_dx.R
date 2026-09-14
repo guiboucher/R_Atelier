@@ -9,17 +9,15 @@ cohort[, sexe := sample(c("M", "F"), nrow(cohort), TRUE)]
 cohort[, rls := sample(dim_rls$CODE, nrow(cohort), TRUE)]
 cohort[, naiss := as.Date(sample(as.Date("1960-01-01"):as.Date("1990-12-31"), nrow(cohort), TRUE))]
 
-cohort_rx <- cohort[rx, on = .(id)]
-
 set.seed(42)
 dx <- vector("list", length(cohort$id))
 for (i in cohort$id) {
   exec <- sample(0:1, 1, prob = c(0.2, 0.8))
   if (exec) {
     ndx <- sample(1:10, 1)
-    dx[[i]] <- data.table(id = i,
-                          start = as.Date(sample(as.Date("2000-01-01"):as.Date("2001-12-31"), ndx)),
-                          dx1 = sample(LETTERS[1:10], ndx, replace = TRUE))
+    dx[[i]] <- cohort[id == i, .(id)][rep(1, ndx)]
+    dx[[i]][, start := as.Date(sample(as.Date("2000-01-01"):as.Date("2001-12-31"), ndx))]
+    dx[[i]][, dx1 := sample(LETTERS[1:10], ndx, replace = TRUE)]
     dx[[i]][, dx2 := sample(c(LETTERS[1:10], NA), ndx, replace = TRUE, prob = c(rep(0.5/10, 10), 0.5))]
     dx[[i]][
       !is.na(dx2),
@@ -37,10 +35,10 @@ for (i in cohort$id) {
 }
 dx <- rbindlist(dx)
 
-setkey(cohort_rx, id, start)
+setkey(rx, id, start)
 setkey(dx, id, start)
-cohort_rx_dx <- merge(cohort_rx, dx, all = TRUE)
+rx_dx <- merge(rx, dx, all = TRUE)
+cohort_rx_dx <- unique(cohort[rx_dx, on = .(id)])
 
 setkey(cohort_rx_dx, id, start)
-
 save(cohort_rx_dx, file = "inspq/03 - Packages à prioriser/data_sample_rx.rda")

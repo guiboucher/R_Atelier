@@ -28,6 +28,8 @@ knitr::opts_chunk$set(echo = TRUE,
 library(data.table)
 load("C:/Users/bougui01/Desktop/Mes Outils/R_Atelier/inspq/03 - Packages à prioriser/data_sample_rx.rda")
 setkey(cohort_rx_dx, NULL)
+load("C:/Users/bougui01/Desktop/Mes Outils/Rinspq/data/dim_rls.rda")
+setkey(dim_rls, NULL)
 
 fil_ariane <- function(...) {
   sections <- c(...)
@@ -185,10 +187,10 @@ class: center, middle
 # dplyr
 
 ---
+class: textfont18
 ```{r, echo=FALSE, results="asis"}
 fil_ariane("dplyr", "Quand utiliser dplyr ?")
 ```
-
 
 ## Quand utiliser dplyr ?
 
@@ -204,6 +206,14 @@ Les principales fonctions sont :
 - `group_by()` pour effectuer une opération *par groupe*;
 - `summarise()` pour des statistiques résumées;
 - `arrange()` pour trier les données.
+
+<br>
+La page officielle est disponible [ici](https://dplyr.tidyverse.org/).
+
+`dplyr` contient combien d'objets (fonctions, variables, tables...) ?
+```{r}
+length(ls("package:dplyr"))
+```
 
 ---
 ```{r, echo=FALSE, results="asis"}
@@ -660,6 +670,9 @@ rx %>% arrange(id, code, desc(start))
 ```
 
 ---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "arrange")
+```
 
 Après un `summarize()` :
 ```{r, eval=FALSE}
@@ -679,29 +692,389 @@ rx %>%
 ```
 ```{r, echo=FALSE}
 head(
-rx %>%
-  filter(!is.na(duration)) %>%
-  mutate(annee = lubridate::year(start)) %>%
-  summarize(MIN = min(duration),
-            Q1 = round(quantile(duration, 0.25), 1),
-            MOY = round(mean(duration), 1),
-            MEDIAN = median(duration),
-            Q3 = round(quantile(duration, 0.75), 1),
-            MAX = max(duration),
-            N = n(),
-            
-            .by = c("code", "annee")) %>%
-  arrange(code, annee)
+  rx %>%
+    filter(!is.na(duration)) %>%
+    mutate(annee = lubridate::year(start)) %>%
+    summarize(MIN = min(duration),
+              Q1 = round(quantile(duration, 0.25), 1),
+              MOY = round(mean(duration), 1),
+              MEDIAN = median(duration),
+              Q3 = round(quantile(duration, 0.75), 1),
+              MAX = max(duration),
+              N = n(),
+              
+              .by = c("code", "annee")) %>%
+    arrange(code, annee)
 )
 ```
 
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "left join")
+```
 
+## left_join
 
+On utilise le `left_join(x, y, by, ...)` pour ajouter des informations provenant d'une deuxième table.
 
+À partir de la table initiale, on construit une table de la cohorte d'étude :
+```{r}
+cohort <- cohort_rx_dx %>%
+  select(id, sexe, naiss, rls) %>%
+  distinct() %>%
+  filter(!is.na(sexe))
+```
+```{r, echo=FALSE}
+head(cohort)
+```
 
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "left join")
+```
+
+À partir du fichier *Estimations et projections de population par territoire sociosanitaire* du Ministère de la Santé et des Services sociaux, on s'est construit une table de dimension RLS.
+```{r}
+head(dim_rls)
+```
+
+---
+class: code80
+```{r, echo=FALSE, results="asis"}
+fil_ariane("dplyr", "left join")
+```
+
+Grâce à `left_join` on est en mesure d'ajouter les informations de la table `dim_rls` à notre table `cohort`.
+```{r, eval=FALSE}
+cohort %>%
+  left_join(dim_rls, by = c("rls" = "CODE")) %>%
+  rename(nom_rls = DESCRIPTIF)
+```
+```{r, echo=FALSE}
+head(
+  cohort %>%
+    left_join(dim_rls, by = c("rls" = "CODE")) %>%
+    rename(nom_rls = DESCRIPTIF)
+)
+```
+
+Voir aussi :
+
+- `inner_join()`
+- `right_join()`
+- `full_join()`
+
+---
+
+## *Cheatsheet*
+
+Une *cheatsheet* est une fiche de référence qui regroupe les fonctions et les commandes les plus utiles.<br>
+Il est possible de les consulter sur le site du *[tidyverse](https://tidyverse.org/)*.
+
+Consulter une *cheatsheet* n'est pas une preuve qu'on ne connaît pas R. C'est la preuve qu'on n'essaie pas de mémoriser des centaines de fonctions pour rien.
+
+<br>
+À retenir : **ALLER LES CONSULTER!!!**
+
+---
+class: center, middle
+
+# tidyr
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("tidyr", "Quand utiliser tidyr ?")
+```
+
+## Quand utiliser tidyr ?
+
+On utilise `tidyr` lorsqu'on veut modifier **la structure** d'une table, **le contenant**, alors que `dplyr` était pour le contenu.
+
+La page officielle est disponible [ici](https://tidyr.tidyverse.org/index.html).
+
+`tidyr` contient combien d'objets (fonctions, variables, tables...) ?
+```{r}
+library(tidyr)
+length(ls("package:tidyr"))
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("tidyr", "pivot_longer")
+```
+
+## pivot_longer
+Il est préférable (pour ne pas dire obligé) de travailler avec des tables *en longueur* où chaque ligne est **une seule et unique observation**.
+
+Exemple où on a plusieurs diagnostics sur la même ligne.
+```{r}
+# Table des diagnostics avec les informations pertinentes
+dx <- cohort_rx_dx %>%
+  select(id, start, dx1, dx2, dx3) %>%
+  filter(!is.na(dx1))  # lignes sans diagnostics
+```
+```{r, echo=FALSE}
+head(dx)
+```
+
+---
+
+```{r, echo=FALSE, results="asis"}
+fil_ariane("tidyr", "pivot_longer")
+```
+
+Les colonnes `dx1`, `dx2` et `dx3` ne respectent pas le concept de *une ligne par observation*. On transforme la table pour que chaque colonne devienne une ligne.
+```{r}
+dx_long <- dx %>%
+  pivot_longer(
+    cols = dx1:dx3,
+    names_to = "ndx",
+    values_to = "dx",
+    values_drop_na = TRUE
+  )
+```
+```{r, echo=FALSE}
+as.data.frame(head(dx_long))
+```
+
+R a été conçu pour manipuler des vecteurs. Comme les colonnes d'une table sont des vecteurs, R est généralement plus efficace lorsqu'on effectue une opération sur une colonne complète que lorsqu'on traite les données ligne par ligne.
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("tidyr", "pivot_wider")
+```
+
+## pivot_wider
+Contraire de `pivot_longer()` où on préfère passer d'une table longue à une table large.
+
+Exemple où on voudrait créé un tableau de présence à partir de la table suivante :
+```{r, echo=FALSE}
+library(dplyr)
+library(tidyr)
+
+# Données de départ
+presence_id <- as.data.frame(tibble(
+  id = c(1,
+         2, 2,
+         3, 3, 3),
+  data_source = c("RAMQ",
+                  "RAMQ", "MED_ECHO",
+                  "RAMQ", "MED_ECHO", "DECES")
+))
+```
+```{r}
+presence_id
+```
 
 
 ---
+class: code85
+```{r, echo=FALSE, results="asis"}
+fil_ariane("tidyr", "pivot_wider")
+```
+
+On veut indiquer la présence de l'individu par `1` et son absence par `0`.
+```{r}
+presence_id %>%
+  mutate(present = 1)
+```
+```{r}
+presence_id %>%
+  mutate(present = 1) %>%
+  pivot_wider(
+    names_from = data_source,
+    values_from = present,
+    values_fill = 0
+  )
+```
+
+---
+class: center, middle
+
+# stringr
+
+---
+class: code80
+```{r, echo=FALSE, results="asis"}
+fil_ariane("stringr", "Quand utiliser stringr ?")
+```
+
+## Quand utiliser stringr ?
+On utilise `stringr` pour la manipulation des données. Sa principale mission est de faciliter la manipulation des chaînes de caractères :
+```{r}
+x <- "  Espaces au début ? À la fin ?   "
+gsub("^\\s+|\\s+$", "", x)  # R de base
+stringr::str_trim(x)  # stringr
+```
+
+La page officielle est disponible [ici](https://stringr.tidyverse.org/).
+
+`stringr` contient combien d'objets (fonctions, variables, tables...) ?
+```{r}
+library(stringr)
+length(ls("package:stringr"))
+```
+
+---
+class: code85
+```{r, echo=FALSE, results="asis"}
+fil_ariane("stringr", "Fonctions utiles")
+```
+
+## Fonctions utiles
+
+Détection
+```{r}
+str_detect(c("Diabète", "Asthme"), "Diab")
+```
+
+Remplacement
+```{r}
+str_replace("Diabète de type 2", "type 2", "type II")
+str_replace_all("A-B-C", "-", "_")
+```
+
+Longueur
+```{r}
+str_length("Québec")
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("stringr", "Fonctions utiles")
+```
+
+Longueur
+```{r}
+str_length("Québec")
+```
+
+Concaténation
+```{r}
+str_c("Patient_", 123)  # équivalent de paste0()
+```
+
+Sous-chaîne
+```{r}
+str_sub("2025-09-01", 1, 4)
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("stringr", "Fonctions utiles")
+```
+
+Majuscules et minuscules
+```{r}
+str_to_upper("Diabète")
+str_to_lower("Diabète")
+```
+
+Retrait d'espaces
+```{r}
+str_trim("   Québec   ")
+str_squish("   Vivre   au  Québec    ") # str_trim + str_replace_all
+```
+
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("stringr", "stringr dans dplyr")
+```
+
+## stringr dans dplyr
+
+En reprenant notre exemple de *diagnostics long* :
+```{r, echo=FALSE}
+as.data.frame(head(dx_long, n = 4))
+```
+Je veux que la colonne `ndx` soit un nombre entier allant de `1` à `N` au lieu de `dx1` à `dxN`.
+```{r}
+dx_long <- dx_long %>%
+  mutate(ndx = as.integer(str_remove(ndx, "dx")))
+```
+```{r, echo=FALSE}
+as.data.frame(head(dx_long, n = 4))
+```
+
+---
+class: center, middle
+
+# lubridate
+
+---
+class: code80
+```{r, echo=FALSE, results="asis"}
+fil_ariane("lubridate", "Quand utiliser lubridate ?")
+```
+
+## Quand utiliser lubridate ?
+On peut utiliser `lubridate` aussitôt qu'on travaille avec une variable de type `Date`.
+
+Le package lubridate simplifie le code en voulant exprimer le temps comme un concept plutôt qu’une chaîne de caractère formatée.
+
+```{r}
+as.integer(format(as.Date("2020-06-01"), "%Y"))  # R de base
+```
+```{r, eval=FALSE}
+year(as_date("2020-06-01"))  # lubridate
+```
+```{r, echo=FALSE}
+lubridate::year(lubridate::as_date("2020-06-01"))
+```
+
+La page officielle est disponible [ici](https://lubridate.tidyverse.org/).
+
+`lubridate` contient combien d'objets (fonctions, variables, tables...) ?
+```{r}
+library(lubridate)
+length(ls("package:lubridate"))
+```
+
+---
+
+```{r, echo=FALSE, results="asis"}
+fil_ariane("lubridate", "Fonctions utiles")
+```
+
+Convertir en date
+```{r}
+ymd("2025-06-15")
+dmy("15-06-2025")
+```
+
+Extraire des composantes
+```{r}
+year(ymd("2025-06-15"))
+month(ymd("2025-06-15"))
+```
+
+---
+class: code85
+```{r, echo=FALSE, results="asis"}
+fil_ariane("lubridate", "Fonctions utiles")
+```
+
+Ajouter ou soustraire du temps
+```{r}
+ymd("2025-06-15") + days(30)
+# Attention aux 29 février !!!
+ymd("2024-02-29") - months(24)
+ymd("2024-02-29") %m-% months(24)  # %m+$ pour ajouter
+```
+
+Période précédente ou suivante
+```{r}
+floor_date(ymd("2025-06-15"), "month")
+ceiling_date(ymd("2025-06-15"), "month")
+```
+
+---
+class: center, middle
+
+# readr
+
+---
+
 
 ## Notes
 
