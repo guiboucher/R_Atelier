@@ -40,6 +40,7 @@ class: code85
 &lt;/style&gt;
 --&gt;
 
+
 &lt;style type="text/css"&gt;
 /* Fil d'ariane */
 .breadcrumb {
@@ -107,7 +108,7 @@ class: code85
 
 # Tidyverse
 
-Les *packages* qui seront présentés font partis du [tidyverse](https://tidyverse.org/), un **ensemble de packages** R conçu pour la science des données.
+Les *packages* qui seront présentés font partie du [tidyverse](https://tidyverse.org/), un **ensemble de packages** R conçu pour la science des données.
 
 Le *tidyverse* s'installe et se charge de la même manière qu'un *package* normal.
 
@@ -115,7 +116,7 @@ Le *tidyverse* s'installe et se charge de la même manière qu'un *package* norm
 install.packages("tidyverse")  # installation
 library(tidyverse)             # chargement
 ```
-Puisque `library(tidyverse)` charge un ensemble de *packages*, on suggère d'appeler uniquement le ou les *packages* utilisés, surtout si vous avez des enjeux d'espaces mémoires.  
+Puisque `library(tidyverse)` charge un ensemble de *packages*, on suggère d'appeler uniquement le ou les *packages* utilisés, surtout si vous avez des enjeux d'espaces mémoire.  
 Exécuter `library(tidyverse)` est équivalent à
 
 ``` r
@@ -175,7 +176,7 @@ mean(1:5)
 ## Concepts importants à connaître d'abord
 
 2) L'évaluation des données (*data masking*)  
-Permet d'utiliser des variables directement à l'intérieur d'une table. Il n'est plus nécessaire d'indiquer le nom de la table (`ma_table$ma_variable`).
+Permets d'utiliser des variables directement à l'intérieur d'une table. Il n'est plus nécessaire d'indiquer le nom de la table (`ma_table$ma_variable`).
 
 Pour calculer l'IMC :
 
@@ -202,19 +203,32 @@ cohort_rx_dx
 ```
 
 ```
-#&gt;           id   sexe    rls      naiss      start   code duration    dx1    dx2    dx3
-#&gt;        &lt;int&gt; &lt;char&gt; &lt;char&gt;     &lt;Date&gt;     &lt;Date&gt; &lt;char&gt;    &lt;num&gt; &lt;char&gt; &lt;char&gt; &lt;char&gt;
-#&gt;     1:     1      M   1111 1967-09-06 2000-01-03      C        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt;     2:     1      M   1111 1967-09-06 2000-01-04      D        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt;     3:     1      M   1111 1967-09-06 2000-01-07      S       30   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt;     4:     1      M   1111 1967-09-06 2000-01-09      C        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt;     5:     1      M   1111 1967-09-06 2000-01-11      C        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt;    ---                                                                               
-#&gt; 17192:   100      M   1632 1990-11-03 2001-12-19      K       15   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 17193:   100      M   1632 1990-11-03 2001-12-19      S       15   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 17194:   100      M   1632 1990-11-03 2001-12-26      B       30   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 17195:   100      M   1632 1990-11-03 2001-12-27      E       90   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 17196:   100      M   1632 1990-11-03 2001-12-29      N        7   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
+#&gt;           id   sexe    rls      naiss      start   code duration    dx1    dx2
+#&gt;        &lt;int&gt; &lt;char&gt; &lt;char&gt;     &lt;Date&gt;     &lt;Date&gt; &lt;char&gt;    &lt;num&gt; &lt;char&gt; &lt;char&gt;
+#&gt;     1:     1      M   1111 1967-09-06 2000-01-03      C        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt;     2:     1      M   1111 1967-09-06 2000-01-04      D        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt;     3:     1      M   1111 1967-09-06 2000-01-07      S       30   &lt;NA&gt;   &lt;NA&gt;
+#&gt;     4:     1      M   1111 1967-09-06 2000-01-09      C        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt;     5:     1      M   1111 1967-09-06 2000-01-11      C        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt;    ---                                                                        
+#&gt; 17192:   100      M   1632 1990-11-03 2001-12-19      K       15   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 17193:   100      M   1632 1990-11-03 2001-12-19      S       15   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 17194:   100      M   1632 1990-11-03 2001-12-26      B       30   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 17195:   100      M   1632 1990-11-03 2001-12-27      E       90   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 17196:   100      M   1632 1990-11-03 2001-12-29      N        7   &lt;NA&gt;   &lt;NA&gt;
+#&gt;           dx3
+#&gt;        &lt;char&gt;
+#&gt;     1:   &lt;NA&gt;
+#&gt;     2:   &lt;NA&gt;
+#&gt;     3:   &lt;NA&gt;
+#&gt;     4:   &lt;NA&gt;
+#&gt;     5:   &lt;NA&gt;
+#&gt;    ---       
+#&gt; 17192:   &lt;NA&gt;
+#&gt; 17193:   &lt;NA&gt;
+#&gt; 17194:   &lt;NA&gt;
+#&gt; 17195:   &lt;NA&gt;
+#&gt; 17196:   &lt;NA&gt;
 ```
 &lt;br&gt;
 Prendre note que le nombre de lignes des tables affichées sera parfois deux, parfois six et d'autres fois plus. C'est uniquement une question d'espace disponible dans les diapositives.
@@ -251,6 +265,7 @@ La page officielle est disponible [ici](https://dplyr.tidyverse.org/).
 
 `dplyr` contient combien d'objets (fonctions, variables, tables...) ?
 
+
 ``` r
 length(ls("package:dplyr"))
 ```
@@ -259,7 +274,9 @@ length(ls("package:dplyr"))
 #&gt; [1] 288
 ```
 
+
 ---
+class: code85
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;dplyr&lt;/span&gt;
     &lt;span&gt;Utiliser dplyr&lt;/span&gt;
@@ -270,6 +287,23 @@ length(ls("package:dplyr"))
 
 ``` r
 library(dplyr)
+```
+
+```
+#&gt; 
+#&gt; Attachement du package : 'dplyr'
+```
+
+```
+#&gt; Les objets suivants sont masqués depuis 'package:stats':
+#&gt; 
+#&gt;     filter, lag
+```
+
+```
+#&gt; Les objets suivants sont masqués depuis 'package:base':
+#&gt; 
+#&gt;     intersect, setdiff, setequal, union
 ```
 
 Ce message indique quelles sont les fonctions du *package* `dplyr` qui ont le même nom qu'une fonction d'un autre *package*.
@@ -324,8 +358,10 @@ methods(print)[1:10]
 ```
 
 ```
-#&gt;  [1] "print.acf"               "print.activeConcordance" "print.AES"               "print.all_vars"         
-#&gt;  [5] "print.anova"             "print.any_vars"          "print.aov"               "print.aovlist"          
+#&gt;  [1] "print.acf"               "print.activeConcordance"
+#&gt;  [3] "print.AES"               "print.all_vars"         
+#&gt;  [5] "print.anova"             "print.any_vars"         
+#&gt;  [7] "print.aov"               "print.aovlist"          
 #&gt;  [9] "print.ar"                "print.Arima"
 ```
 
@@ -334,7 +370,7 @@ length(methods(print))
 ```
 
 ```
-#&gt; [1] 313
+#&gt; [1] 300
 ```
 
 ---
@@ -350,7 +386,7 @@ On utilise `select(.data, ...)` pour choisir ou exclure certaines colonnes.
 ### Arguments
 
 - **`.data`** : Un `data.frame` ou tout ce qui en découle. Voir `tibble`, `lazy data.frame`, `data.table`...
-- **`...`** : 
+- **`...`** : Une ou plusieurs expressions séparées par des virgules.
 
 ---
 class: code80
@@ -485,14 +521,22 @@ cohort_rx_dx %&gt;% select(id, sexe, naiss, rls, everything())
 ```
 
 ```
-#&gt;       id   sexe      naiss    rls      start   code duration    dx1    dx2    dx3
-#&gt;    &lt;int&gt; &lt;char&gt;     &lt;Date&gt; &lt;char&gt;     &lt;Date&gt; &lt;char&gt;    &lt;num&gt; &lt;char&gt; &lt;char&gt; &lt;char&gt;
-#&gt; 1:     1      M 1967-09-06   1111 2000-01-03      C        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 2:     1      M 1967-09-06   1111 2000-01-04      D        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 3:     1      M 1967-09-06   1111 2000-01-07      S       30   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 4:     1      M 1967-09-06   1111 2000-01-09      C        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 5:     1      M 1967-09-06   1111 2000-01-11      C        1   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
-#&gt; 6:     1      M 1967-09-06   1111 2000-01-12      G       45   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
+#&gt;       id   sexe      naiss    rls      start   code duration    dx1    dx2
+#&gt;    &lt;int&gt; &lt;char&gt;     &lt;Date&gt; &lt;char&gt;     &lt;Date&gt; &lt;char&gt;    &lt;num&gt; &lt;char&gt; &lt;char&gt;
+#&gt; 1:     1      M 1967-09-06   1111 2000-01-03      C        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 2:     1      M 1967-09-06   1111 2000-01-04      D        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 3:     1      M 1967-09-06   1111 2000-01-07      S       30   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 4:     1      M 1967-09-06   1111 2000-01-09      C        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 5:     1      M 1967-09-06   1111 2000-01-11      C        1   &lt;NA&gt;   &lt;NA&gt;
+#&gt; 6:     1      M 1967-09-06   1111 2000-01-12      G       45   &lt;NA&gt;   &lt;NA&gt;
+#&gt;       dx3
+#&gt;    &lt;char&gt;
+#&gt; 1:   &lt;NA&gt;
+#&gt; 2:   &lt;NA&gt;
+#&gt; 3:   &lt;NA&gt;
+#&gt; 4:   &lt;NA&gt;
+#&gt; 5:   &lt;NA&gt;
+#&gt; 6:   &lt;NA&gt;
 ```
 
 ---
@@ -656,9 +700,9 @@ class: code80
 
 ### Plusieurs conditions
 
-1) Toutes les prescriptions avec une durée (ou une quantité) de 30 jours.
-2) Exclure les RLS 1001, 1701 et 1801.
-3) Au moins un diagnostique (`dx1` a une valeur).
+1) Toutes les prescriptions avec une durée (ou une quantité) de 30 jours.&lt;br&gt;
+2) Exclure les RLS 1001, 1701 et 1801.&lt;br&gt;
+3) Au moins un diagnostic (`dx1` a une valeur).
 
 ``` r
 # Séparer par des virgules = ET / AND
@@ -711,13 +755,14 @@ rx %&gt;% mutate(end = start + duration - 1)
 #&gt; 3:     1      S 2000-01-07       30 2000-02-05
 ```
 
-Pour sauvegarder les résultats (modifier `rx`)
+Pour sauvegarder les résultats dans `rx` qui existe déjà :
 
 ``` r
 rx &lt;- rx %&gt;% mutate(end = start + duration - 1)
 ```
 
 ---
+class: code85
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;dplyr&lt;/span&gt;
     &lt;span&gt;mutate&lt;/span&gt;
@@ -728,26 +773,29 @@ rx &lt;- rx %&gt;% mutate(end = start + duration - 1)
 
 ``` r
 rx &lt;- rx %&gt;%
-  mutate(end = start + duration - 1,
-         qte_desc = case_when(
-           duration == 1   ~ "unique",
-           duration == 30  ~ "mensuel",
-           duration == 90  ~ "trimestriel",
-           is.na(duration) ~ NA,
-           
-           .default = "autre"
-         ))
-rx
+  mutate(
+    end = start + duration - 1,
+    qte_desc = case_when(
+      duration == 1   ~ "unique",
+      duration == 30  ~ "mensuel",
+      duration == 90  ~ "trimestriel",
+      is.na(duration) ~ NA,
+      
+      .default = "autre"
+    ),
+    # On peut utiliser une colonne créée précédemment
+    mois_fin = lubridate::month(end)
+  )
 ```
 
 ```
-#&gt;       id   code      start duration        end    qte_desc
-#&gt;    &lt;int&gt; &lt;char&gt;     &lt;Date&gt;    &lt;num&gt;     &lt;Date&gt;      &lt;char&gt;
-#&gt; 1:     1      C 2000-01-03        1 2000-01-03      unique
-#&gt; 2:     1      S 2000-01-07       30 2000-02-05     mensuel
-#&gt; 3:     1      G 2000-01-12       45 2000-02-25       autre
-#&gt; 4:     1      Y 2000-01-19       90 2000-04-17 trimestriel
-#&gt; 5:    NA   &lt;NA&gt;       &lt;NA&gt;       NA       &lt;NA&gt;        &lt;NA&gt;
+#&gt;       id   code      start duration        end    qte_desc mois_fin
+#&gt;    &lt;int&gt; &lt;char&gt;     &lt;Date&gt;    &lt;num&gt;     &lt;Date&gt;      &lt;char&gt;    &lt;num&gt;
+#&gt; 1:     1      C 2000-01-03        1 2000-01-03      unique        1
+#&gt; 2:     1      S 2000-01-07       30 2000-02-05     mensuel        2
+#&gt; 3:     1      C 2000-01-11        1 2000-01-11      unique        1
+#&gt; 4:     1      G 2000-01-12       45 2000-02-25       autre        2
+#&gt; 5:     1      Y 2000-01-19       90 2000-04-17 trimestriel        4
 ```
 
 ---
@@ -759,7 +807,7 @@ rx
 ## group_by
 On utilise `group_by(.data, ...)` pour faire une analyse pour chaque groupe.
 
-Supposons qu'on voudrait calculer le nombre de jours qu'un individu s'est fait prescrire un médicament.
+Supposons qu'on voudrait calculer, au moment du service, le nombre de jours qu'un individu s'est fait prescrire un médicament au moment (somme cumulative)
 
 Sans `group_by`
 
@@ -854,13 +902,13 @@ On utilise `summarise(.data, ..., .by = NULL)` (ou `summarize()`) pour créer le
 rx %&gt;%
   filter(!is.na(duration)) %&gt;%
   mutate(annee = lubridate::year(start)) %&gt;%
-  summarize(MIN = min(duration),
-            Q1 = round(quantile(duration, 0.25), 1),
-            MOY = round(mean(duration), 1),
-            MEDIAN = median(duration),
-            Q3 = round(quantile(duration, 0.75), 1),
-            MAX = max(duration),
-            N = n(),
+  summarize(min = min(duration),
+            q1 = round(quantile(duration, 0.25), 1),
+            moy = round(mean(duration), 1),
+            med = median(duration),
+            q3 = round(quantile(duration, 0.75), 1),
+            max = max(duration),
+            n = n(),
             
             .by = c("code", "annee"))
 ```
@@ -948,13 +996,13 @@ rx %&gt;%
 
 On utilise le `left_join(x, y, by, ...)` pour ajouter des informations provenant d'une deuxième table.
 
+Exemple&lt;br&gt;
 À partir de la table initiale, on construit une table de la cohorte d'étude :
 
 ``` r
 cohort &lt;- cohort_rx_dx %&gt;%
   select(id, sexe, naiss, rls) %&gt;%
-  distinct() %&gt;%
-  filter(!is.na(sexe))
+  distinct()
 ```
 
 ```
@@ -992,7 +1040,7 @@ head(dim_rls)
 ```
 
 ---
-class: code80
+class: code75
 &lt;div class="breadcrumb"&gt;
     &lt;span&gt;dplyr&lt;/span&gt;
     &lt;span&gt;left join&lt;/span&gt;
@@ -1007,14 +1055,22 @@ cohort %&gt;%
 ```
 
 ```
-#&gt;       id   sexe      naiss    rls                                            nom_rls
-#&gt;    &lt;int&gt; &lt;char&gt;     &lt;Date&gt; &lt;char&gt;                                             &lt;char&gt;
-#&gt; 1:     1      M 1967-09-06   1111                        RLS de la Baie-des-Chaleurs
-#&gt; 2:     2      F 1962-09-10   0652 RLS de Rivière-des-Prairies - Anjou - Montréal-Est
-#&gt; 3:     3      M 1970-09-17   0811                             RLS de l'Abitibi-Ouest
-#&gt; 4:     4      F 1962-06-05   1214                                  RLS des Etchemins
-#&gt; 5:     5      M 1966-07-31   0814                           RLS de la Vallée-de-l'Or
-#&gt; 6:     6      M 1979-12-15   0516                          RLS de Val Saint-François
+#&gt;       id   sexe      naiss    rls
+#&gt;    &lt;int&gt; &lt;char&gt;     &lt;Date&gt; &lt;char&gt;
+#&gt; 1:     1      M 1967-09-06   1111
+#&gt; 2:     2      F 1962-09-10   0652
+#&gt; 3:     3      M 1970-09-17   0811
+#&gt; 4:     4      F 1962-06-05   1214
+#&gt; 5:     5      M 1966-07-31   0814
+#&gt; 6:     6      M 1979-12-15   0516
+#&gt;                                               nom_rls
+#&gt;                                                &lt;char&gt;
+#&gt; 1:                        RLS de la Baie-des-Chaleurs
+#&gt; 2: RLS de Rivière-des-Prairies - Anjou - Montréal-Est
+#&gt; 3:                             RLS de l'Abitibi-Ouest
+#&gt; 4:                                  RLS des Etchemins
+#&gt; 5:                           RLS de la Vallée-de-l'Or
+#&gt; 6:                          RLS de Val Saint-François
 ```
 
 Voir aussi :
@@ -1121,7 +1177,7 @@ dx_long &lt;- dx %&gt;%
 #&gt; 6  3 2000-05-07 dx1  C
 ```
 
-R a été conçu pour manipuler des vecteurs. Comme les colonnes d'une table sont des vecteurs, R est généralement plus efficace lorsqu'on effectue une opération sur une colonne complète que lorsqu'on traite les données ligne par ligne.
+R a été conçu pour manipuler des vecteurs. Comme les colonnes d'une table sont des vecteurs, R est généralement plus efficace lorsqu'on effectue une opération sur une colonne complète plutôt que lorsqu'on traite les données ligne par ligne.
 
 ---
 &lt;div class="breadcrumb"&gt;
@@ -1260,11 +1316,11 @@ str_detect(c("Diabète", "Asthme"), "Diab")
 Remplacement
 
 ``` r
-str_replace("Diabète de type 2", "type 2", "type II")
+str_replace("A-B-C", "-", "_")
 ```
 
 ```
-#&gt; [1] "Diabète de type II"
+#&gt; [1] "A_B-C"
 ```
 
 ``` r
@@ -1273,16 +1329,6 @@ str_replace_all("A-B-C", "-", "_")
 
 ```
 #&gt; [1] "A_B_C"
-```
-
-Longueur
-
-``` r
-str_length("Québec")
-```
-
-```
-#&gt; [1] 6
 ```
 
 ---
@@ -1449,7 +1495,9 @@ length(ls("package:lubridate"))
     &lt;span&gt;Fonctions utiles&lt;/span&gt;
 &lt;/div&gt;
 
-Convertir en date
+## Fonctions utiles
+
+Créer une date
 
 ``` r
 ymd("2025-06-15")
@@ -1519,7 +1567,7 @@ ymd("2024-02-29") %m-% months(24)  # %m+$ pour ajouter
 #&gt; [1] "2022-02-28"
 ```
 
-Période précédente ou suivante
+Période actuelle ou suivante
 
 ``` r
 floor_date(ymd("2025-06-15"), "month")
@@ -1543,12 +1591,84 @@ class: center, middle
 # readr
 
 ---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;readr&lt;/span&gt;
+    &lt;span&gt;Quand utiliser readr ?&lt;/span&gt;
+&lt;/div&gt;
+
+## Quand utiliser readr ?
+
+Le *package* `readr` est la boîte à outils spécialisée pour lire les fichiers texte (`csv`, `txt`, `tsv`) dans R.
+
+La page officielle est disponible [ici](https://readr.tidyverse.org/).
+
+`readr` contient combien d'objets (fonctions, variables, tables...) ?
+
+``` r
+library(readr)
+length(ls("package:readr"))
+```
+
+```
+#&gt; [1] 103
+```
+
+Si on utilise les fonctions de base en R qui commencent par `read.` pour importer ou `write.` pour exporter, leur fonction équivalente en `readr` sont `read_` et `write_`.&lt;br&gt;
+Par exemple `read.csv()` devient `read_csv()`.
+
+---
+class: code85
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;readr&lt;/span&gt;
+    &lt;span&gt;Fonctions utiles&lt;/span&gt;
+&lt;/div&gt;
+
+## Fonctions utiles
+
+CSV
+
+``` r
+read_csv(); write_csv()  # séparateur "," et décimale "."
+read_csv2(); write_csv2()  # séparateur ";" et décimale ","
+```
+
+TSV
+
+``` r
+read_tsv(); write_tsv()  # tsv = tab-separated values (\t)
+```
+
+Fichier général
+
+``` r
+read_delim(); write_delim()  # fonction générale où on décide
+                             # le délimiteur et autres paramètres
+```
 
 
-## Notes
 
-- vignettes
-- doc-case_when
+---
+&lt;div class="breadcrumb"&gt;
+    &lt;span&gt;readr&lt;/span&gt;
+    &lt;span&gt;Autres packages&lt;/span&gt;
+&lt;/div&gt;
+
+## Autres *packages*
+
+- `haven` pour du SPSS, Stata et SAS.
+- `readxl` et `writexl` pour des fichiers Excel.&lt;br&gt;
+Il y a d'autres solutions, mais essayer d'éviter ceux qui sont dépendants de Java.
+- `data.table` avec `fread` et `fwrite`.
+- [`fst`](https://www.fstpackage.org/) est un format dédié à R où on combine performance, compression et sélection des colonnes et des lignes.
+
+---
+
+# Pour finir
+
+- N'oubliez pas d'aller voir la documentation des fonctions!&lt;br&gt;
+Ils contiennent souvent des exemples de code qu'on peut exécuter.&lt;br&gt;
+- **Les Vignettes**&lt;br&gt;
+Les vignettes sont des guides pratiques fournis avec un *package*. Contrairement à l'aide d'une fonction qui explique une commande précise, une vignette montre généralement comment utiliser plusieurs fonctions ensemble pour réaliser une tâche complète.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

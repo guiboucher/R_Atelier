@@ -25,11 +25,10 @@ class: code85
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE,
                       comment = "#>")
-library(data.table)
 load("C:/Users/bougui01/Desktop/Mes Outils/R_Atelier/inspq/03 - Packages à prioriser/data_sample_rx.rda")
-setkey(cohort_rx_dx, NULL)
+data.table::setkey(cohort_rx_dx, NULL)
 load("C:/Users/bougui01/Desktop/Mes Outils/Rinspq/data/dim_rls.rda")
-setkey(dim_rls, NULL)
+data.table::setkey(dim_rls, NULL)
 
 fil_ariane <- function(...) {
   sections <- c(...)
@@ -41,6 +40,7 @@ fil_ariane <- function(...) {
   cat('</div>')
 }
 ```
+
 ```{css, echo=FALSE}
 /* Fil d'ariane */
 .breadcrumb {
@@ -108,14 +108,14 @@ fil_ariane <- function(...) {
 
 # Tidyverse
 
-Les *packages* qui seront présentés font partis du [tidyverse](https://tidyverse.org/), un **ensemble de packages** R conçu pour la science des données.
+Les *packages* qui seront présentés font partie du [tidyverse](https://tidyverse.org/), un **ensemble de packages** R conçu pour la science des données.
 
 Le *tidyverse* s'installe et se charge de la même manière qu'un *package* normal.
 ```{r, eval=FALSE}
 install.packages("tidyverse")  # installation
 library(tidyverse)             # chargement
 ```
-Puisque `library(tidyverse)` charge un ensemble de *packages*, on suggère d'appeler uniquement le ou les *packages* utilisés, surtout si vous avez des enjeux d'espaces mémoires.  
+Puisque `library(tidyverse)` charge un ensemble de *packages*, on suggère d'appeler uniquement le ou les *packages* utilisés, surtout si vous avez des enjeux d'espaces mémoire.  
 Exécuter `library(tidyverse)` est équivalent à
 ```{r, eval=FALSE}
 library(ggplot2)
@@ -155,7 +155,7 @@ fil_ariane("Tidyverse", "Concepts importants à connaître d'abord")
 ## Concepts importants à connaître d'abord
 
 2) L'évaluation des données (*data masking*)  
-Permet d'utiliser des variables directement à l'intérieur d'une table. Il n'est plus nécessaire d'indiquer le nom de la table (`ma_table$ma_variable`).
+Permets d'utiliser des variables directement à l'intérieur d'une table. Il n'est plus nécessaire d'indiquer le nom de la table (`ma_table$ma_variable`).
 
 Pour calculer l'IMC :
 ```{r, eval=FALSE}
@@ -211,11 +211,18 @@ Les principales fonctions sont :
 La page officielle est disponible [ici](https://dplyr.tidyverse.org/).
 
 `dplyr` contient combien d'objets (fonctions, variables, tables...) ?
+```{r, echo=FALSE, message=FALSE}
+library(dplyr)
+```
 ```{r}
 length(ls("package:dplyr"))
 ```
+```{r, echo=FALSE, message=FALSE}
+detach("package:dplyr", unload = TRUE)
+```
 
 ---
+class: code85
 ```{r, echo=FALSE, results="asis"}
 fil_ariane("dplyr", "Utiliser dplyr")
 ```
@@ -282,7 +289,7 @@ On utilise `select(.data, ...)` pour choisir ou exclure certaines colonnes.
 ### Arguments
 
 - **`.data`** : Un `data.frame` ou tout ce qui en découle. Voir `tibble`, `lazy data.frame`, `data.table`...
-- **`...`** : 
+- **`...`** : Une ou plusieurs expressions séparées par des virgules.
 
 ---
 class: code80
@@ -483,9 +490,9 @@ fil_ariane("dplyr", "filter", "Plusieurs conditions")
 
 ### Plusieurs conditions
 
-1) Toutes les prescriptions avec une durée (ou une quantité) de 30 jours.
-2) Exclure les RLS 1001, 1701 et 1801.
-3) Au moins un diagnostique (`dx1` a une valeur).
+1) Toutes les prescriptions avec une durée (ou une quantité) de 30 jours.<br>
+2) Exclure les RLS 1001, 1701 et 1801.<br>
+3) Au moins un diagnostic (`dx1` a une valeur).
 ```{r, eval=FALSE}
 # Séparer par des virgules = ET / AND
 cohort_rx_dx %>% select(id, sexe, rls, code, duration, dx1) %>%
@@ -525,12 +532,13 @@ rx %>% mutate(end = start + duration - 1)
 head(rx %>% mutate(end = start + duration - 1), 3)
 ```
 
-Pour sauvegarder les résultats (modifier `rx`)
+Pour sauvegarder les résultats dans `rx` qui existe déjà :
 ```{r}
 rx <- rx %>% mutate(end = start + duration - 1)
 ```
 
 ---
+class: code85
 ```{r, echo=FALSE, results="asis"}
 fil_ariane("dplyr", "mutate", "Créer plusieurs colonnes")
 ```
@@ -538,30 +546,37 @@ fil_ariane("dplyr", "mutate", "Créer plusieurs colonnes")
 ### Créer plusieurs colonnes
 ```{r, eval=FALSE}
 rx <- rx %>%
-  mutate(end = start + duration - 1,
-         qte_desc = case_when(
-           duration == 1   ~ "unique",
-           duration == 30  ~ "mensuel",
-           duration == 90  ~ "trimestriel",
-           is.na(duration) ~ NA,
-           
-           .default = "autre"
-         ))
-rx
+  mutate(
+    end = start + duration - 1,
+    qte_desc = case_when(
+      duration == 1   ~ "unique",
+      duration == 30  ~ "mensuel",
+      duration == 90  ~ "trimestriel",
+      is.na(duration) ~ NA,
+      
+      .default = "autre"
+    ),
+    # On peut utiliser une colonne créée précédemment
+    mois_fin = lubridate::month(end)
+  )
 ```
 ```{r, echo=FALSE}
 rx <- rx %>%
-  mutate(end = start + duration - 1,
-         qte_desc = case_when(
-           duration == 1   ~ "unique",
-           duration == 30  ~ "mensuel",
-           duration == 90  ~ "trimestriel",
-           is.na(duration) ~ NA,
-           
-           .default = "autre"
-         ))
-rx[c(1, 3, 6, 10, 17416)]
-rx <- rx %>% select(-end, -qte_desc)
+  mutate(
+    end = start + duration - 1,
+    qte_desc = case_when(
+      duration == 1   ~ "unique",
+      duration == 30  ~ "mensuel",
+      duration == 90  ~ "trimestriel",
+      is.na(duration) ~ NA,
+      
+      .default = "autre"
+    ),
+    # On peut utiliser une colonne créée précédemment
+    mois_fin = lubridate::month(end)
+  )
+rx[c(1, 3, 5, 6, 10)]
+rx <- rx %>% select(-end, -qte_desc, -mois_fin)
 ```
 
 ---
@@ -572,7 +587,7 @@ fil_ariane("dplyr", "group_by")
 ## group_by
 On utilise `group_by(.data, ...)` pour faire une analyse pour chaque groupe.
 
-Supposons qu'on voudrait calculer le nombre de jours qu'un individu s'est fait prescrire un médicament.
+Supposons qu'on voudrait calculer, au moment du service, le nombre de jours qu'un individu s'est fait prescrire un médicament au moment (somme cumulative)
 
 Sans `group_by`
 ```{r}
@@ -596,7 +611,7 @@ rx[c(1:3, 298:300), c("id", "duration")] %>%
 rx[c(1:3, 298:300), c("id", "duration")] %>%
   group_by(id) %>%
   mutate(cumulatif = cumsum(duration)) %>%
-  as.data.table()
+  data.table::as.data.table()
 ```
 
 Dès qu'on arrive au `id 2`, la somme cumulative recommence.
@@ -631,13 +646,13 @@ On utilise `summarise(.data, ..., .by = NULL)` (ou `summarize()`) pour créer le
 rx %>%
   filter(!is.na(duration)) %>%
   mutate(annee = lubridate::year(start)) %>%
-  summarize(MIN = min(duration),
-            Q1 = round(quantile(duration, 0.25), 1),
-            MOY = round(mean(duration), 1),
-            MEDIAN = median(duration),
-            Q3 = round(quantile(duration, 0.75), 1),
-            MAX = max(duration),
-            N = n(),
+  summarize(min = min(duration),
+            q1 = round(quantile(duration, 0.25), 1),
+            moy = round(mean(duration), 1),
+            med = median(duration),
+            q3 = round(quantile(duration, 0.75), 1),
+            max = max(duration),
+            n = n(),
             
             .by = c("code", "annee"))
 ```
@@ -717,12 +732,12 @@ fil_ariane("dplyr", "left join")
 
 On utilise le `left_join(x, y, by, ...)` pour ajouter des informations provenant d'une deuxième table.
 
+Exemple<br>
 À partir de la table initiale, on construit une table de la cohorte d'étude :
 ```{r}
 cohort <- cohort_rx_dx %>%
   select(id, sexe, naiss, rls) %>%
-  distinct() %>%
-  filter(!is.na(sexe))
+  distinct()
 ```
 ```{r, echo=FALSE}
 head(cohort)
@@ -739,7 +754,7 @@ head(dim_rls)
 ```
 
 ---
-class: code80
+class: code75
 ```{r, echo=FALSE, results="asis"}
 fil_ariane("dplyr", "left join")
 ```
@@ -837,7 +852,7 @@ dx_long <- dx %>%
 as.data.frame(head(dx_long))
 ```
 
-R a été conçu pour manipuler des vecteurs. Comme les colonnes d'une table sont des vecteurs, R est généralement plus efficace lorsqu'on effectue une opération sur une colonne complète que lorsqu'on traite les données ligne par ligne.
+R a été conçu pour manipuler des vecteurs. Comme les colonnes d'une table sont des vecteurs, R est généralement plus efficace lorsqu'on effectue une opération sur une colonne complète plutôt que lorsqu'on traite les données ligne par ligne.
 
 ---
 ```{r, echo=FALSE, results="asis"}
@@ -930,13 +945,8 @@ str_detect(c("Diabète", "Asthme"), "Diab")
 
 Remplacement
 ```{r}
-str_replace("Diabète de type 2", "type 2", "type II")
+str_replace("A-B-C", "-", "_")
 str_replace_all("A-B-C", "-", "_")
-```
-
-Longueur
-```{r}
-str_length("Québec")
 ```
 
 ---
@@ -1025,7 +1035,7 @@ lubridate::year(lubridate::as_date("2020-06-01"))
 La page officielle est disponible [ici](https://lubridate.tidyverse.org/).
 
 `lubridate` contient combien d'objets (fonctions, variables, tables...) ?
-```{r}
+```{r, message=FALSE}
 library(lubridate)
 length(ls("package:lubridate"))
 ```
@@ -1036,7 +1046,9 @@ length(ls("package:lubridate"))
 fil_ariane("lubridate", "Fonctions utiles")
 ```
 
-Convertir en date
+## Fonctions utiles
+
+Créer une date
 ```{r}
 ymd("2025-06-15")
 dmy("15-06-2025")
@@ -1062,7 +1074,7 @@ ymd("2024-02-29") - months(24)
 ymd("2024-02-29") %m-% months(24)  # %m+$ pour ajouter
 ```
 
-Période précédente ou suivante
+Période actuelle ou suivante
 ```{r}
 floor_date(ymd("2025-06-15"), "month")
 ceiling_date(ymd("2025-06-15"), "month")
@@ -1074,9 +1086,70 @@ class: center, middle
 # readr
 
 ---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("readr", "Quand utiliser readr ?")
+```
+
+## Quand utiliser readr ?
+
+Le *package* `readr` est la boîte à outils spécialisée pour lire les fichiers texte (`csv`, `txt`, `tsv`) dans R.
+
+La page officielle est disponible [ici](https://readr.tidyverse.org/).
+
+`readr` contient combien d'objets (fonctions, variables, tables...) ?
+```{r}
+library(readr)
+length(ls("package:readr"))
+```
+
+Si on utilise les fonctions de base en R qui commencent par `read.` pour importer ou `write.` pour exporter, leur fonction équivalente en `readr` sont `read_` et `write_`.<br>
+Par exemple `read.csv()` devient `read_csv()`.
+
+---
+class: code85
+```{r, echo=FALSE, results="asis"}
+fil_ariane("readr", "Fonctions utiles")
+```
+
+## Fonctions utiles
+
+CSV
+```{r, eval=FALSE}
+read_csv(); write_csv()  # séparateur "," et décimale "."
+read_csv2(); write_csv2()  # séparateur ";" et décimale ","
+```
+
+TSV
+```{r, eval=FALSE}
+read_tsv(); write_tsv()  # tsv = tab-separated values (\t)
+```
+
+Fichier général
+```{r, eval=FALSE}
+read_delim(); write_delim()  # fonction générale où on décide
+                             # le délimiteur et autres paramètres
+```
 
 
-## Notes
 
-- vignettes
-- doc-case_when
+---
+```{r, echo=FALSE, results="asis"}
+fil_ariane("readr", "Autres packages")
+```
+
+## Autres *packages*
+
+- `haven` pour du SPSS, Stata et SAS.
+- `readxl` et `writexl` pour des fichiers Excel.<br>
+Il y a d'autres solutions, mais essayer d'éviter ceux qui sont dépendants de Java.
+- `data.table` avec `fread` et `fwrite`.
+- [`fst`](https://www.fstpackage.org/) est un format dédié à R où on combine performance, compression et sélection des colonnes et des lignes.
+
+---
+
+# Pour finir
+
+- N'oubliez pas d'aller voir la documentation des fonctions!<br>
+Ils contiennent souvent des exemples de code qu'on peut exécuter.<br>
+- **Les Vignettes**<br>
+Les vignettes sont des guides pratiques fournis avec un *package*. Contrairement à l'aide d'une fonction qui explique une commande précise, une vignette montre généralement comment utiliser plusieurs fonctions ensemble pour réaliser une tâche complète.
